@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Abstract
 {
-    public abstract class BaseEntitiy : IBaseEntitiy
+    public abstract class BaseEntity : IBaseEntity
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public DataStatus DataStatu { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
