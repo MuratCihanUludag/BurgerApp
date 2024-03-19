@@ -18,7 +18,7 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
     public DbSet<Drink> Drinks { get; set; }
     public DbSet<Cips> Cipies { get; set; }
     public DbSet<Sauce> Sauces { get; set; }
-    public DbSet<ExtraMetarial> ExtraMetarials { get; set; }
+    public DbSet<ExtraMaterial> ExtraMetarials { get; set; }
     //public DbSet<Menu> Menus { get; set; }
     //public DbSet<Order> Orders { get; set; }
     //public DbSet<OrderDetail> OrderDetails { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
 {
-    public class ExtraMetarial : BaseImage
+    public class ExtraMaterial : BaseImage
     {
         public string Name { get; set; }
         public double Price { get; set; }
