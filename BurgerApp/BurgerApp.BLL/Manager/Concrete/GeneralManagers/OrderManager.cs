@@ -12,9 +12,9 @@ namespace BurgerApp.BLL.Manager.Concrete.GeneralManager
 {
     public class OrderManager : GenericManager<OrderDTO, Order>
     {
-            public OrderManager()
-            {
-                _repository = new OrderRepository(new BurgerAppContext());
-            }
+        public OrderManager()
+        {
+            _repository = new OrderRepository(new BurgerAppContext());
+        }
     }
 }

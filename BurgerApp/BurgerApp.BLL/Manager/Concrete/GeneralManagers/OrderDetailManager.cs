@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.GeneralManager
 {
-    public class OrderDetailManager:GenericManager<OrderDetailDTO,OrderDetail>
+    public class OrderDetailManager : GenericManager<OrderDetailDTO, OrderDetail>
     {
-            public OrderDetailManager()
-            {
-                _repository = new OrderDetailRepository(new BurgerAppContext());
-            }
+        public OrderDetailManager()
+        {
+            _repository = new OrderDetailRepository(new BurgerAppContext());
+        }
     }
 }

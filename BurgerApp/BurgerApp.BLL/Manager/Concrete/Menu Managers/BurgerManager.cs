@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.Menu_Manager
 {
-    public class BurgerManager:GenericManager<BurgerDTO,Burger>
+    public class BurgerManager : GenericManager<BurgerDTO, Burger>
     {
         public BurgerManager()
         {

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.BLL.ViewModels.Other_Models
+namespace BurgerApp.BLL.ViewModels.Base
 {
-    internal class ImageDTO
+    public class BaseDTO
     {
+        public int Id { get; set; }
     }
 }

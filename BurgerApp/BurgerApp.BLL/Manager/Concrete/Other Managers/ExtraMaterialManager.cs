@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.Other_Managers
 {
-    public class ExtraMaterialManager:GenericManager<ExtraMaterialDTO,ExtraMetarial>
+    public class ExtraMaterialManager : GenericManager<ExtraMaterialDTO, ExtraMetarial>
     {
         public ExtraMaterialManager()
         {

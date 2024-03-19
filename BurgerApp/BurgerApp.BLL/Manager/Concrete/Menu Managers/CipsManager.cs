@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.Menu_Manager
 {
-    public class CipsManager:GenericManager<CipsDTO,Cips>
+    public class CipsManager : GenericManager<CipsDTO, Cips>
     {
         public CipsManager()
         {
