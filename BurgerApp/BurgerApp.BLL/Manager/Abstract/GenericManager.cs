@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BurgerApp.DAL.Entities.Abstract;
+using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.DAL.Repo.Abstract;
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Abstract
+namespace BurgerApp.DAL.Entities.Abstract.Base
 {
     public abstract class BaseEntity : IBaseEntity
     {
