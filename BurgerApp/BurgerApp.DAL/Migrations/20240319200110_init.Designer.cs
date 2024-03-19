@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    [Migration("20240319192939_Mig-1")]
-    partial class Mig1
+    [Migration("20240319200110_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
