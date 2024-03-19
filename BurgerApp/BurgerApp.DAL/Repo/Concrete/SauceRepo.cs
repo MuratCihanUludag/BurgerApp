@@ -3,7 +3,7 @@ using BurgerApp.DAL.Repo.Abstract;
 
 namespace BurgerApp.DAL.Repo.Concrete
 {
-    public class SauceManager : GenericRepo<Sauce>,ISauceManager 
+    public class SauceRepo : GenericRepo<Sauce>,ISauceRepo
     {
     }
 

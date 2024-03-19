@@ -3,7 +3,7 @@ using BurgerApp.DAL.Repo.Abstract;
 
 namespace BurgerApp.DAL.Repo.Concrete
 {
-    public class ExtraMaterialManager : GenericRepo<ExtraMaterial>,IExtraMaterialManager
+    public class ExtraMaterialRepo : GenericRepo<ExtraMaterial>,IExtraMaterialRepo
     {
     }
 
