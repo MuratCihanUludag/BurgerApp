@@ -1,4 +1,5 @@
 ﻿using BurgerApp.DAL.Entities.Abstract;
+using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.DAL.Entities.Concrate.MenuClasses;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate
 {
-    public class Menu : BaseImage
+    public class Menu : BaseImage,IMenu
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -22,7 +23,9 @@ namespace BurgerApp.DAL.Entities.Concrate
         public Cips Cips { get; set; }
         public double MenuPrice()
         {
-            return this.Burger.Price + this.Drink.Price + this.Cips.Price;
+            if (this.Burger.Price != null && this.Drink.Price != null && this.Cips.Price != null)
+                return this.Burger.Price + (this.Drink.Price - 10) + (this.Cips.Price - 15);
+            return 0;
         }
     }
 }

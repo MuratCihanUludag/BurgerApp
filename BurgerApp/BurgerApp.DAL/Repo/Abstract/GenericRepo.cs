@@ -1,4 +1,4 @@
-﻿using BurgerApp.DAL.Entities.Abstract;
+﻿using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.PL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

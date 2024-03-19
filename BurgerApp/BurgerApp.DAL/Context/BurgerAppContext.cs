@@ -17,11 +17,12 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
     public DbSet<Burger> Burgers { get; set; }
     public DbSet<Drink> Drinks { get; set; }
     public DbSet<Cips> Cipies { get; set; }
-    public DbSet<Sauce> Sauces { get; set; }
+    public DbSet<Sauce> Sauces { get; set; }    
     public DbSet<ExtraMaterial> ExtraMetarials { get; set; }
-    //public DbSet<Menu> Menus { get; set; }
-    //public DbSet<Order> Orders { get; set; }
-    //public DbSet<OrderDetail> OrderDetails { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -42,8 +43,9 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
                .WithMany(x => x.Menus)
                .HasForeignKey(x => x.CipsId);
 
+        builder.Entity<OrderDetail>()
 
-        base.OnModelCreating(builder);
+
 
     }
 }
