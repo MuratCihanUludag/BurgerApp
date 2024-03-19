@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.BLL.ViewModels
+namespace BurgerApp.BLL.ViewModels.General_Models
 {
-    internal class Class1
+    internal class OrderDetailDTO
     {
     }
 }
