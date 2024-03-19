@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Concrate
+namespace BurgerApp.DAL.Comman
 {
-    internal class Class1
+    public enum ProductSize
     {
+        Standart =1,
+        Big,
+        King,
+        Ultra
     }
 }
