@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Concrate
+namespace BurgerApp.DAL.Entities.Concrate.MenuClasses
 {
-    internal class Class1
+    internal class Drink
     {
     }
 }
