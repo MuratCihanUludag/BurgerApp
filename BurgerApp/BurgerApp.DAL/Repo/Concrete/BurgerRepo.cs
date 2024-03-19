@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BurgerApp.DAL.Repo.Concrete
 {
 
-    public class BurgerRepo : GenericRepo<Burger>,IBurgerRepo
+    public class BurgerRepo : GenericRepo<Burger>, IBurgerRepo
     {
     }
 

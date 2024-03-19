@@ -10,6 +10,10 @@ namespace BurgerApp.PL.Data;
 
 public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
 {
+    public BurgerAppContext()
+    {
+    }
+
     public BurgerAppContext(DbContextOptions<BurgerAppContext> options)
         : base(options)
     {
