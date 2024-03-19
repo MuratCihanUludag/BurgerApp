@@ -1,6 +1,7 @@
 ﻿using BurgerApp.BLL.Manager.Abstract;
 using BurgerApp.BLL.ViewModels.Other_Models;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
+using BurgerApp.DAL.Repo.Concrete;
 using BurgerApp.PL.Data;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace BurgerApp.BLL.Manager.Concrete.Other_Managers
     {
         public SauceManager()
         {
-            _repository = new SauceRepository(new BurgerAppContext());
+            _repo = new SauceRepo();
         }
     }
 }

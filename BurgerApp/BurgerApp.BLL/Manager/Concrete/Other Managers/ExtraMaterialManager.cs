@@ -1,6 +1,7 @@
 ﻿using BurgerApp.BLL.Manager.Abstract;
 using BurgerApp.BLL.ViewModels.Other_Models;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
+using BurgerApp.DAL.Repo.Concrete;
 using BurgerApp.PL.Data;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.Other_Managers
 {
-    public class ExtraMaterialManager : GenericManager<ExtraMaterialDTO, ExtraMetarial>
+    public class ExtraMaterialManager : GenericManager<ExtraMaterialDTO, ExtraMaterial>
     {
         public ExtraMaterialManager()
         {
-            _repository = new ExtraMaterialRepository(new BurgerAppContext());
+            _repo = new ExtraMaterialRepo();
         }
     }
 }
