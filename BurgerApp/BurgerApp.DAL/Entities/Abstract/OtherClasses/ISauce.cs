@@ -1,14 +1,13 @@
-﻿using BurgerApp.DAL.Entities.Abstract.Base;
-using BurgerApp.DAL.Entities.Abstract.OtherClasses;
+﻿using BurgerApp.DAL.Entities.Concrate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
+namespace BurgerApp.DAL.Entities.Abstract.OtherClasses
 {
-    public class Sauce : BaseImage,ISauce
+    public interface ISauce
     {
         public string Name { get; set; }
         public double Price { get; set; }

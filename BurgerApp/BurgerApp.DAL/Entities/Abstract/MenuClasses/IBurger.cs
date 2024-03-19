@@ -1,17 +1,18 @@
 ﻿using BurgerApp.DAL.Entities.Abstract.Base;
-using BurgerApp.DAL.Entities.Abstract.OtherClasses;
+using BurgerApp.DAL.Entities.Concrate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
+namespace BurgerApp.DAL.Entities.Abstract.MenuClasses
 {
-    public class Sauce : BaseImage,ISauce
+    public interface IBurger : IBaseImage
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public double Price { get; set; }
-        public ICollection<OrderDetail> Details { get; set; }
+        public ICollection<Menu> Menus { get; set; }
     }
 }
