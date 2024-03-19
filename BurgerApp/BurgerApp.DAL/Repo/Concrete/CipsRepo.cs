@@ -3,7 +3,7 @@ using BurgerApp.DAL.Repo.Abstract;
 
 namespace BurgerApp.DAL.Repo.Concrete
 {
-    public class CipsManager : GenericRepo<Cips>,ICipsManager
+    public class CipsRepo : GenericRepo<Cips>,ICipsRepo
     {
     }
 
