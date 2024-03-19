@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BurgerApp.DAL.Entities.Abstract
+namespace BurgerApp.DAL.Entities.Abstract.Base
 {
-    public class BaseImage : BaseEntity
+    public interface IBaseImage : IBaseEntity
     {
         public byte[] Image { get; set; }
     }

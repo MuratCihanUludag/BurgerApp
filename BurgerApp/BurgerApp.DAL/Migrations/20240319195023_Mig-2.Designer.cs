@@ -4,6 +4,7 @@ using BurgerApp.PL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    partial class BurgerAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240319195023_Mig-2")]
+    partial class Mig2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,7 +74,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.ToTable("Menus", (string)null);
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", b =>
@@ -111,7 +114,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Burgers", (string)null);
+                    b.ToTable("Burgers");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Cips", b =>
@@ -150,7 +153,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cipies", (string)null);
+                    b.ToTable("Cipies");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", b =>
@@ -189,7 +192,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Drinks", (string)null);
+                    b.ToTable("Drinks");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
@@ -220,7 +223,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
@@ -258,7 +261,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", b =>
@@ -294,7 +297,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExtraMetarials", (string)null);
+                    b.ToTable("ExtraMetarials");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.Sauce", b =>
@@ -330,7 +333,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sauces", (string)null);
+                    b.ToTable("Sauces");
                 });
 
             modelBuilder.Entity("BurgerApp.PL.Areas.Identity.Data.BurgerAppUser", b =>
@@ -410,7 +413,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("ExtraMetarialsId");
 
-                    b.ToTable("ExtraMetarialOrderDetail", (string)null);
+                    b.ToTable("ExtraMetarialOrderDetail");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -562,7 +565,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("SaucesId");
 
-                    b.ToTable("OrderDetailSauce", (string)null);
+                    b.ToTable("OrderDetailSauce");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Menu", b =>
