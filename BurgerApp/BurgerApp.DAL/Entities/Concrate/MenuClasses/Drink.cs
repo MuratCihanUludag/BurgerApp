@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.MenuClasses
 {
-    public class Drink : BaseEntity
+    public class Drink : BaseImage
     {
         public string Name { get; set; }
         public ProductSize Size { get; set; }
         public double Price { get; set; }
-        public int ImageId { get; set; }
-        public Image Image { get; set; }
         public ICollection<Menu> Menus { get; set; }
 
 

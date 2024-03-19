@@ -52,8 +52,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<int>("DrinkId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -70,9 +71,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Menus");
+                    b.ToTable("Menu");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", b =>
@@ -96,8 +95,9 @@ namespace BurgerApp.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -110,8 +110,6 @@ namespace BurgerApp.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.ToTable("Burgers");
                 });
@@ -133,8 +131,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -150,8 +149,6 @@ namespace BurgerApp.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.ToTable("Cipies");
                 });
@@ -173,8 +170,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -191,40 +189,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
-
                     b.ToTable("Drinks");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DataStatu")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
@@ -250,9 +215,6 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<int>("MenuId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
 
@@ -260,9 +222,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", b =>
@@ -282,8 +242,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -297,42 +258,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
-
                     b.ToTable("ExtraMetarials");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DataStatu")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("ImageArry")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.Sauce", b =>
@@ -352,8 +278,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -366,8 +293,6 @@ namespace BurgerApp.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.ToTable("Sauces");
                 });
@@ -609,24 +534,18 @@ namespace BurgerApp.DAL.Migrations
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", "Burger")
                         .WithMany("Menus")
                         .HasForeignKey("BurgerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.MenuClasses.Cips", "Cips")
                         .WithMany("Menus")
                         .HasForeignKey("CipsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", "Drink")
                         .WithMany("Menus")
                         .HasForeignKey("DrinkId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -635,52 +554,6 @@ namespace BurgerApp.DAL.Migrations
                     b.Navigation("Cips");
 
                     b.Navigation("Drink");
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", b =>
-                {
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Cips", b =>
-                {
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", b =>
-                {
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.HasOne("BurgerApp.PL.Areas.Identity.Data.BurgerAppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
@@ -691,33 +564,7 @@ namespace BurgerApp.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.Order", null)
-                        .WithMany("Details")
-                        .HasForeignKey("OrderId");
-
                     b.Navigation("Menu");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", b =>
-                {
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.Sauce", b =>
-                {
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("ExtraMetarialOrderDetail", b =>
@@ -814,11 +661,6 @@ namespace BurgerApp.DAL.Migrations
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", b =>
                 {
                     b.Navigation("Menus");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }

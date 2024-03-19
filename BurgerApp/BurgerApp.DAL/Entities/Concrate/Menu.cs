@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate
 {
-    public class Menu : BaseEntity
+    public class Menu : BaseImage
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -20,8 +20,6 @@ namespace BurgerApp.DAL.Entities.Concrate
         public Drink Drink { get; set; }
         public int CipsId { get; set; }
         public Cips Cips { get; set; }
-        public int ImageId { get; set; }
-        public Image Image { get; set; }
         public double MenuPrice()
         {
             return this.Burger.Price + this.Drink.Price + this.Cips.Price;

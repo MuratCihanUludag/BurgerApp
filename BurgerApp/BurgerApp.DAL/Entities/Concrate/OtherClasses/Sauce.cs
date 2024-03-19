@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
 {
-    public class Sauce : BaseEntity
+    public class Sauce : BaseImage
     {
         public string Name { get; set; }
         public double Price { get; set; }
-        public int ImageId { get; set; }
-        public Image Image { get; set; }
         public ICollection<OrderDetail> Details { get; set; }
     }
 }
