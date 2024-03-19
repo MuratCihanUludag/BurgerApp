@@ -1,4 +1,7 @@
-﻿using BurgerApp.PL.Areas.Identity.Data;
+﻿using BurgerApp.DAL.Entities.Concrate;
+using BurgerApp.DAL.Entities.Concrate.MenuClasses;
+using BurgerApp.DAL.Entities.Concrate.OtherClasses;
+using BurgerApp.PL.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +14,44 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
         : base(options)
     {
     }
+    public DbSet<Burger> Burgers { get; set; }
+    public DbSet<Drink> Drinks { get; set; }
+    public DbSet<Cips> Cipies { get; set; }
+    public DbSet<Image> Images { get; set; }
+    public DbSet<Sauce> Sauces { get; set; }
+    public DbSet<ExtraMetarial> ExtraMetarials { get; set; }
+    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<Menu>()
+               .HasOne(x => x.Burger)
+               .WithMany(x => x.Menus)
+               .HasForeignKey(x => x.BurgerId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+
+        builder.Entity<Menu>()
+               .HasOne(x => x.Drink)
+               .WithMany(x => x.Menus)
+               .HasForeignKey(x => x.DrinkId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+
+        builder.Entity<Menu>()
+               .HasOne(x => x.Cips)
+               .WithMany(x => x.Menus)
+               .HasForeignKey(x => x.CipsId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<Order>()
+            .
+
+
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+
     }
 }
