@@ -1,4 +1,5 @@
-﻿using BurgerApp.DAL.Entities.Abstract;
+﻿using BurgerApp.DAL.Entities.Abstract.Base;
+using BurgerApp.DAL.Entities.Abstract.OtherClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
 {
-    public class Sauce : BaseImage
+    public class Sauce : BaseImage,ISauce
     {
         public string Name { get; set; }
         public double Price { get; set; }

@@ -1,5 +1,6 @@
 ﻿using BurgerApp.DAL.Comman;
-using BurgerApp.DAL.Entities.Abstract;
+using BurgerApp.DAL.Entities.Abstract.Base;
+using BurgerApp.DAL.Entities.Abstract.MenuClasses;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.MenuClasses
 {
-    public class Cips : BaseImage
+    public class Cips : BaseImage, ICips
     {
         public string Name { get; set; }
         public ProductSize Size { get; set; }

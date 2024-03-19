@@ -1,4 +1,5 @@
 ﻿using BurgerApp.DAL.Entities.Abstract;
+using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,15 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate
 {
-    public class OrderDetail : BaseEntity
+    public class OrderDetail : BaseEntity, IOrderDetail
     {
         public int MenuId { get; set; }
         public Menu Menu { get; set; }
         public int Count { get; set; }
         public ICollection<Sauce> Sauces { get; set; }
         public ICollection<ExtraMetarial> ExtraMetarials { get; set; }
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
         public double OrderDetailTotalPrice()
         {
             double totalSaucePrice = 0;
@@ -27,6 +30,7 @@ namespace BurgerApp.DAL.Entities.Concrate
             {
                 totalExtraMetarialPrice += extraMetarial.Price;
             }
+
             return (this.Menu.MenuPrice() + totalSaucePrice + totalExtraMetarialPrice) * this.Count;
         }
 

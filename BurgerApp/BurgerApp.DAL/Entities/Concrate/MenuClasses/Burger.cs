@@ -1,4 +1,5 @@
-﻿using BurgerApp.DAL.Entities.Abstract;
+﻿using BurgerApp.DAL.Entities.Abstract.Base;
+using BurgerApp.DAL.Entities.Abstract.MenuClasses;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.MenuClasses
 {
-    public class Burger : BaseImage
+    public class Burger : BaseImage, IBurger
     {
         public string Name { get; set; }
         public string Description { get; set; }
