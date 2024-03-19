@@ -3,7 +3,7 @@ using BurgerApp.DAL.Repo.Abstract;
 
 namespace BurgerApp.DAL.Repo.Concrete
 {
-    public class OrderManager : GenericRepo<Order>,IOrderManager 
+    public class OrderRepo : GenericRepo<Order>,IOrderRepo 
     {
     }
 
