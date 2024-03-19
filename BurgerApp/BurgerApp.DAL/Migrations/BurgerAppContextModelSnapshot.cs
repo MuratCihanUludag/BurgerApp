@@ -39,7 +39,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -85,7 +85,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -125,7 +125,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -164,7 +164,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -237,7 +237,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -272,7 +272,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
@@ -308,7 +308,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DataStatu")
+                    b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Deleted")
