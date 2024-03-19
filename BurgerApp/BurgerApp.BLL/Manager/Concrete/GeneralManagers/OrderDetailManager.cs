@@ -1,6 +1,7 @@
 ﻿using BurgerApp.BLL.Manager.Abstract;
 using BurgerApp.BLL.ViewModels.General_Models;
 using BurgerApp.DAL.Entities.Concrate;
+using BurgerApp.DAL.Repo.Concrete;
 using BurgerApp.PL.Data;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace BurgerApp.BLL.Manager.Concrete.GeneralManager
     {
         public OrderDetailManager()
         {
-            _repository = new OrderDetailRepository(new BurgerAppContext());
+            _repo = new OrderDetailRepo();
         }
     }
 }
