@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate
 {
-    internal class Class1
+    internal class Burger
     {
     }
 }
