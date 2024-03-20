@@ -9,5 +9,6 @@ namespace BurgerApp.PL.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the BurgerAppUser class
 public class BurgerAppUser : IdentityUser
 {
+
 }
 

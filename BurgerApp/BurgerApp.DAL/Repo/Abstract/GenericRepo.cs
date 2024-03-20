@@ -1,5 +1,6 @@
 ﻿using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.PL.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,16 @@ namespace BurgerApp.DAL.Repo.Abstract
 {
     public class GenericRepo<T> : IGenericRepo<T> where T : BaseEntity
     {
-        private BurgerAppContext _dbContext;
+        protected DbContext _dbContext;
         private DbSet<T> _dbSet;
         public GenericRepo()
         {
-            
+
         }
         public GenericRepo(BurgerAppContext dbContext)
         {
             _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
         }
         public void Add(T entity)
         {
