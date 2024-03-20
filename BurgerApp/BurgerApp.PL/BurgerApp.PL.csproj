@@ -22,4 +22,8 @@
     <ProjectReference Include="..\BurgerApp.BLL\BurgerApp.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+  </ItemGroup>
+
 </Project>

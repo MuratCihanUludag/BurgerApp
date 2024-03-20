@@ -15,7 +15,7 @@ namespace BurgerApp.DAL.Entities.Abstract
         public Menu Menu { get; set; }
         public int Count { get; set; }
         public ICollection<Sauce> Sauces { get; set; }
-        public ICollection<ExtraMetarial> ExtraMetarials { get; set; }
+        public ICollection<ExtraMaterial> ExtraMetarials { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
         public double OrderDetailTotalPrice();

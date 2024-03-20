@@ -13,9 +13,9 @@ namespace BurgerApp.BLL.Manager.Concrete.Other_Managers
 {
     public class ExtraMaterialManager : GenericManager<ExtraMaterialDTO, ExtraMaterial>
     {
-        public ExtraMaterialManager()
+        public ExtraMaterialManager(BurgerAppContext context)
         {
-            _repo = new ExtraMaterialRepo();
+            _repo = new ExtraMaterialRepo(context);
         }
     }
 }
