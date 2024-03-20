@@ -13,9 +13,9 @@ namespace BurgerApp.BLL.Manager.Concrete.Other_Managers
 {
     public class SauceManager : GenericManager<SauceDTO, Sauce>
     {
-        public SauceManager()
+        public SauceManager(BurgerAppContext context)
         {
-            _repo = new SauceRepo();
+            _repo = new SauceRepo(context);
         }
     }
 }

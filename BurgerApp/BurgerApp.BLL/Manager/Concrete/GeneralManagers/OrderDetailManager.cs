@@ -13,9 +13,9 @@ namespace BurgerApp.BLL.Manager.Concrete.GeneralManager
 {
     public class OrderDetailManager : GenericManager<OrderDetailDTO, OrderDetail>
     {
-        public OrderDetailManager()
+        public OrderDetailManager(BurgerAppContext context)
         {
-            _repo = new OrderDetailRepo();
+            _repo = new OrderDetailRepo(context);
         }
     }
 }
