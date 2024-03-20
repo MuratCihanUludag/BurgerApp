@@ -1,4 +1,6 @@
-﻿@model List<BurgerDTO>
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.CommonFunctions
+@model List<BurgerViewModel>
 
 <div class="table-responsive">
     <table class="table table-hover">
@@ -8,12 +10,18 @@
             </tr>
         </thead>
         <tbody>
-@*             @foreach (var burger in Model)
+            @foreach (var burger in Model)
             {
                 <tr>
                     <td>@burger.Name</td>
+                    <td>
+                        @{
+                            var image2 = await CommonFunc.ImageToArray(burger.Image);
+                        }
+                        <img src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
+                    </td>
                 </tr>
-            } *@
+            }
         </tbody>
     </table>
 

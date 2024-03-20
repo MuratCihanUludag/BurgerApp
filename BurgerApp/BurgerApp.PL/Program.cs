@@ -6,6 +6,7 @@ using BurgerApp.PL.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionCihan") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
 
+
 builder.Services.AddDbContext<BurgerAppContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<BurgerAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -39,13 +40,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
+app.MapControllerRoute(
+      name: "areaRoute",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapControllerRoute(
-      name: "areas",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-    );
+
+
+
 app.Run();
