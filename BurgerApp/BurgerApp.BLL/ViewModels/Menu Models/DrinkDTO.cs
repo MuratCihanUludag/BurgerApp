@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BurgerApp.BLL.ViewModels.Menu_Models
 {
     public class DrinkDTO:BaseDTO
@@ -16,5 +17,6 @@ namespace BurgerApp.BLL.ViewModels.Menu_Models
         public ProductSize Size { get; set; }
         public double Price { get; set; }
         public ICollection<MenuDTO> Menus { get; set; }
+        public byte[] Image { get; set; }
     }
 }

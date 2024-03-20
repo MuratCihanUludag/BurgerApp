@@ -1,0 +1,35 @@
+﻿@model IEnumerable<DrinkDTO>
+
+@{
+    ViewData["Title"] = "Drinks List";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var drink in Model)
+        {
+            <tr>
+                <td>@drink.Name</td>
+                <td>@drink.Size</td>
+                <td>@drink.Price</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@drink.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@drink.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@drink.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New</a>
