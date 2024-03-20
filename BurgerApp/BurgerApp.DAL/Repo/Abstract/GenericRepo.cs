@@ -1,4 +1,4 @@
-﻿using BurgerApp.DAL.Entities.Abstract;
+﻿using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.PL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,13 +13,17 @@ namespace BurgerApp.DAL.Repo.Abstract
     {
         private BurgerAppContext _dbContext;
         private DbSet<T> _dbSet;
+        public GenericRepo()
+        {
+            
+        }
         public GenericRepo(BurgerAppContext dbContext)
         {
             _dbContext = dbContext;
         }
         public void Add(T entity)
         {
-            entity.DataStatu = Comman.DataStatus.Insert;
+            entity.DataStatus = Comman.DataStatus.Insert;
             entity.Created = DateTime.Now;
             _dbSet.Add(entity);
             _dbContext.SaveChanges();
@@ -27,7 +31,7 @@ namespace BurgerApp.DAL.Repo.Abstract
 
         public void Delete(T entity)
         {
-            entity.DataStatu = Comman.DataStatus.Delete;
+            entity.DataStatus = Comman.DataStatus.Delete;
             entity.Deleted = DateTime.Now;
             this.Update(entity);
         }
@@ -39,9 +43,9 @@ namespace BurgerApp.DAL.Repo.Abstract
 
         public void Update(T entity)
         {
-            entity.DataStatu = entity.DataStatu != Comman.DataStatus.Delete ? Comman.DataStatus.Update : Comman.DataStatus.Delete;
+            entity.DataStatus = entity.DataStatus != Comman.DataStatus.Delete ? Comman.DataStatus.Update : Comman.DataStatus.Delete;
 
-            if (entity.DataStatu == Comman.DataStatus.Update)
+            if (entity.DataStatus == Comman.DataStatus.Update)
                 entity.Updated = DateTime.Now;
 
             _dbSet.Update(entity);
@@ -55,7 +59,7 @@ namespace BurgerApp.DAL.Repo.Abstract
 
         public IList<T> GetAll()
         {
-            return _dbSet.AsNoTracking().Where(c => c.DataStatu != Comman.DataStatus.Delete).ToList();
+            return _dbSet.AsNoTracking().Where(c => c.DataStatus != Comman.DataStatus.Delete).ToList();
         }
 
     }

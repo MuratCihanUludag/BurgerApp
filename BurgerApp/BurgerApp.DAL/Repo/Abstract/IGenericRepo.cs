@@ -15,4 +15,5 @@ namespace BurgerApp.DAL.Repo.Abstract
         IList<T> GetAll();
         T GetById(int id);
     }
+
 }
