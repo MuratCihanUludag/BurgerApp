@@ -16,7 +16,7 @@
                     <td>@burger.Name</td>
                     <td>
                         @{
-                            var image2 = await CommonFunc.ImageToArray(burger.Image);
+                            var image2 = CommonFunc.ImageToArray(burger.Image);
                         }
                         <img src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                     </td>
