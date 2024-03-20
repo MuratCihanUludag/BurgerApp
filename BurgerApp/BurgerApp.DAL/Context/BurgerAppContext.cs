@@ -42,10 +42,5 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
                .HasOne(x => x.Cips)
                .WithMany(x => x.Menus)
                .HasForeignKey(x => x.CipsId);
-
-        builder.Entity<OrderDetail>()
-
-
-
     }
 }
