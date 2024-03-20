@@ -24,7 +24,6 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
     public DbSet<OrderDetail> OrderDetails { get; set; }
 
 
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<Menu>()
