@@ -13,9 +13,9 @@ namespace BurgerApp.BLL.Manager.Concrete.Menu_Manager
 {
     public class DrinkManager : GenericManager<DrinkDTO, Drink>
     {
-        public DrinkManager()
+        public DrinkManager(BurgerAppContext context)
         {
-            _repo = new DrinkRepo();
+            _repo = new DrinkRepo(context);
         }
     }
 }
