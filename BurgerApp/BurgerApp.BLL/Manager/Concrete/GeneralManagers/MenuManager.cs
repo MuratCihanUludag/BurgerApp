@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.BLL.Manager.Concrete.GeneralManager
 {
-    public class MenuManager:GenericManager<MenuDTO,Menu>
+    public class MenuManager : GenericManager<MenuDTO, Menu>
     {
-        public MenuManager()
+        public MenuManager(BurgerAppContext context)
         {
-            _repo = new MenuRepo();
+            _repo = new MenuRepo(context);
         }
     }
 }

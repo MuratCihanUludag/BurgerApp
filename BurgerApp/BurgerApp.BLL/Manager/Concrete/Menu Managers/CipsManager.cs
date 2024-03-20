@@ -13,9 +13,9 @@ namespace BurgerApp.BLL.Manager.Concrete.Menu_Manager
 {
     public class CipsManager : GenericManager<CipsDTO, Cips>
     {
-        public CipsManager()
+        public CipsManager(BurgerAppContext context)
         {
-            _repo = new CipsRepo();
+            _repo = new CipsRepo(context);
         }
     }
 }
