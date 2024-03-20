@@ -1,112 +1,88 @@
 ﻿using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
 using BurgerApp.BLL.ViewModels.Menu_Models;
+using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
+using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+   [Area("Admin")]
     public class DrinkController : Controller
     {
-        private readonly DrinkManager _drinkManager;
-        private readonly ILogger<DrinkController> _logger;
+        private readonly DrinkManager _manager;
 
-        public DrinkController(BurgerAppContext context, ILogger<DrinkController> logger)
+        public DrinkController(BurgerAppContext dbContext)
         {
-            _drinkManager = new DrinkManager(context);
-            _logger = logger; 
+            _manager = new DrinkManager(dbContext);
         }
-
         public IActionResult Index()
         {
-            var drinks = _drinkManager.GetAll();
+            var drinks = _manager.GetAll();
             return View(drinks);
         }
-
         public IActionResult Details(int id)
         {
-            var drink = _drinkManager.GetById(id);
+            var drink = _manager.GetById(id);
             if (drink == null)
             {
                 return NotFound();
             }
             return View(drink);
         }
-
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DrinkDTO drinkDto, IFormFile imageFile)
+        public async Task<IActionResult> Create(DrinkViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (imageFile != null && imageFile.Length > 0)
+                var drinkDTO = new DrinkDTO
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await imageFile.CopyToAsync(memoryStream);
-                        drinkDto.Image = memoryStream.ToArray();
-                    }
-                }
-                _drinkManager.Add(drinkDto);
+                    Name = model.Name,
+                    Size = model.Size,
+                    Price = model.Price,
+                    Image = await CommonFunc.ImageToArray(model.Image)
+                };
+                _manager.Add(drinkDTO);
                 return RedirectToAction(nameof(Index));
             }
-            return View(drinkDto);
+            return View(model);
         }
-
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            var drink = _drinkManager.GetById(id);
+            var drink = _manager.GetById(id);
             if (drink == null)
             {
                 return NotFound();
             }
-            return View(drink);
+            var model = new DrinkViewModel
+            {
+
+            };
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, DrinkDTO drinkDto, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, DrinkViewModel model)
         {
-            if (id != drinkDto.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    if (imageFile != null && imageFile.Length > 0)
-                    {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            imageFile.CopyTo(memoryStream);
-                            drinkDto.Image = memoryStream.ToArray();
-                        }
-                    }
-                    _drinkManager.Update(drinkDto);
-                }
-                catch (Exception ex) 
-                {
-                    _logger.LogError(ex, "Drink güncellenirken bir hata oluştu"); 
-                    ModelState.AddModelError("", "Bir hata oluştu ve içecek güncellenemedi. Lütfen daha sonra tekrar deneyiniz.");
-                    return View(drinkDto);
-                }
-
                 return RedirectToAction(nameof(Index));
             }
-            return View(drinkDto);
+            return View(model);
         }
-
+        [HttpGet]
         public IActionResult Delete(int id)
         {
-            var drink = _drinkManager.GetById(id);
+            var drink = _manager.GetById(id);
             if (drink == null)
             {
                 return NotFound();
@@ -118,9 +94,13 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var drink = _drinkManager.GetById(id);
-            _drinkManager.Remove(drink);
-            return RedirectToAction(nameof(Index));
+            var drink = _manager.GetById(id); 
+            if (drink != null)
+            {
+                _manager.Delete(drink); 
+                return RedirectToAction(nameof(Index));
+            }
+            return NotFound(); 
         }
     }
 }
