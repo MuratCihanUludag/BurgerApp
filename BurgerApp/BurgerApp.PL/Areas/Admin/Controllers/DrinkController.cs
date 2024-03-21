@@ -58,10 +58,11 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
                 drink.Image = CommonFunc.ArrayToImage(drinkDto.Image);
             }
 
-            if (ModelState.IsValid)
-            {
-                var drinkDto = _mapper.Map<DrinkDTO>(drink);
-                _manager.Update(drinkDto);
+                var drinkDto = _mapper.Map<DrinkDTO>(model);
+                drinkDto.Image = imageBytes;
+
+                _drinkManager.Add(drinkDto);
+
                 return RedirectToAction("Index");
             }
             return PartialView(drink);
