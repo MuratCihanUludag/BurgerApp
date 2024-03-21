@@ -51,29 +51,30 @@ $(document).ready(function () {
     $(document).on('click', '.deleteLink', function (e) {
         e.preventDefault();
         var drinkId = $(this).data('id');
-        if (drinkId) {
-            if (confirm('Bu içeceği silmek istediğinize emin misiniz?')) {
-                $.ajax({
-                    url: '/Admin/Drink/DeleteConfirmed/' + drinkId,
-                    type: 'POST',
-                    data: {
-                        id: drinkId,
-                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
-                    },
-                    success: function () {
-                        reloadDrinksList();
-                    },
-                    error: function () {
-                        alert("İçeceği silerken bir hata oluştu.");
-                    }
-                });
-            }
-        } else
-        {
-            console.error("Silme işlemi için içecek ID'si bulunamadı.");
-            alert("Bir hata oluştu, lütfen sayfayı yenileyin ve tekrar deneyin.");
-        }
+        var deleteUrl = `/Admin/Drink/Delete/${drinkId}`;
+        $.get(deleteUrl, function (data) {
+            $('#modalBody').html(data);
+            $('#deleteModal').modal('show');
+        }).fail(function () {
+            alert("İçecek bilgisi yüklenirken bir hata oluştu.");
+        });
     });
 
+    $(document).on('submit', '#deleteForm', function (e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: form.attr('method'),
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (response) {
+                $('#deleteModal').modal('hide');
+                reloadDrinksList();
+            },
+            error: function (xhr, status, error) {
+                alert("İçecek silinirken bir hata oluştu.");
+            }
+        });
+    });
     reloadDrinksList();
 });
