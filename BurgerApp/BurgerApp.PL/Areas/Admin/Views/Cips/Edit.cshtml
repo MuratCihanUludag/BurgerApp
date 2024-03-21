@@ -5,6 +5,7 @@
 @model CipsViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
+    var tip = Model.Size.GetType();
 }
 <form id="form-edit" asp-action="Edit" method="post">
     <div class="modal-body">
@@ -14,12 +15,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Boyut</label>
-            <select asp-for="Size" class="form-select">
-                @foreach (var size in Enum.GetValues(typeof(ProductSize)))
-                {
-                    <option value="@size">@size</option>
-                }
-            </select>
+            <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList(tip))"> </select>
         </div>
         <div class="form-group">
             <label class="form-label">Fiyat</label>
@@ -57,7 +53,8 @@
     });
 
 
-    $(".btn-primary").click(() => {
+    $("#form-edit").submit(() => {
+        e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
             url: `Edit`,

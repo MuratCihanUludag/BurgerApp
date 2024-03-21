@@ -29,7 +29,8 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             var burgerDtoList = _manager.GetAll();
             var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
-            return PartialView(burgerViewList);
+            ViewBag.burgerViewList = burgerViewList;
+            return PartialView();
         }
         [HttpPost]
         public IActionResult Add(BurgerViewModel burger)

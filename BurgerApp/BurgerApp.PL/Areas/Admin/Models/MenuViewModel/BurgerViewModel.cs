@@ -6,7 +6,8 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
     public class BurgerViewModel
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Bos Birakilamaz")]
+
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }

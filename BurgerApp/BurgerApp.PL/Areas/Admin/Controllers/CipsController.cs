@@ -29,7 +29,8 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             var cipsDtoList = _manager.GetAll();
             var cipsViewList = _mapper.Map<List<CipsViewModel>>(cipsDtoList);
-            return PartialView(cipsViewList);
+            ViewBag.CipsList = cipsViewList;
+            return PartialView();
         }
         [HttpPost]
         public IActionResult Add(CipsViewModel cipsModel)
@@ -49,11 +50,11 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             return PartialView(cipsView);
         }
         [HttpPost]
-        public IActionResult _Edit(CipsViewModel cipsModel)
+        public IActionResult Edit(CipsViewModel cipsModel)
         {
             if (cipsModel.Image is null)
             {
-                var cipsDto =  _manager.GetById(cipsModel.Id);
+                var cipsDto = _manager.GetById(cipsModel.Id);
                 cipsModel.Image = CommonFunc.ArrayToImage(cipsDto.Image);
             }
 
@@ -65,5 +66,21 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             }
             return PartialView(cipsModel);
         }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return PartialView(_mapper.Map<CipsViewModel>(_manager.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult Delete(CipsViewModel cipsModel)
+        {
+            if (cipsModel.Id is not 0)
+            {
+                _manager.Delete(_manager.GetById(cipsModel.Id));
+                RedirectToAction("Index");  
+            }
+            return PartialView(cipsModel);
+        }
+
     }
 }
