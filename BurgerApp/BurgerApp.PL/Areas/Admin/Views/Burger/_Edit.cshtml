@@ -50,7 +50,8 @@
     });
 
 
-    $("#edit-button").click(() => {
+    $("#form-edit").submit(() => {
+        e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
             url: `_Edit`,

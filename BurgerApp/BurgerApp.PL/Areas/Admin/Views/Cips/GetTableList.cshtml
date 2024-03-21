@@ -1,8 +1,9 @@
-﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-@model List<CipsViewModel>
+@model CipsViewModel
 @{
-    int index = 0;
+    int index = 1;
 }
 <table class="table table-hover">
     <thead>
@@ -10,24 +11,18 @@
             <th>#</th>
             <th>Ad</th>
             <th>Resim</th>
+            <th>Boyut</th>
             <th>Fiyat</th>
             <th>Aksiyonlar</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var cips in Model)
+        @foreach (var cips in ViewBag.CipsList)
         {
             <tr>
-                <td>
-                    @(index++)
-                </td>
-                <td>
-                    @cips.Name
-                </td>
-                <td>
-                    @{
-                        var image2 = CommonFunc.ImageToArray(cips.Image);
-                    }
+                <td> @(index++) </td>
+                <td> @cips.Name </td>
+                <td> @{ var image2 = CommonFunc.ImageToArray(cips.Image); }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                 </td>
                 <td>
@@ -36,9 +31,9 @@
                 <td>
                     @cips.Price
                 </td>
-                <td class="d-flex">
+                <td class="">
                     <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-outline-warning me-2">Duzenle</button>
-                    <button class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -49,18 +44,19 @@
         <tbody>
             <tr>
                 <td>@(index + 1)</td>
-                <td><input name="Name" class="form-control" placeholder="Ad" /></td>
-                <td><input name="Image" type="file" class="form-control" placeholder="Resim" /></td>
-                <td><input name="Description" class="form-control" placeholder="Açıklama" /></td>
-                <td><input name="Price" class="form-control" placeholder="Fiyat" /></td>
-                <td><button type="button" class="btn btn-primary w-100">Ekle</button></td>
+                <td><input asp-for="Name" required class="form-control" placeholder="Ad" /></td>
+                <td><input asp-for="Image" required type="file" class="form-control" placeholder="Resim" /></td>
+                <td> <select asp-for="Size" required class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
+                <td><input asp-for="Price" required name="Price" class="form-control" placeholder="Fiyat" /></td>
+                <td><button type="submit" id="add-button"  class="btn btn-primary w-100">Ekle</button></td>
             </tr>
         </tbody>
     </table>
 </form>
 
 <script>
-    $(".btn-primary").click(() => {
+    $("#form-add").submit((e) => {
+        e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
             url: `Add`,
