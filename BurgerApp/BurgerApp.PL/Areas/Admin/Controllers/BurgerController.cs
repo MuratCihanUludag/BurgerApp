@@ -7,6 +7,8 @@ using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Data;
 
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
@@ -32,18 +34,20 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             ViewBag.burgerViewList = burgerViewList;
             return PartialView();
         }
+
         [HttpPost]
         public IActionResult Add(BurgerViewModel burger)
         {
-            var burgerDto = _mapper.Map<BurgerDTO>(burger);
-
-            _manager.Add(burgerDto);
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                var burgerDto = _mapper.Map<BurgerDTO>(burger);
+                _manager.Add(burgerDto);
+            }
+            return PartialView("Index");
         }
 
         [HttpGet]
-        public IActionResult _Edit(int id)
+        public IActionResult Edit(int id)
         {
             var burgerDto = _manager.GetById(id);
             var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
@@ -51,7 +55,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             return PartialView(burgerView);
         }
         [HttpPost]
-        public IActionResult _Edit(BurgerViewModel burger)
+        public IActionResult Edit(BurgerViewModel burger)
         {
             if (burger.Image is null)
             {
@@ -69,14 +73,14 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult _Delete(int id)
+        public IActionResult Delete(int id)
         {
             var burgerDto = _manager.GetById(id);
             var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
             return PartialView(burgerView);
         }
         [HttpPost]
-        public IActionResult _Delete(BurgerViewModel burger)
+        public IActionResult Delete(BurgerViewModel burger)
         {
             if (burger.Id is not 0)
             {

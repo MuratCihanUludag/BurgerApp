@@ -1,24 +1,24 @@
-﻿@using BurgerApp.DAL.Comman
-@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
 
+@model BurgerViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
-    var tip = Model.Size.GetType();
+
 }
-<form id="form-edit" asp-action="Edit" method="post">
+<form id="form-edit" asp-action="_Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="form-label">Ad</label>
-            <input value="@Model.Name" name="Name" class="form-control" />
+            <input asp-for="Name" value="@Model.Name" required class="form-control" />
         </div>
         <div class="form-group">
-            <label class="form-label">Boyut</label>
-            <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList(tip))"> </select>
+            <label class="form-label">Aciklama</label>
+            <input asp-for="Description" value="@Model.Description" required name="Description" class="form-control" />
         </div>
         <div class="form-group">
-            <label class="form-label">Fiyat</label>
-            <input value="@Model.Price" name="Price" class="form-control" />
+            <label class="fomr-label">Fiyat</label>
+            <input asp-for="Price" value="@Model.Price" required class="form-control" />
         </div>
         <div class="form-group text-center">
             <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
@@ -27,14 +27,12 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Guncelle</button>
+        <button type="submit" id="edit-button" class="btn btn-primary" >Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
 
-
 <script>
-
     $("#img-@Model.Id").click(() => {
         $("#input-img-@Model.Id").click();
     })
@@ -56,7 +54,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `_Edit`,
+            url: `Edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -84,6 +82,9 @@
             }
         })
     }
-
 </script>
+
+
+
+
 

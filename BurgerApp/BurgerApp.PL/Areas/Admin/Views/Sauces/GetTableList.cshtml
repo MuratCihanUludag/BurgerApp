@@ -1,25 +1,23 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-@model BurgerViewModel
+@model List<SauceViewModel>
 
 @{
-
     int index = 1;
 }
 
 <table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="align-items-center">
             <th>#</th>
             <th>Ad</th>
             <th>Resim</th>
-            <th>Açıklama</th>
             <th>Fiyat</th>
             <th>Aksiyonlar</th>
         </tr>
     </thead>
     <tbody id="table-list">
-        @foreach (var burger in ViewBag.burgerViewList)
+        @foreach (var burger in Model)
         {
             <tr>
                 <td>@(index++)</td>
@@ -27,56 +25,36 @@
                 <td>
                     @{
                         var image2 = CommonFunc.ImageToArray(burger.Image);
-                    }
+                     }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                 </td>
-                <td>@burger.Description</td>
                 <td>@burger.Price</td>
                 <td>
-                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<div id="test">
-</div>
-
 
 <form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
     <table class="table table-hover">
-        <tbody>
+        <tbody >
             <tr>
                 <td>@(index + 1)</td>
-                <td>
-                    <input asp-for="Name" class="form-control" placeholder="Ad" />
-                    <span asp-validation-for="Name"></span>
-                </td>
-                <td>
-                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
-                    <span asp-validation-for="Image"></span>
-                </td>
-                <td>
-                    <input asp-for="Description" class="form-control" placeholder="Açıklama" />
-                    <span asp-validation-for="Description"></span>
-                </td>
-                <td>
-                    <input asp-for="Price" class="form-control" placeholder="Fiyat" />
-                    <span asp-validation-for="Price"></span>
-                </td>
-                <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
+                <td><input name="Name" class="form-control" placeholder="Ad" /></td>
+                <td><input name="Image" type="file" class="form-control" placeholder="Resim" /></td>
+                <td><input name="Price" class="form-control" placeholder="Fiyat" /></td>
+                <td><button type="button" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
             </tr>
         </tbody>
     </table>
 </form>
 
-
-
 <script>
 
-    $("#form-add").submit((e) => {
-        e.preventDefault();
+    $("#add-button").click(() => {
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
             url: `Add`,
@@ -109,5 +87,4 @@
     }
 
 </script>
-
 
