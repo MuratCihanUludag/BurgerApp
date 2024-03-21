@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    [Migration("20240319200110_init")]
-    partial class init
+    [Migration("20240319195023_Mig-2")]
+    partial class Mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.ToTable("Menu");
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", b =>
@@ -195,6 +195,37 @@ namespace BurgerApp.DAL.Migrations
                     b.ToTable("Drinks");
                 });
 
+            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DataStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Deleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -218,6 +249,9 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<int>("MenuId")
                         .HasColumnType("int");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
 
@@ -225,7 +259,9 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.ToTable("OrderDetail");
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", b =>
@@ -559,6 +595,17 @@ namespace BurgerApp.DAL.Migrations
                     b.Navigation("Drink");
                 });
 
+            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
+                {
+                    b.HasOne("BurgerApp.PL.Areas.Identity.Data.BurgerAppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
                 {
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.Menu", "Menu")
@@ -567,7 +614,15 @@ namespace BurgerApp.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BurgerApp.DAL.Entities.Concrate.Order", "Order")
+                        .WithMany("Details")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Menu");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ExtraMetarialOrderDetail", b =>
@@ -664,6 +719,11 @@ namespace BurgerApp.DAL.Migrations
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", b =>
                 {
                     b.Navigation("Menus");
+                });
+
+            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
+                {
+                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }
