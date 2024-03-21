@@ -1,0 +1,85 @@
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.CommonFunctions
+
+@model ExtraMaterialViewModel
+@{
+    var image = CommonFunc.ImageToArray(Model.Image);
+
+}
+<form id="form-edit" asp-action="_Edit" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="fomr-label">Ad</label>
+            <input value="@Model.Name" name="Name" class="form-control" />
+        </div>       
+        <div class="form-group">
+            <label class="fomr-label">Fiyat</label>
+            <input value="@Model.Price" name="Price" class="form-control" />
+        </div>
+        <div class="form-group text-center">
+            <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
+            <input value="@Model.Image" class="form-control" name="Image" id="input-img-@Model.Id" style="opacity:0;position:absolute;z-index: -2; pointer-events:none" type="file" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="edit-button" class="btn btn-primary">Guncelle</button>
+        <input name="Id" type="hidden" value="@Model.Id" />
+    </div>
+</form>
+
+<script>
+    $("#img-@Model.Id").click(() => {
+        $("#input-img-@Model.Id").click();
+    })
+
+    $("#input-img-@Model.Id").change(function () {
+        var file = this.files[0];
+        if (file && file.type.startsWith('image')) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+
+                $("#img-@Model.Id").attr("src", e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    $("#edit-button").click(() => {
+        var formData = new FormData($("#form-edit")[0]);
+        $.ajax({
+            url: `_Edit`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:", data);
+                ReInitTable()
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+</script>
+
+
+
+
+
