@@ -50,6 +50,7 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
                         .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                         .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
                         .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)));
+
             CreateMap<DrinkDTO, DrinkViewModel>()
                         .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

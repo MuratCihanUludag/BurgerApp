@@ -6,6 +6,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
     public class DrinkViewModel
     {
         public int Id { get; set; }
+
         [Required(ErrorMessage = "İçecek adı zorunludur.")]
         public string Name { get; set; }
 
@@ -16,7 +17,6 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         [Required(ErrorMessage = "Boyut seçimi zorunludur.")]
         public ProductSize Size { get; set; }
 
-        [Required(ErrorMessage = "Resim yüklemek zorunludur.")]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }
