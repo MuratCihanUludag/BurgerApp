@@ -28,7 +28,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             var drinkDtoList = _manager.GetAll();
             var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkDtoList);
-            ViewBag.burgerViewList = drinkViewList;
+            ViewBag.drinkList = drinkViewList;
             return PartialView();
         }
         [HttpPost]

@@ -1,12 +1,11 @@
-﻿@model IEnumerable<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.CommonFunctions
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
 
 @{
-    ViewData["Title"] = "İçecekler";
     int index = 1;
 }
-
-<h2>İçecek Listesi</h2>
-
 <table class="table table-hover">
     <thead>
         <tr>
@@ -19,27 +18,45 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var drink in Model)
+        @foreach (var drinks in ViewBag.DrinkList)
         {
             <tr>
-                <td>@index++</td>
-                <td>@drink.Name</td>
+                <td> @(index++) </td>
+                <td> @drinks.Name </td>
                 <td>
-                    @if (drink.Image != null)
-                    {
-                        <img src="@Url.Action("GetImage", "Drink", new { id = drink.Id })" class="img-fluid" style="width:100px; height:60px;" />
+                    @{
+                        var image2 = CommonFunc.ImageToArray(drinks.Image);
                     }
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Drink Image" />
                 </td>
-                <td>@drink.Size.ToString()</td>
-                <td>@drink.Price.ToString("C")</td>
                 <td>
-                    <a href="@Url.Action("_Edit", "Drink", new { id = drink.Id })" class="btn btn-warning">Düzenle</a>
-                    <a href="@Url.Action("_Delete", "Drink", new { id = drink.Id })" class="btn btn-danger">Sil</a>
+                    @drinks.Size
+                </td>
+                <td>
+                    @drinks.Price
+                </td>
+                <td class="">
+                    <button data-bs-target="#btn-edit-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-warning me-2">Duzenle</button>
+                    <button data-bs-target="#btn-delete-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+<form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
+    <table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>@(index + 1)</td>
+                <td><input asp-for="Name" required class="form-control" placeholder="Ad" /></td>
+                <td><input asp-for="Image" required type="file" class="form-control" placeholder="Resim" /></td>
+                <td> <select asp-for="Size" required class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
+                <td><input asp-for="Price" required name="Price" class="form-control" placeholder="Fiyat" /></td>
+                <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
 
 <script>
     $("#form-add").submit((e) => {

@@ -27,7 +27,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Guncelle</button>
+        <button type="submit" class="btn btn-primary">Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
@@ -52,7 +52,7 @@
     });
 
 
-    $("#form-edit").submit(() => {
+    $("#form-edit").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
