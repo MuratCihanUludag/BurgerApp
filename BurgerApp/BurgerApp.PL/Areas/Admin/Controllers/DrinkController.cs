@@ -1,4 +1,5 @@
-﻿using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
+﻿using AutoMapper;
+using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
 using BurgerApp.BLL.ViewModels.Menu_Models;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using BurgerApp.PL.CommonFunctions;
@@ -8,33 +9,43 @@ using Microsoft.Extensions.Logging;
 
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
-   [Area("Admin")]
+    [Area("Admin")]
     public class DrinkController : Controller
     {
-        private readonly DrinkManager _manager;
+        private readonly DrinkManager _drinkManager;
+        private readonly IMapper _mapper;
 
-        public DrinkController(BurgerAppContext dbContext)
+        public DrinkController(BurgerAppContext context, IMapper mapper)
         {
-            _manager = new DrinkManager(dbContext);
+            _drinkManager = new DrinkManager(context);
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
-            var drinks = _manager.GetAll();
-            return View(drinks);
+            var drinks = _drinkManager.GetAll();
+            var model = _mapper.Map<IEnumerable<DrinkViewModel>>(drinks);
+            return View(model);
+        }
+        public IActionResult DrinkList()
+        {
+            var drinks = _drinkManager.GetAll();
+            var model = _mapper.Map<IEnumerable<DrinkViewModel>>(drinks);
+            return PartialView("_DrinkList", model);
         }
         public IActionResult Details(int id)
         {
-            var drink = _manager.GetById(id);
+            var drink = _drinkManager.GetById(id);
             if (drink == null)
             {
                 return NotFound();
             }
-            return View(drink);
+            var model = _mapper.Map<DrinkViewModel>(drink);
+            return PartialView("_Details", model);
         }
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return PartialView("_Create");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -42,65 +53,57 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var drinkDTO = new DrinkDTO
+                byte[] imageBytes = null;
+                if (model.Image != null)
                 {
-                    Name = model.Name,
-                    Size = model.Size,
-                    Price = model.Price,
-                    Image = await CommonFunc.ImageToArray(model.Image)
-                };
-                _manager.Add(drinkDTO);
-                return RedirectToAction(nameof(Index));
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await model.Image.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
+
+                var drinkDto = _mapper.Map<DrinkDTO>(model);
+                drinkDto.Image = imageBytes;
+
+                _drinkManager.Add(drinkDto);
+
+                return RedirectToAction("Index");
             }
             return View(model);
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var drink = _manager.GetById(id);
-            if (drink == null)
-            {
-                return NotFound();
-            }
-            var model = new DrinkViewModel
-            {
-
-            };
-            return View(model);
+            var drink = _drinkManager.GetById(id);
+            var model = _mapper.Map<DrinkViewModel>(drink);
+            return PartialView("_Edit", model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DrinkViewModel model)
+        public IActionResult Edit(int id, DrinkViewModel model)
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var drinkDto = _mapper.Map<DrinkDTO>(model);
+                _drinkManager.Update(drinkDto);
+                return RedirectToAction("DrinkList");
             }
-            return View(model);
+            return PartialView("_Edit", model);
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var drink = _manager.GetById(id);
-            if (drink == null)
-            {
-                return NotFound();
-            }
-            return View(drink);
+            var drink = _drinkManager.GetById(id);
+            var model = _mapper.Map<DrinkViewModel>(drink);
+            return PartialView("_Delete", model);
         }
-
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var drink = _manager.GetById(id); 
-            if (drink != null)
-            {
-                _manager.Delete(drink); 
-                return RedirectToAction(nameof(Index));
-            }
-            return NotFound(); 
+            _drinkManager.Delete(new DrinkDTO { Id = id });
+            return RedirectToAction("DrinkList");
         }
     }
 }

@@ -1,0 +1,9 @@
+﻿@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
+
+<form id="deleteForm" asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken()
+    <div class="alert alert-danger" role="alert">
+        "<strong>@Model.Name</strong> içeceğini silmek istediğinize emin misiniz?"
+    </div>
+    <button type="submit" class="btn btn-danger">Sil</button>
+</form>

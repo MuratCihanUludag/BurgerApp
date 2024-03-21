@@ -1,0 +1,12 @@
+﻿@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
+
+<dl class="row">
+    <dt class="col-sm-3">Adı</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">Fiyat</dt>
+    <dd class="col-sm-9">@Model.Price</dd>
+
+    <dt class="col-sm-3">Boyut</dt>
+    <dd class="col-sm-9">@Model.Size.ToString()</dd>
+</dl>

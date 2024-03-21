@@ -5,6 +5,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 {
     public class DrinkViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "İçecek adı zorunludur.")]
         public string Name { get; set; }
 
