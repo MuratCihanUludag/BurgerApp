@@ -14,6 +14,5 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public IFormFile? Image { get; set; }
         [Required]
         public double Price { get; set; }
-        public ICollection<MenuDTO> Menus { get; set; }
     }
 }
