@@ -64,7 +64,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
                 }
 
                 var drinkDto = _mapper.Map<DrinkDTO>(model);
-                drinkDto.Image = imageBytes;
+             
 
                 _drinkManager.Add(drinkDto);
 
