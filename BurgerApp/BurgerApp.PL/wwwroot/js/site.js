@@ -68,7 +68,8 @@ $(document).ready(function () {
                     }
                 });
             }
-        } else {
+        } else
+        {
             console.error("Silme işlemi için içecek ID'si bulunamadı.");
             alert("Bir hata oluştu, lütfen sayfayı yenileyin ve tekrar deneyin.");
         }

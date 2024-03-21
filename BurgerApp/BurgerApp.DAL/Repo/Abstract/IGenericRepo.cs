@@ -14,7 +14,6 @@ namespace BurgerApp.DAL.Repo.Abstract
         void Remove(T entity);
         IList<T> GetAll();
         T GetById(int id);
-        Task GetByIdAsync(int id);
     }
 
 }
