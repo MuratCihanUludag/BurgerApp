@@ -12,11 +12,12 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
 {
     public BurgerAppContext(DbContextOptions<BurgerAppContext> options)
         : base(options)
-    { }
+    {
+    }
     public DbSet<Burger> Burgers { get; set; }
     public DbSet<Drink> Drinks { get; set; }
     public DbSet<Cips> Cipies { get; set; }
-    public DbSet<Sauce> Sauces { get; set; }
+    public DbSet<Sauce> Sauces { get; set; }    
     public DbSet<ExtraMaterial> ExtraMetarials { get; set; }
     public DbSet<Menu> Menus { get; set; }
     public DbSet<Order> Orders { get; set; }
@@ -40,8 +41,6 @@ public class BurgerAppContext : IdentityDbContext<BurgerAppUser>
                .HasOne(x => x.Cips)
                .WithMany(x => x.Menus)
                .HasForeignKey(x => x.CipsId);
-
         base.OnModelCreating(builder);
-
     }
 }
