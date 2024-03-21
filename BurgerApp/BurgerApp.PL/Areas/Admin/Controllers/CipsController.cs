@@ -11,12 +11,12 @@ using BurgerApp.DAL.Entities.Concrate.MenuClasses;
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class CipsController : Controller
+    public class ExtraMaterialController : Controller
     {
 
         private readonly CipsManager _manager;
         private IMapper _mapper;
-        public CipsController(BurgerAppContext dbContext, IMapper mapper)
+        public ExtraMaterialController(BurgerAppContext dbContext, IMapper mapper)
         {
             _manager = new CipsManager(dbContext);
             _mapper = mapper;

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    [Migration("20240321130433_mig1")]
-    partial class mig1
+    [Migration("20240319195023_Mig-2")]
+    partial class Mig2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,7 +264,7 @@ namespace BurgerApp.DAL.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMaterial", b =>
+            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -401,7 +401,7 @@ namespace BurgerApp.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ExtraMaterialOrderDetail", b =>
+            modelBuilder.Entity("ExtraMetarialOrderDetail", b =>
                 {
                     b.Property<int>("DetailsId")
                         .HasColumnType("int");
@@ -413,7 +413,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("ExtraMetarialsId");
 
-                    b.ToTable("ExtraMaterialOrderDetail");
+                    b.ToTable("ExtraMetarialOrderDetail");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -625,7 +625,7 @@ namespace BurgerApp.DAL.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("ExtraMaterialOrderDetail", b =>
+            modelBuilder.Entity("ExtraMetarialOrderDetail", b =>
                 {
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.OrderDetail", null)
                         .WithMany()
@@ -633,7 +633,7 @@ namespace BurgerApp.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMaterial", null)
+                    b.HasOne("BurgerApp.DAL.Entities.Concrate.OtherClasses.ExtraMetarial", null)
                         .WithMany()
                         .HasForeignKey("ExtraMetarialsId")
                         .OnDelete(DeleteBehavior.Cascade)
