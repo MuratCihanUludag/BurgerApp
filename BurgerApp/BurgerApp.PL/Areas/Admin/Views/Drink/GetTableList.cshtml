@@ -1,80 +1,64 @@
-﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+﻿@using BurgerApp.DAL.Comman
 @using BurgerApp.PL.CommonFunctions
-@model BurgerViewModel
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
 
 @{
-
     int index = 1;
 }
-
 <table class="table table-hover">
     <thead>
         <tr>
             <th>#</th>
             <th>Ad</th>
             <th>Resim</th>
-            <th>Açıklama</th>
+            <th>Boyut</th>
             <th>Fiyat</th>
             <th>Aksiyonlar</th>
         </tr>
     </thead>
-    <tbody id="table-list">
-        @foreach (var burger in ViewBag.burgerViewList)
+    <tbody>
+        @foreach (var drinks in ViewBag.DrinkList)
         {
             <tr>
-                <td>@(index++)</td>
-                <td>@burger.Name</td>
+                <td> @(index++) </td>
+                <td> @drinks.Name </td>
                 <td>
                     @{
-                        var image2 = CommonFunc.ImageToArray(burger.Image);
+                        var image2 = CommonFunc.ImageToArray(drinks.Image);
                     }
-                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Drink Image" />
                 </td>
-                <td>@burger.Description</td>
-                <td>@burger.Price</td>
                 <td>
-                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
+                    @drinks.Size
+                </td>
+                <td>
+                    @drinks.Price
+                </td>
+                <td class="">
+                    <button data-bs-target="#btn-edit-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-warning me-2">Duzenle</button>
+                    <button data-bs-target="#btn-delete-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<div id="test">
-</div>
-
-
 <form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
     <table class="table table-hover">
         <tbody>
             <tr>
                 <td>@(index + 1)</td>
-                <td>
-                    <input asp-for="Name" class="form-control" placeholder="Ad" />
-                    <span asp-validation-for="Name"></span>
-                </td>
-                <td>
-                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
-                    <span asp-validation-for="Image"></span>
-                </td>
-                <td>
-                    <input asp-for="Description" class="form-control" placeholder="Açıklama" />
-                    <span asp-validation-for="Description"></span>
-                </td>
-                <td>
-                    <input asp-for="Price" class="form-control" placeholder="Fiyat" />
-                    <span asp-validation-for="Price"></span>
-                </td>
+                <td><input asp-for="Name" required class="form-control" placeholder="Ad" /></td>
+                <td><input asp-for="Image" required type="file" class="form-control" placeholder="Resim" /></td>
+                <td> <select asp-for="Size" required class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
+                <td><input asp-for="Price" required name="Price" class="form-control" placeholder="Fiyat" /></td>
                 <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
             </tr>
         </tbody>
     </table>
 </form>
 
-
-
 <script>
-
     $("#form-add").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
@@ -109,5 +93,3 @@
     }
 
 </script>
-
-

@@ -52,7 +52,7 @@
                 var id = e.target.id;
                 console.log(id)
                 $.ajax({
-                    url: `_Edit/${id}`,
+                    url: `Edit/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#cips-edit").html(data);
@@ -67,7 +67,7 @@
                 var id = e.target.id;
                 console.log(id)
                 $.ajax({
-                    url: `_Delete/${id}`,
+                    url: `Delete/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#cips-delete").html(data);

@@ -16,6 +16,9 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
 
         private readonly CipsManager _manager;
         private IMapper _mapper;
+
+     
+
         public ExtraMaterialController(BurgerAppContext dbContext, IMapper mapper)
         {
             _manager = new CipsManager(dbContext);
@@ -26,6 +29,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             return View();
         }
         public IActionResult GetTableList()
+
         {
             var cipsDtoList = _manager.GetAll();
             var cipsViewList = _mapper.Map<List<CipsViewModel>>(cipsDtoList);
@@ -35,12 +39,17 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Add(CipsViewModel cipsModel)
         {
-            var cipsDto = _mapper.Map<CipsDTO>(cipsModel);
-
-            _manager.Add(cipsDto);
-
-            return RedirectToAction("Index");
-
+            if (ModelState.IsValid)
+            {
+                var cipsDto = _mapper.Map<CipsDTO>(cipsModel);
+                _manager.Add(cipsDto);
+                return RedirectToAction("Index");
+            }
+            var errors = ModelState.ToDictionary(
+                  kvp => kvp.Key,
+                  kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList()
+              );
+            return BadRequest(errors);
         }
         [HttpGet]
         public IActionResult Edit(int id)
@@ -77,7 +86,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             if (cipsModel.Id is not 0)
             {
                 _manager.Delete(_manager.GetById(cipsModel.Id));
-                RedirectToAction("Index");  
+                RedirectToAction("Index");
             }
             return PartialView(cipsModel);
         }

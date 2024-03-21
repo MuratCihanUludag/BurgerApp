@@ -8,7 +8,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
     public class CipsViewModel
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Bos Birakilamaz")]
         public string Name { get; set; }
         [Required]
         public ProductSize Size { get; set; }
