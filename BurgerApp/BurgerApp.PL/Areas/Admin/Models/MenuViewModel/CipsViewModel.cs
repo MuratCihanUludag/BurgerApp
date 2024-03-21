@@ -11,8 +11,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public string Name { get; set; }
         [Required]
         public ProductSize Size { get; set; }
-        [Required]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
         [Required]
         public double Price { get; set; }
         public ICollection<MenuDTO> Menus { get; set; }
