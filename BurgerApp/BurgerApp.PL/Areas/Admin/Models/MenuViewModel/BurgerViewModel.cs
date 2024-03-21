@@ -10,8 +10,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
-        [Required]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
         [Required]
         public double Price { get; set; }
 
