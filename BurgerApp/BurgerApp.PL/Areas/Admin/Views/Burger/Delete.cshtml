@@ -8,19 +8,19 @@
             <p id="result-text">@Model.Name silmek istedigine eminmisin</p>
         </div>
         <div class="modal-footer">
-            <button type="button" id="delete-button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgec</button>
-            <button type="button" class="btn btn-danger">Sil</button>
+            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Vazgec</button>
+            <button type="submit" id="delete-button"  class="btn btn-danger">Sil</button>
             <input name="Id" type="hidden" value="@Model.Id" />
         </div>
 </form>
 
 <script>
-    $("#form-delete").click((e) => {
+    $("#form-delete").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `_Delete`,
+            url: `Delete`,
             method: "POST",
             data: formData,
             processData: false,

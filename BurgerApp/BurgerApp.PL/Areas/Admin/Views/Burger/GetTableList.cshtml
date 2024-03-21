@@ -3,6 +3,7 @@
 @model BurgerViewModel
 
 @{
+
     int index = 1;
 }
 
@@ -31,7 +32,7 @@
                 </td>
                 <td>@burger.Description</td>
                 <td>@burger.Price</td>
-                <td class="d-flex">
+                <td>
                     <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
                     <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
                 </td>
@@ -39,6 +40,9 @@
         }
     </tbody>
 </table>
+<div id="test">
+</div>
+
 
 <form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
     <table class="table table-hover">
@@ -50,15 +54,15 @@
                     <span asp-validation-for="Name"></span>
                 </td>
                 <td>
-                    <input asp-for="Image" name="Image" type="file" class="form-control" placeholder="Resim" />
+                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
                     <span asp-validation-for="Image"></span>
                 </td>
                 <td>
-                    <input asp-for="Description" name="Description" class="form-control" placeholder="Açıklama" />
+                    <input asp-for="Description" class="form-control" placeholder="Açıklama" />
                     <span asp-validation-for="Description"></span>
                 </td>
                 <td>
-                    <input asp-for="Price" name="Price" class="form-control" placeholder="Fiyat" />
+                    <input asp-for="Price" class="form-control" placeholder="Fiyat" />
                     <span asp-validation-for="Price"></span>
                 </td>
                 <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
@@ -66,6 +70,8 @@
         </tbody>
     </table>
 </form>
+
+
 
 <script>
 
@@ -103,4 +109,5 @@
     }
 
 </script>
+
 
