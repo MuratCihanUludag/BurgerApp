@@ -92,19 +92,19 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             return PartialView("_Edit", model);
         }
         [HttpGet]
-        public IActionResult Delete(int id)
+        public IActionResult _Delete(int id)
         {
-            var drink = _drinkManager.GetById(id);
-            var model = _mapper.Map<DrinkViewModel>(drink);
-            return PartialView("_Delete", model);
+            var drinkDto = _drinkManager.GetById(id);
+            var drinkView = _mapper.Map<DrinkViewModel>(drinkDto);
+            return PartialView(drinkView);
         }
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public IActionResult _DeleteConfirmed(int id) 
         {
             _drinkManager.Delete(new DrinkDTO { Id = id });
-            return RedirectToAction("DrinkList");
+            return Json(new { success = true });
         }
+
     }
 }
 

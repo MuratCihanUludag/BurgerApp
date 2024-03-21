@@ -47,34 +47,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    $(document).on('click', '.deleteLink', function (e) {
-        e.preventDefault();
-        var drinkId = $(this).data('id'); 
-        var url = `/Admin/Drink/Delete/${drinkId}`; 
-        $.get(url, function (data) {
-            $('#modalBody').html(data); 
-            $('#deleteModal').modal('show'); 
-        }).fail(function () {
-            alert("Silme işlemi için bilgiler yüklenirken bir hata oluştu.");
-        });
-    });
-
-    $(document).on('submit', '#deleteForm', function (e) {
-        e.preventDefault();
-        var form = $(this);
-        $.ajax({
-            type: 'POST',
-            url: form.attr('action'),
-            data: form.serialize(),
-            success: function (response) {
-                $('#deleteModal').modal('hide');
-                reloadDrinksList(); 
-            },
-            error: function () {
-                alert("İçecek silinirken bir hata oluştu.");
-            }
-        });
-    });
+    
     reloadDrinksList()
 });
