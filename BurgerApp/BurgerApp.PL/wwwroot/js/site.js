@@ -50,13 +50,13 @@ $(document).ready(function () {
 
     $(document).on('click', '.deleteLink', function (e) {
         e.preventDefault();
-        var drinkId = $(this).data('id');
-        var deleteUrl = `/Admin/Drink/Delete/${drinkId}`;
-        $.get(deleteUrl, function (data) {
-            $('#modalBody').html(data);
-            $('#deleteModal').modal('show');
+        var drinkId = $(this).data('id'); 
+        var url = `/Admin/Drink/Delete/${drinkId}`; 
+        $.get(url, function (data) {
+            $('#modalBody').html(data); 
+            $('#deleteModal').modal('show'); 
         }).fail(function () {
-            alert("İçecek bilgisi yüklenirken bir hata oluştu.");
+            alert("Silme işlemi için bilgiler yüklenirken bir hata oluştu.");
         });
     });
 
@@ -64,17 +64,17 @@ $(document).ready(function () {
         e.preventDefault();
         var form = $(this);
         $.ajax({
-            type: form.attr('method'),
+            type: 'POST',
             url: form.attr('action'),
             data: form.serialize(),
             success: function (response) {
                 $('#deleteModal').modal('hide');
-                reloadDrinksList();
+                reloadDrinksList(); 
             },
-            error: function (xhr, status, error) {
+            error: function () {
                 alert("İçecek silinirken bir hata oluştu.");
             }
         });
     });
-    reloadDrinksList();
+    reloadDrinksList()
 });
