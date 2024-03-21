@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BurgerApp.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class fourth : Migration
+    public partial class firstim : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

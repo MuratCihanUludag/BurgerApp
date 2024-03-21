@@ -1,27 +1,82 @@
 ﻿@model IEnumerable<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
 
 @{
-    ViewData["Title"] = "İçecek Yönetimi";
+    ViewData["Title"] = "İçecekler";
+    int index = 1;
 }
-<div class="container mt-4">
-    <h2>@ViewData["Title"]</h2>
-    <button id="createButton" class="btn btn-success">Yeni İçecek Ekle</button>
-    <div id="drinksListContainer"></div>
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ad</th>
+                <th>Resim</th>
+                <th>Boyut</th>
+                <th>Fiyat</th>
+                <th>Aksiyonlar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var drink in Model)
+            {
+                <tr>
+                    <td>@index++</td>
+                    <td>@drink.Name</td>
+                    <td>
+                        @if (drink.Image != null)
+                        {
+                            <img src="@Url.Action("GetImage", "Drink", new { id = drink.Id })" class="img-fluid" style="width:100px; height:60px;" />
+                        }
+                    </td>
+                    <td>@drink.Size.ToString()</td>
+                    <td>@drink.Price.ToString("C")</td>
+                    <td>
+                        <button class="btn btn-outline-warning" data-bs-target="#btn-edit-drink" data-bs-toggle="modal" data-id="@drink.Id">Düzenle</button>
+                        <button class="btn btn-outline-danger" data-bs-target="#btn-delete-drink" data-bs-toggle="modal" data-id="@drink.Id">Sil</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<div class="modal fade" id="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+
+<div class="modal fade" id="btn-edit-drink" tabindex="-1" aria-labelledby="editDrinkLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">İçecek Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="editDrinkLabel">İçecek Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="modalBody">
-            </div>
+            <div id="drink-edit-content"></div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="btn-delete-drink" tabindex="-1" aria-labelledby="deleteDrinkLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteDrinkLabel">İçecek Sil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="drink-delete-content"></div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            $('.table').on('click', '.btn-outline-warning', function () {
+                var id = $(this).data('id');
+                $('#drink-edit-content').load('/Admin/Drink/Edit/' + id);
+            });
+
+            $('.table').on('click', '.btn-outline-danger', function () {
+                var id = $(this).data('id');
+                $('#drink-delete-content').load('/Admin/Drink/Delete/' + id);
+            });
+        });
+    </script>
 }

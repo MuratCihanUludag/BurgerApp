@@ -12,97 +12,77 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
     [Area("Admin")]
     public class DrinkController : Controller
     {
-        private readonly DrinkManager _drinkManager;
-        private readonly IMapper _mapper;
-
-        public DrinkController(BurgerAppContext context, IMapper mapper)
+        private readonly DrinkManager _manager;
+        private IMapper _mapper;
+        public DrinkController(BurgerAppContext dbContext, IMapper mapper)
         {
-            _drinkManager = new DrinkManager(context);
+            _manager = new DrinkManager(dbContext);
             _mapper = mapper;
         }
+
         public IActionResult Index()
         {
-            var drinks = _drinkManager.GetAll();
-            var model = _mapper.Map<IEnumerable<DrinkViewModel>>(drinks);
-            return View(model);
+            return View();
         }
-        public IActionResult DrinkList()
+        public IActionResult GetTableList()
         {
-            var drinks = _drinkManager.GetAll();
-            var model = _mapper.Map<IEnumerable<DrinkViewModel>>(drinks);
-            return PartialView("_DrinkList", model);
-        }
-        public IActionResult Details(int id)
-        {
-            var drink = _drinkManager.GetById(id);
-            if (drink == null)
-            {
-                return NotFound();
-            }
-            var model = _mapper.Map<DrinkViewModel>(drink);
-            return PartialView("_Details", model);
-        }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return PartialView("_Create");
+            var drinkDtoList = _manager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkDtoList);
+            ViewBag.burgerViewList = drinkViewList;
+            return PartialView();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DrinkViewModel model)
+        public IActionResult Add(DrinkViewModel drink)
         {
+            var drinkDto = _mapper.Map<DrinkDTO>(drink);
+
+            _manager.Add(drinkDto);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult _Edit(int id)
+        {
+            var drinkDto = _manager.GetById(id);
+            var drinkView = _mapper.Map<DrinkViewModel>(drinkDto);
+
+            return PartialView(drinkView);
+        }
+        [HttpPost]
+        public IActionResult _Edit(DrinkViewModel drink)
+        {
+            if (drink.Image is null)
+            {
+                var drinkDto = _manager.GetById(drink.Id);
+                drink.Image = CommonFunc.ArrayToImage(drinkDto.Image);
+            }
+
             if (ModelState.IsValid)
             {
-                byte[] imageBytes = null;
-                if (model.Image != null)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await model.Image.CopyToAsync(memoryStream);
-                        imageBytes = memoryStream.ToArray();
-                    }
-                }
-
-                var drinkDto = _mapper.Map<DrinkDTO>(model);
-                drinkDto.Image = imageBytes;
-
-                _drinkManager.Add(drinkDto);
-
+                var drinkDto = _mapper.Map<DrinkDTO>(drink);
+                _manager.Update(drinkDto);
                 return RedirectToAction("Index");
             }
-            return View(model);
+            return PartialView(drink);
         }
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var drink = _drinkManager.GetById(id);
-            var model = _mapper.Map<DrinkViewModel>(drink);
-            return PartialView("_Edit", model);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, DrinkViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var drinkDto = _mapper.Map<DrinkDTO>(model);
-                _drinkManager.Update(drinkDto);
-                return RedirectToAction("DrinkList");
-            }
-            return PartialView("_Edit", model);
-        }
+
         [HttpGet]
         public IActionResult _Delete(int id)
         {
-            var drinkDto = _drinkManager.GetById(id);
+            var drinkDto = _manager.GetById(id);
             var drinkView = _mapper.Map<DrinkViewModel>(drinkDto);
             return PartialView(drinkView);
         }
         [HttpPost]
-        public IActionResult _DeleteConfirmed(int id) 
+        public IActionResult _Delete(DrinkViewModel drink)
         {
-            _drinkManager.Delete(new DrinkDTO { Id = id });
-            return Json(new { success = true });
+            if (drink.Id is not 0)
+            {
+                _manager.Delete(_manager.GetById(drink.Id));
+                return RedirectToAction("Index");
+            }
+            return PartialView(drink);
         }
 
     }

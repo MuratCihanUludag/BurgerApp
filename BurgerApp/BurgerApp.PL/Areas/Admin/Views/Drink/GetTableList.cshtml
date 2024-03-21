@@ -1,0 +1,78 @@
+﻿@model IEnumerable<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
+
+@{
+    ViewData["Title"] = "İçecekler";
+    int index = 1;
+}
+
+<h2>İçecek Listesi</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Resim</th>
+            <th>Boyut</th>
+            <th>Fiyat</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var drink in Model)
+        {
+            <tr>
+                <td>@index++</td>
+                <td>@drink.Name</td>
+                <td>
+                    @if (drink.Image != null)
+                    {
+                        <img src="@Url.Action("GetImage", "Drink", new { id = drink.Id })" class="img-fluid" style="width:100px; height:60px;" />
+                    }
+                </td>
+                <td>@drink.Size.ToString()</td>
+                <td>@drink.Price.ToString("C")</td>
+                <td>
+                    <a href="@Url.Action("_Edit", "Drink", new { id = drink.Id })" class="btn btn-warning">Düzenle</a>
+                    <a href="@Url.Action("_Delete", "Drink", new { id = drink.Id })" class="btn btn-danger">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    $("#form-add").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add")[0]);
+        $.ajax({
+            url: `Add`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable()
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+
+</script>
