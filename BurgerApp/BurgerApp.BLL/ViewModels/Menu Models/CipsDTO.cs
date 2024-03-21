@@ -14,6 +14,7 @@ namespace BurgerApp.BLL.ViewModels.Menu_Models
     {
         public string Name { get; set; }
         public ProductSize Size { get; set; }
+        public byte[] Image { get; set; }
         public double Price { get; set; }
         public ICollection<MenuDTO> Menus { get; set; }
     }
