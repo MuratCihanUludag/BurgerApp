@@ -1,23 +1,26 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-
-
+@model List<CipsViewModel>
+@{
+    int index = 1;
+}
 <div class="table-responsive">
 </div>
 
 <!-- Edit-Modal -->
-<div class="modal fade" id="btn-edit-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-edit-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-edit">
+            <div id="cips-edit">
             </div>
         </div>
     </div>
 </div>
+
 <!-- Delete-Modal -->
 <div class="modal fade" id="btn-delete-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -52,10 +55,10 @@
                 var id = e.target.id;
                 console.log(id)
                 $.ajax({
-                    url: `_Edit/${id}`,
+                    url: `Edit/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#burger-edit").html(data);
+                        $("#cips-edit").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
@@ -78,6 +81,8 @@
                 })
             })
         }
+
+
+
     </script>
 }
-
