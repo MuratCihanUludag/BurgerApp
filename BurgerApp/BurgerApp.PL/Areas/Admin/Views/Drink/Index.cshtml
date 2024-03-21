@@ -1,27 +1,138 @@
-﻿@model IEnumerable<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
+﻿@model List<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
 
-@{
-    ViewData["Title"] = "İçecek Yönetimi";
-}
-<div class="container mt-4">
-    <h2>@ViewData["Title"]</h2>
-    <button id="createButton" class="btn btn-success">Yeni İçecek Ekle</button>
-    <div id="drinksListContainer"></div>
+<div class="table-responsive">
 </div>
-<div class="modal fade" id="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+
+<!-- Edit-Modal -->
+
+<div class="modal fade" id="btn-edit-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
         <div class="modal-content">
+
             <div class="modal-header">
-                <h5 class="modal-title">İçecek Ekle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+
+                <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Duzenle</h1>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
-            <div class="modal-body" id="modalBody">
+
+            <div id="drink-edit">
             </div>
+
         </div>
+
     </div>
+
 </div>
+
+<!-- Delete-Modal -->
+
+<div class="modal fade" id="btn-delete-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Sil</h1>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div id="drink-delete">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 @section Scripts {
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+
+        $(document).ready(() => {
+
+            $.ajax({
+
+                url: `GetTableList`,
+
+                method: 'GET',
+
+                beforeSend: () => {
+
+                    console.log("bekleyin")
+
+                },
+
+                success: (data) => {
+
+                    $(".table-responsive").html(data);
+
+                    BindButton()
+
+                }
+
+            })
+
+        })
+
+        function BindButton() {
+
+            $(".btn-outline-warning").click((e) => {
+
+                var id = e.target.id;
+
+                console.log(id)
+
+                $.ajax({
+
+                    url: `_Edit/${id}`,
+
+                    method: "GET",
+
+                    success: (data) => {
+
+                        $("#drink-edit").html(data);
+
+                    },
+
+                    error: (xhr) => {
+
+                        console.log(xhr.status)
+
+                    }
+
+                })
+
+            })
+
+            $(".btn-outline-danger").click((e) => {
+
+                var id = e.target.id;
+
+                console.log(id)
+
+                $.ajax({
+
+                    url: `_Delete/${id}`,
+
+                    method: "GET",
+                    success: (data) => {
+                        $("#drink-delete").html(data);
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
+        }
+
+    </script>
 }
