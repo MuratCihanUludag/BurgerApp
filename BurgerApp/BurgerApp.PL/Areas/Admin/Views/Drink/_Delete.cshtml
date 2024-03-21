@@ -1,51 +1,55 @@
 ﻿@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
 
+<form id="form-delete" asp-action="_Delete" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+            <p id="result-text">@Model.Name silmek istedigine eminmisin</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="delete-button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgec</button>
+            <button type="button" class="btn btn-danger">Sil</button>
+            <input name="Id" type="hidden" value="@Model.Id" />
+        </div>
+</form>
 
-@* <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">İçeceği Sil</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="deleteForm" asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <div class="alert alert-danger" role="alert">
-                        "<strong>@Model.Name</strong> içeceğini silmek istediğinize emin misiniz?"
-                    </div>
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-danger">Sil</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> *@
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">İçeceği Sil</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="deleteForm" method="post">
-                    @Html.AntiForgeryToken()
-                    <div class="alert alert-danger" role="alert">
-                        "<strong>@Model.Name</strong> içeceğini silmek istediğinize emin misiniz?"
-                    </div>
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-danger">Sil</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    $("#form-delete").click((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-delete")[0]);
+        console.log(formData)
+        $.ajax({
+            url: `_Delete`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                $(".modal-body").html(`
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <p id="result-text" >Silme Islemi Basarili</p>
+                            </div
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                        </div>`);
+                ReInitTable()
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+</script>
