@@ -25,7 +25,6 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             return View();
         }
-
         public IActionResult GetTableList()
         {
             var burgerDtoList = _manager.GetAll();
@@ -67,7 +66,6 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             }
             return PartialView(burger);
         }
-
 
         [HttpGet]
         public IActionResult _Delete(int id)

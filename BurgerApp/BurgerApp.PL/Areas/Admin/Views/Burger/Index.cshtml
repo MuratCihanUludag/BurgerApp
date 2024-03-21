@@ -52,7 +52,7 @@
                 var id = e.target.id;
                 console.log(id)
                 $.ajax({
-                    url: `_EditPartial/${id}`,
+                    url: `_Edit/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#burger-edit").html(data);
@@ -78,9 +78,6 @@
                 })
             })
         }
-
-
-
     </script>
 }
 

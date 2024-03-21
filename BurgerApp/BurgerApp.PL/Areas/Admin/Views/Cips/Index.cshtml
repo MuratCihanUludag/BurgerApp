@@ -5,76 +5,84 @@
     int index = 1;
 }
 <div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ad</th>
-                <th>Resim</th>
-                <th>Fiyat</th>
-                <th>Aksiyonlar</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cips in Model)
-            {
-                <tr>
-                    <td>
-                        @(index++)
-                    </td>
-                    <td>
-                        @cips.Name
-                    </td>
-                    <td>
-                        @{
-                            var image2 = CommonFunc.ImageToArray(cips.Image);
-                        }
-                        <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
-                    </td>
-                    <td>
-                        @cips.Size
-                    </td>
-                    <td>
-                        @cips.Price
-                    </td>
-                    <td class="d-flex">
-                        <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@cips.Id" class="btn btn-outline-warning me-2">Duzenle</button>
-                        <button class="btn btn-outline-danger">Sil</button>
-                    </td>
-                </tr>
-            }
-            <tr>
-                <form>
-                <td>
-                        @(index)
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Ad" />
-                </td>
-                <td>
-                    <input type="file" class="form-control" placeholder="Resim" />
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Fiyat" />
-                </td>
-                <td>
-                    <button class="btn btn-primary w-100">Ekle</button>
-                </td>
-                </form>
-            </tr>
-        </tbody>
-    </table>
 </div>
 
-<div class="modal fade" id="btn-edit-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Edit-Modal -->
+<div class="modal fade" id="btn-edit-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Cips Duzenle</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-edit">
+            <div id="cips-edit">
             </div>
         </div>
     </div>
 </div>
+
+<!-- Delete-Modal -->
+<div class="modal fade" id="btn-delete-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Sil</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="burger-delete">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(() => {
+            $.ajax({
+                url: `GetTableList`,
+                method: 'GET',
+                beforeSend: () => {
+                    console.log("bekleyin")
+                },
+                success: (data) => {
+                    $(".table-responsive").html(data);
+                    BindButton()
+                }
+            })
+        })
+        function BindButton() {
+            $(".btn-outline-warning").click((e) => {
+                var id = e.target.id;
+                console.log(id)
+                $.ajax({
+                    url: `Edit/${id}`,
+                    method: "GET",
+                    success: (data) => {
+                        $("#cips-edit").html(data);
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
+
+            $(".btn-outline-danger").click((e) => {
+                var id = e.target.id;
+                console.log(id)
+                $.ajax({
+                    url: `_Delete/${id}`,
+                    method: "GET",
+                    success: (data) => {
+                        $("#burger-delete").html(data);
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
+        }
+
+
+
+    </script>
+}

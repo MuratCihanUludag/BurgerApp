@@ -6,7 +6,7 @@
     var image = CommonFunc.ImageToArray(Model.Image);
 
 }
-<form id="form-edit" asp-action="_EditPartial" method="post">
+<form id="form-edit" asp-action="_Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="fomr-label">Ad</label>
@@ -27,7 +27,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Guncelle</button>
+        <button type="button" id="edit-button" class="btn btn-primary">Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
@@ -50,7 +50,7 @@
     });
 
 
-    $(".btn-primary").click(() => {
+    $("#edit-button").click(() => {
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
             url: `_Edit`,

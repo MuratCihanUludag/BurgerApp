@@ -1,34 +1,42 @@
-﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
 
 @model CipsViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
 }
-<form asp-action="">
-    <div class="model-body">
+<form id="form-edit" asp-action="Edit" method="post">
+    <div class="modal-body">
         <div class="form-group">
-            <label class="fomr-label">Ad</label>
-            <input value="@Model.Name" class="form-control" />
+            <label class="form-label">Ad</label>
+            <input value="@Model.Name" name="Name" class="form-control" />
         </div>
         <div class="form-group">
             <label class="form-label">Boyut</label>
-            <input value="@Model.Size" class="form-control" />
+            <select asp-for="Size" class="form-select">
+                @foreach (var size in Enum.GetValues(typeof(ProductSize)))
+                {
+                    <option value="@size">@size</option>
+                }
+            </select>
         </div>
         <div class="form-group">
             <label class="form-label">Fiyat</label>
-            <input value="@Model.Price" class="form-control" />
+            <input value="@Model.Price" name="Price" class="form-control" />
         </div>
         <div class="form-group text-center">
             <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
-            <input value="@Model.Image" class="form-control" id="input-img-@Model.Id" style="opacity:0;position:absolute;z-index: -2; pointer-events:none" type="file" />
+            <input value="@Model.Image" class="form-control" name="Image" id="input-img-@Model.Id" style="opacity:0;position:absolute;z-index: -2; pointer-events:none" type="file" />
         </div>
     </div>
-    <div class="model-footer">
+    <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Guncelle</button>
+        <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
+
 
 <script>
 
@@ -47,5 +55,38 @@
             reader.readAsDataURL(file);
         }
     });
+
+
+    $(".btn-primary").click(() => {
+        var formData = new FormData($("#form-edit")[0]);
+        $.ajax({
+            url: `Edit`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:", data);
+                ReInitTable()
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
 
 </script>
