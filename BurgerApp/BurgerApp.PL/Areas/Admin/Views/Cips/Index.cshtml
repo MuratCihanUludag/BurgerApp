@@ -3,6 +3,7 @@
 @model List<CipsViewModel>
 @{
     int index = 1;
+
 }
 <div class="table-responsive">
 </div>
@@ -22,7 +23,7 @@
 </div>
 
 <!-- Delete-Modal -->
-<div class="modal fade" id="btn-delete-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-delete-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -70,7 +71,7 @@
                 var id = e.target.id;
                 console.log(id)
                 $.ajax({
-                    url: `_Delete/${id}`,
+                    url: `Delete/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#burger-delete").html(data);
