@@ -5,6 +5,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 {
     public class BurgerViewModel
     {
+        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -13,6 +14,6 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public IFormFile Image { get; set; }
         [Required]
         public double Price { get; set; }
-  
+
     }
 }

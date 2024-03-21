@@ -22,15 +22,16 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            var burgers = _manager.GetAll();
-            var burgerViewList = new List<BurgerViewModel>();
+            var burgerDtoList = _manager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
 
-            foreach (var item in burgers)
-            {
-                var burger = _mapper.Map<BurgerViewModel>(item);
-                burgerViewList.Add(burger);
-            }
             return View(burgerViewList);
+        }
+        public IActionResult _Edit(int id)
+        {
+            var burgerDto = _manager.GetById(id);
+            var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
+            return PartialView(burgerView);
         }
 
         [HttpGet]
