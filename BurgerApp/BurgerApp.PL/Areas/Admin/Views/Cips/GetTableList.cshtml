@@ -22,7 +22,10 @@
             <tr>
                 <td> @(index++) </td>
                 <td> @cips.Name </td>
-                <td> @{ var image2 = CommonFunc.ImageToArray(cips.Image); }
+                <td>
+                    @{
+                        var image2 = CommonFunc.ImageToArray(cips.Image);
+                    }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                 </td>
                 <td>
@@ -44,11 +47,20 @@
         <tbody>
             <tr>
                 <td>@(index + 1)</td>
-                <td><input asp-for="Name" required class="form-control" placeholder="Ad" /></td>
-                <td><input asp-for="Image" required type="file" class="form-control" placeholder="Resim" /></td>
-                <td> <select asp-for="Size" required class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
-                <td><input asp-for="Price" required name="Price" class="form-control" placeholder="Fiyat" /></td>
-                <td><button type="submit" id="add-button"  class="btn btn-primary w-100">Ekle</button></td>
+                <td>
+                    <input asp-for="Name" class="form-control" placeholder="Ad" />
+                    <span id="Name-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
+                    <span id="Image-error" class="text-danger"></span>
+                </td>
+                <td> <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
+                <td>
+                    <input asp-for="Price" name="Price" class="form-control" placeholder="Fiyat" />
+                    <span id="Price-error" class="text-danger"></span>
+                </td>
+                <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
             </tr>
         </tbody>
     </table>
@@ -69,8 +81,14 @@
                 ReInitTable()
             },
             error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
-
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
             }
         })
     })

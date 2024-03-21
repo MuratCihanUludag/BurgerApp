@@ -9,16 +9,16 @@
 <form id="form-edit" asp-action="_Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
-            <label class="fomr-label">Ad</label>
-            <input value="@Model.Name" name="Name" class="form-control" />
+            <label class="form-label">Ad</label>
+            <input asp-for="Name" value="@Model.Name" required class="form-control" />
         </div>
         <div class="form-group">
-            <label class="fomr-label">Aciklama</label>
-            <input value="@Model.Description" name="Description" class="form-control" />
+            <label class="form-label">Aciklama</label>
+            <input asp-for="Description" value="@Model.Description" required name="Description" class="form-control" />
         </div>
         <div class="form-group">
             <label class="fomr-label">Fiyat</label>
-            <input value="@Model.Price" name="Price" class="form-control" />
+            <input asp-for="Price" value="@Model.Price" required class="form-control" />
         </div>
         <div class="form-group text-center">
             <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
@@ -27,7 +27,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="edit-button" class="btn btn-primary">Guncelle</button>
+        <button type="submit" id="edit-button" class="btn btn-primary" >Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
@@ -50,11 +50,11 @@
     });
 
 
-    $("#form-edit").submit(() => {
+    $("#form-edit").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `_Edit`,
+            url: `Edit`,
             method: "POST",
             data: formData,
             processData: false,
