@@ -1,5 +1,6 @@
 ﻿using BurgerApp.DAL.Entities.Abstract;
 using BurgerApp.DAL.Entities.Abstract.Base;
+using BurgerApp.DAL.Entities.Concrate.MenuClasses;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,12 @@ namespace BurgerApp.DAL.Entities.Concrate
 {
     public class OrderDetail : BaseEntity, IOrderDetail
     {
-        public int MenuId { get; set; }
-        public Menu Menu { get; set; }
+        public int BurgerId { get; set; }
+        public Burger Burger { get; set; }
+        public int DrinkId { get; set; }
+        public Drink Drink { get; set; }
+        public int CipsId { get; set; }
+        public Cips Cips { get; set; }
         public int Count { get; set; }
         public ICollection<Sauce> Sauces { get; set; }
         public ICollection<ExtraMaterial> ExtraMetarials { get; set; }
@@ -20,19 +25,12 @@ namespace BurgerApp.DAL.Entities.Concrate
         public Order Order { get; set; }
         public double OrderDetailTotalPrice()
         {
-            double totalSaucePrice = 0;
-            double totalExtraMetarialPrice = 0;
-            foreach (var sauce in Sauces)
-            {
-                totalSaucePrice += sauce.Price;
-            }
-            foreach (var extraMetarial in ExtraMetarials)
-            {
-                totalExtraMetarialPrice += extraMetarial.Price;
-            }
+            double totalSaucePrice = Sauces.Sum(sauce => sauce.Price);
+            double totalExtraMaterialPrice = ExtraMetarials.Sum(extra => extra.Price);
+            double menuPrice = this.Burger.Price + (this.Drink.Price - 10) + (this.Cips.Price - 15);
+            double totalPrice = (menuPrice + totalSaucePrice + totalExtraMaterialPrice) * Count;
 
-            return (this.Menu.MenuPrice() + totalSaucePrice + totalExtraMetarialPrice) * this.Count;
+            return totalPrice;
         }
-
     }
 }

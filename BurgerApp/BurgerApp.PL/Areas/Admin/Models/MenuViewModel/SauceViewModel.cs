@@ -14,4 +14,3 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public IFormFile? Image { get; set; }
     }
 }
-WebHostBuilderNamedPipeExtensions göre oluştur IFormFile? propunu ekle
