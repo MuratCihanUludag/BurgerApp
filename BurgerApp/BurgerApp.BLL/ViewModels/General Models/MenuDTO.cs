@@ -13,6 +13,7 @@ namespace BurgerApp.BLL.ViewModels.General_Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public byte[] Image { get; set; }
         public int BurgerId { get; set; }
         public BurgerDTO Burger { get; set; }
         public int DrinkId { get; set; }
