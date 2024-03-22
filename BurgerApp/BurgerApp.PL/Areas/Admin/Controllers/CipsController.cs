@@ -17,6 +17,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         private readonly CipsManager _manager;
         private IMapper _mapper;
 
+
         public CipsController(BurgerAppContext dbContext, IMapper mapper)
         {
             _manager = new CipsManager(dbContext);

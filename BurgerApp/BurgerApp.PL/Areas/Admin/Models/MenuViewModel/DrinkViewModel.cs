@@ -15,7 +15,13 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 
         [Required(ErrorMessage = "Boyut seçimi zorunludur.")]
         public ProductSize Size { get; set; }
+
         [Required(ErrorMessage ="Resim zorunludur.")]
         public IFormFile Image { get; set; }
+
+        public override string ToString()
+        {
+            return Name + " (" + Enum.GetName<ProductSize>(Size) + ")";
+        }
     }
 }
