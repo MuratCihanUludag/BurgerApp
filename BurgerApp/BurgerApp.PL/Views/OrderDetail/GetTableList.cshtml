@@ -1,0 +1,94 @@
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.ViewModels
+@model List<OrderDetailViewModel>
+
+@{
+    int index = 1;
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr class="align-items-center">
+            <th>#</th>
+            <th>Burger</th>
+            <th>İçecek</th>
+            <th>Cips</th>
+            <th>Adet</th>
+            <th>Toplam Fiyat</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody id="table-list">
+        @if (true)
+        {
+            @foreach (var detail in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td>@detail.Burger.Name</td>
+                    <td>@detail.Drink.Name</td>
+                    <td>@detail.Cips.Name</td>
+                    <td>@detail.Count</td>
+                    <td>@detail.OrderDetailTotalPrice().ToString("C")</td>
+                    <td>
+                        <button data-bs-target="#btn-edit-orderdetail" data-bs-toggle="modal" id="@detail.Id" class="btn btn-outline-warning me-2">Düzenle</button>
+                        <button data-bs-target="#btn-delete-orderdetail" data-bs-toggle="modal" id="@detail.Id" class="btn btn-outline-danger">Sil</button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="7">Sipariş detayı bulunamadı.</td></tr>
+        }
+    </tbody>
+</table>
+
+<form id="form-add-orderdetail" asp-action="Add" method="POST">
+    <table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>@(index + 1)</td>
+                <td><select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, nameof(BurgerViewModel.Id), nameof(BurgerViewModel.Name)))"></select></td>
+                <td><select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips, nameof(CipsViewModel.Id), nameof(CipsViewModel.Name)))"></select></td>
+                <td><select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks, nameof(DrinkViewModel.Id), nameof(DrinkViewModel.Name)))"></select></td>
+                <td><input name="Count" type="number" class="form-control" placeholder="Adet" /></td>
+                <td><button type="submit" id="add-orderdetail-button" class="btn btn-primary w-100">Ekle</button></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    $("#form-add-orderdetail").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add-orderdetail")[0]);
+        $.ajax({
+            url: `@Url.Action("Add", "OrderDetail")`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable();
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+            }
+        });
+    });
+
+    function ReInitTable() {
+        $.ajax({
+            url: `@Url.Action("GetTableList", "OrderDetail")`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("Yenileniyor...");
+            },
+            success: (data) => {
+                $("#table-list").html(data);
+            }
+        });
+    }
+</script>

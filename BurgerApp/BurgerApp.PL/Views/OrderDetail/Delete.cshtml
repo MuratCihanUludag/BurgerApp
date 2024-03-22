@@ -1,0 +1,44 @@
+﻿@using BurgerApp.PL.ViewModels
+@model OrderDetailViewModel
+
+<form id="form-delete-orderdetail" asp-action="Delete" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+            <p id="result-text">@Model.Burger.Name ve diğer detaylar ile birlikte bu sipariş detayını silmek istediğinizden emin misiniz?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="cancel-delete-orderdetail" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+            <button type="button" id="confirm-delete-orderdetail" class="btn btn-danger">Sil</button>
+            <input name="Id" type="hidden" value="@Model.Id" />
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#confirm-delete-orderdetail").click((e) => {
+        e.preventDefault();
+        var id = $("input[name='Id']").val();
+        $.ajax({
+            url: `/admin/orderdetail/delete/${id}`,
+            method: "POST",
+            success: (data) => {
+                $('#myModal').modal('hide');
+                ReInitTable();
+            },
+            error: (xhr) => {
+                console.log("Silme işlemi başarısız. Hata kodu:", xhr.status);
+            }
+        });
+    });
+
+    function ReInitTable() {
+        $.ajax({
+            url: `/admin/orderdetail/getTableList`,
+            method: 'GET',
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton();
+            }
+        });
+    }
+</script>
