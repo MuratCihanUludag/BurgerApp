@@ -26,7 +26,6 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             var orderDetailDtoList = _manager.GetAll();
             var orderDetailViewList = _mapper.Map<List<OrderDetailViewModel>>(orderDetailDtoList);
-            ViewBag.OrderDetailViewList = orderDetailViewList;
             return PartialView("_OrderDetailTable", orderDetailViewList);
         }
         [HttpGet]
