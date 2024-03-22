@@ -11,15 +11,13 @@ using BurgerApp.DAL.Entities.Concrate.MenuClasses;
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ExtraMaterialController : Controller
+    public class CipsController : Controller
     {
 
         private readonly CipsManager _manager;
         private IMapper _mapper;
 
-     
-
-        public ExtraMaterialController(BurgerAppContext dbContext, IMapper mapper)
+        public CipsController(BurgerAppContext dbContext, IMapper mapper)
         {
             _manager = new CipsManager(dbContext);
             _mapper = mapper;
@@ -32,25 +30,24 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
 
         {
             var cipsDtoList = _manager.GetAll();
-            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cipsDtoList);
-            ViewBag.CipsList = cipsViewList;
+            var cipsModelList = _mapper.Map<List<CipsViewModel>>(cipsDtoList);
+            ViewBag.CipsList = cipsModelList;
             return PartialView();
         }
         [HttpPost]
+
         public IActionResult Add(CipsViewModel cipsModel)
         {
             if (ModelState.IsValid)
             {
                 var cipsDto = _mapper.Map<CipsDTO>(cipsModel);
                 _manager.Add(cipsDto);
-                return RedirectToAction("Index");
+                return Ok();
             }
-            var errors = ModelState.ToDictionary(
-                  kvp => kvp.Key,
-                  kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList()
-              );
+            var errors = ModelState.GetErrors();
             return BadRequest(errors);
         }
+
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -65,15 +62,17 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             {
                 var cipsDto = _manager.GetById(cipsModel.Id);
                 cipsModel.Image = CommonFunc.ArrayToImage(cipsDto.Image);
+                ModelState.Remove(nameof(cipsModel.Image));
             }
-
             if (ModelState.IsValid)
             {
                 var cipsDto = _mapper.Map<CipsDTO>(cipsModel);
                 _manager.Update(cipsDto);
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(cipsModel);
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
+
         }
         [HttpGet]
         public IActionResult Delete(int id)
@@ -86,9 +85,9 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             if (cipsModel.Id is not 0)
             {
                 _manager.Delete(_manager.GetById(cipsModel.Id));
-                RedirectToAction("Index");
+                return Ok("Index");
             }
-            return PartialView(cipsModel);
+            return BadRequest();
         }
 
     }

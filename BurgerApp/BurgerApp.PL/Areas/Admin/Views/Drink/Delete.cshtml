@@ -1,4 +1,5 @@
-﻿@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@model DrinkViewModel
 
 <form id="form-delete" asp-action="_Delete" method="post">
     <div class="modal-body">
@@ -18,7 +19,7 @@
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `_Delete`,
+            url: `/admin/drink/Delete`,
             method: "POST",
             data: formData,
             processData: false,
@@ -27,7 +28,7 @@
                 $(".modal-body").html(`
                         <div class="modal-body">
                             <div class="form-group">
-                                <p id="result-text" >Silme Islemi Basarili</p>
+                                <p id="result-text">Silme Islemi Basarili</p>
                             </div
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -41,7 +42,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/drink/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
