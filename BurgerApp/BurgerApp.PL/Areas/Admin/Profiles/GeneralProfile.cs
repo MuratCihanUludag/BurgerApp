@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BurgerApp.BLL.ViewModels.General_Models;
 using BurgerApp.BLL.ViewModels.Menu_Models;
 using BurgerApp.BLL.ViewModels.Other_Models;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
@@ -88,6 +89,27 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
 
             #endregion
 
+            #region MenuProfile
+
+            CreateMap<MenuViewModel, MenuDTO>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                    .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.DrinkId))
+                    .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.BurgerId))
+                    .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.CipsId))
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)));
+
+            CreateMap<MenuDTO, MenuViewModel>()
+                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                    .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.DrinkId))
+                    .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.BurgerId))
+                    .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.CipsId))
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)));
+
+            #endregion
 
 
         }
