@@ -15,5 +15,12 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public IFormFile? Image { get; set; }
         [Required]
         public double Price { get; set; }
+
+        public override string ToString()
+        {
+            return Name +" (" +Enum.GetName<ProductSize>(Size)+")" ;
+        }
     }
+
+
 }

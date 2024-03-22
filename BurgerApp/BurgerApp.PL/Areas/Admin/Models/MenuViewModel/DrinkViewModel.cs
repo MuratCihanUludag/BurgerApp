@@ -18,5 +18,10 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         public ProductSize Size { get; set; }
 
         public IFormFile? Image { get; set; }
+
+        public override string ToString()
+        {
+            return Name + " (" + Enum.GetName<ProductSize>(Size) + ")";
+        }
     }
 }
