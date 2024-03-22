@@ -7,11 +7,11 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
     public class SauceViewModel
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Sos ismi zorunludur.")]
         public string Name { get; set; }
-        [Required]
+        [Range(0.01, Double.PositiveInfinity, ErrorMessage = "Fiyat sifirdan buyuk olmalidir.")]
         public double Price { get; set; }
-        public IFormFile? Image { get; set; }
+        [Required(ErrorMessage = "Resim zorunludur.")]
+        public IFormFile Image { get; set; }
     }
 }
-WebHostBuilderNamedPipeExtensions göre oluştur IFormFile? propunu ekle

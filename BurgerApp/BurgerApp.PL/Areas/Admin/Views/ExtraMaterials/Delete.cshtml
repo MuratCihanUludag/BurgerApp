@@ -22,7 +22,7 @@
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `_Delete`,
+            url: `/admin/extraMaterials/delete`,
             method: "POST",
             data: formData,
             processData: false,
@@ -45,7 +45,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/extraMaterials/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

@@ -20,7 +20,7 @@
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `Delete`,
+            url: `/admin/burger/delete`,
             method: "POST",
             data: formData,
             processData: false,

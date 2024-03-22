@@ -29,60 +29,60 @@ namespace SauceApp.PL.Areas.Admin.Controllers
         {
             var sauceDtoList = _manager.GetAll();
             var sauceViewList = _mapper.Map<List<SauceViewModel>>(sauceDtoList);
-            return PartialView(sauceViewList);
+            ViewBag.sauceViewList = sauceViewList;
+            return PartialView();
         }
         [HttpPost]
         public IActionResult Add(SauceViewModel sauce)
         {
-            var sauceDto = _mapper.Map<SauceDTO>(sauce);
-
-            _manager.Add(sauceDto);
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _manager.Add(_mapper.Map<SauceDTO>(sauce));
+                return Ok();
+            }
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
-        public IActionResult _Edit(int id)
+        public IActionResult Edit(int id)
         {
-            var sauceDto = _manager.GetById(id);
-            var sauceView = _mapper.Map<SauceViewModel>(sauceDto);
-
-            return PartialView(sauceView);
+            return PartialView(_mapper.Map<SauceViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult _Edit(SauceViewModel sauce)
+        public IActionResult Edit(SauceViewModel sauce)
         {
             if (sauce.Image is null)
             {
                 var sauceDto = _manager.GetById(sauce.Id);
                 sauce.Image = CommonFunc.ArrayToImage(sauceDto.Image);
+                ModelState.Remove(nameof(sauce.Image));
             }
 
             if (ModelState.IsValid)
             {
                 var sauceDto = _mapper.Map<SauceDTO>(sauce);
                 _manager.Update(sauceDto);
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(sauce);
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
-        public IActionResult _Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var sauceDto = _manager.GetById(id);
-            var sauceView = _mapper.Map<SauceViewModel>(sauceDto);
-            return PartialView(sauceView);
+            return PartialView(_mapper.Map<SauceViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult _Delete(SauceViewModel sauce)
+        public IActionResult Delete(SauceViewModel sauce)
         {
             if (sauce.Id is not 0)
             {
                 _manager.Delete(_manager.GetById(sauce.Id));
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(sauce);
+            return BadRequest();
         }
     }
 }

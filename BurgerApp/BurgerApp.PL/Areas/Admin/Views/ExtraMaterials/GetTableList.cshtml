@@ -1,6 +1,6 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-@model List<ExtraMaterialViewModel>
+@model ExtraMaterialViewModel
 
 @{
     int index = 1;
@@ -17,7 +17,7 @@
         </tr>
     </thead>
     <tbody id="table-list">
-        @foreach (var burger in Model)
+        @foreach (var burger in ViewBag.extraMaterialModelList)
         {
             <tr>
                 <td>@(index++)</td>
@@ -25,13 +25,13 @@
                 <td>
                     @{
                         var image2 = CommonFunc.ImageToArray(burger.Image);
-                     }
+                    }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                 </td>
                 <td>@burger.Price</td>
                 <td>
-                    <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-extraMaterial" data-bs-toggle="modal" id="@burger.Id" class="btn btn-edit-extraMaterial btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-extraMaterial" data-bs-toggle="modal" id="@burger.Id" class="btn btn-delete-extraMaterial btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -40,24 +40,34 @@
 
 <form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
     <table class="table table-hover">
-        <tbody >
+        <tbody>
             <tr>
                 <td>@(index + 1)</td>
-                <td><input name="Name" class="form-control" placeholder="Ad" /></td>
-                <td><input name="Image" type="file" class="form-control" placeholder="Resim" /></td>
-                <td><input name="Price" class="form-control" placeholder="Fiyat" /></td>
-                <td><button type="button" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
+                <td>
+                    <input asp-for="Name" class="form-control" placeholder="Ad" />
+                    <span id="Name-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
+                    <span id="Image-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Price" type="number" value="0" class="form-control" placeholder="Fiyat" />
+                    <span id="Price-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <button type="button" id="add-button" class="btn btn-primary w-100">Ekle</button>
+                </td>
             </tr>
         </tbody>
     </table>
 </form>
 
 <script>
-
     $("#add-button").click(() => {
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
-            url: `Add`,
+            url: `/admin/extraMaterials/add`,
             method: "POST",
             data: formData,
             processData: false,
@@ -67,14 +77,20 @@
                 ReInitTable()
             },
             error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
-
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
             }
         })
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/extraMaterials/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
