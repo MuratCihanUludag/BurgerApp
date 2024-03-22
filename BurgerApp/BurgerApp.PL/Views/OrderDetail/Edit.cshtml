@@ -1,0 +1,73 @@
+﻿@using BurgerApp.DAL.Comman
+@model BurgerApp.PL.ViewModels.OrderDetailViewModel
+
+<form id="form-edit-orderdetail" asp-action="Edit" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="form-label">Burger</label>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, "Value", "Text", Model.BurgerId))"></select>
+            <span id="BurgerId-error-edit" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="form-label">İçecek</label>
+            <select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks, "Value", "Text", Model.DrinkId))"></select>
+            <span id="DrinkId-error-edit" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Cips</label>
+            <select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips, "Value", "Text", Model.CipsId))"></select>
+            <span id="CipsId-error-edit" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Adet</label>
+            <input value="@Model.Count" type="number" name="Count" class="form-control" />
+            <span id="Count-error-edit" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <input name="Id" type="hidden" value="@Model.Id" />
+    </div>
+</form>
+
+<script>
+    $("#form-edit-orderdetail").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-edit-orderdetail")[0]);
+        $.ajax({
+            url: `/admin/orderdetail/edit`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:", data);
+                ReInitTable()
+            },
+            error: (xhr) => {
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error-edit").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `/admin/orderdetail/getTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+</script>

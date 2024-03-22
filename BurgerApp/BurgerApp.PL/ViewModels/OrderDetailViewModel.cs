@@ -1,20 +1,12 @@
-﻿using BurgerApp.BLL.ViewModels.Base;
+﻿using BurgerApp.DAL.Entities.Concrate.MenuClasses;
 using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using BurgerApp.DAL.Entities.Concrate;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BurgerApp.BLL.ViewModels.Other_Models;
-using BurgerApp.DAL.Entities.Concrate.MenuClasses;
-using BurgerApp.BLL.ViewModels.Menu_Models;
-using BurgerApp.DAL.Entities.Abstract.OtherClasses;
 
-namespace BurgerApp.BLL.ViewModels.General_Models
+namespace BurgerApp.PL.ViewModels
 {
-    public class OrderDetailDTO : BaseDTO
+    public class OrderDetailViewModel
     {
+        public int Id { get; set; }
         public int BurgerId { get; set; }
         public Burger Burger { get; set; }
         public int DrinkId { get; set; }
