@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    [Migration("20240322130525_birincimiz")]
+    [Migration("20240322163009_birincimiz")]
     partial class birincimiz
     {
         /// <inheritdoc />

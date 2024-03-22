@@ -4,6 +4,7 @@ using BurgerApp.BLL.ViewModels.Menu_Models;
 using BurgerApp.BLL.ViewModels.Other_Models;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using BurgerApp.PL.CommonFunctions;
+using BurgerApp.PL.ViewModels;
 
 namespace BurgerApp.PL.Areas.Admin.Profiles
 {
@@ -110,7 +111,24 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
                     .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)));
 
             #endregion
-
+            #region OrderDetailProfile
+            CreateMap<OrderDetailViewModel, OrderDetailDTO>()
+                .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.Burger.Id))
+                .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.Drink.Id))
+                .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.Cips.Id))
+                .ForMember(dest => dest.Sauces, opt => opt.MapFrom(src => src.Sauces))
+                .ForMember(dest => dest.ExtraMetarials, opt => opt.MapFrom(src => src.ExtraMetarials))
+                .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
+                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.Order.Id));
+            CreateMap<OrderDetailDTO, OrderDetailViewModel>()
+                .ForMember(dest => dest.Burger, opt => opt.MapFrom(src => src.Burger))
+                .ForMember(dest => dest.Drink, opt => opt.MapFrom(src => src.Drink))
+                .ForMember(dest => dest.Cips, opt => opt.MapFrom(src => src.Cips))
+                .ForMember(dest => dest.Sauces, opt => opt.MapFrom(src => src.Sauces))
+                .ForMember(dest => dest.ExtraMetarials, opt => opt.MapFrom(src => src.ExtraMetarials))
+                .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
+                .ForMember(dest => dest.Order, opt => opt.MapFrom(src => src.Order));
+            #endregion
 
         }
     }
