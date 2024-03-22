@@ -1,6 +1,7 @@
 ﻿using BurgerApp.BLL.ViewModels.Base;
 using BurgerApp.BLL.ViewModels.General_Models;
 using BurgerApp.DAL.Comman;
+using DataAnnotationsExtensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
@@ -8,12 +9,14 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
     public class CipsViewModel
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Bos Birakilamaz")]
+        [Required(ErrorMessage = "Isim zorunludur.")]
         public string Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Boyut zorunludur.")]
         public ProductSize Size { get; set; }
-        public IFormFile? Image { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Resim zorunludur.")]
+        public IFormFile Image { get; set; }
+
+        [Range(0.01, Double.PositiveInfinity, ErrorMessage = "Fiyat sifirdam buyuk olmalidir.")]
         public double Price { get; set; }
 
         public override string ToString()

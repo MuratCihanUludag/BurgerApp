@@ -1,14 +1,9 @@
-﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
-@using BurgerApp.PL.CommonFunctions
-@model List<CipsViewModel>
-@{
-    int index = 1;
+﻿
 
-}
-<div class="table-responsive">
-</div>
+<div class="table-responsive"> </div>
 
 <!-- Edit-Modal -->
+
 <div class="modal fade" id="btn-edit-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -16,13 +11,13 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="cips-edit">
-            </div>
+            <div id="cips-edit"></div>
         </div>
     </div>
 </div>
 
 <!-- Delete-Modal -->
+
 <div class="modal fade" id="btn-delete-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -30,8 +25,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Sil</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-delete">
-            </div>
+            <div id="burger-delete"> </div>
         </div>
     </div>
 </div>
@@ -40,7 +34,7 @@
     <script>
         $(document).ready(() => {
             $.ajax({
-                url: `GetTableList`,
+                url: `/admin/cips/getTableList`,
                 method: 'GET',
                 beforeSend: () => {
                     console.log("bekleyin")
@@ -52,11 +46,10 @@
             })
         })
         function BindButton() {
-            $(".btn-outline-warning").click((e) => {
+            $(".btn-edit-cips").click((e) => {
                 var id = e.target.id;
-                console.log(id)
                 $.ajax({
-                    url: `Edit/${id}`,
+                    url: `/admin/cips/edit/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#cips-edit").html(data);
@@ -67,11 +60,10 @@
                 })
             })
 
-            $(".btn-outline-danger").click((e) => {
+            $(".btn-delete-cips").click((e) => {
                 var id = e.target.id;
-                console.log(id)
                 $.ajax({
-                    url: `Delete/${id}`,
+                    url: `/admin/cips/delete/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#burger-delete").html(data);

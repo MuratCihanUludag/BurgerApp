@@ -10,14 +10,14 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
         [Required(ErrorMessage = "İçecek adı zorunludur.")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Fiyat zorunludur.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Fiyat 0'dan büyük olmalıdır.")]
+        [Range(0.01, Double.PositiveInfinity, ErrorMessage = "Fiyat sifirdam buyuk olmalidir.")]
         public double Price { get; set; }
 
         [Required(ErrorMessage = "Boyut seçimi zorunludur.")]
         public ProductSize Size { get; set; }
 
-        public IFormFile? Image { get; set; }
+        [Required(ErrorMessage ="Resim zorunludur.")]
+        public IFormFile Image { get; set; }
 
         public override string ToString()
         {
