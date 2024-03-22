@@ -8,16 +8,16 @@ namespace BurgerApp.PL.ViewModels
     {
         public int Id { get; set; }
         public int BurgerId { get; set; }
-        public Burger Burger { get; set; }
+        public Burger? Burger { get; set; }
         public int DrinkId { get; set; }
-        public Drink Drink { get; set; }
+        public Drink? Drink { get; set; }
         public int CipsId { get; set; }
-        public Cips Cips { get; set; }
+        public Cips? Cips { get; set; }
         public int Count { get; set; }
-        public ICollection<Sauce> Sauces { get; set; }
-        public ICollection<ExtraMaterial> ExtraMetarials { get; set; }
+        public ICollection<Sauce>? Sauces { get; set; }
+        public ICollection<ExtraMaterial>? ExtraMetarials { get; set; }
         public int OrderId { get; set; }
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
         public double OrderDetailTotalPrice()
         {
             double totalSaucePrice = Sauces.Sum(sauce => sauce.Price);

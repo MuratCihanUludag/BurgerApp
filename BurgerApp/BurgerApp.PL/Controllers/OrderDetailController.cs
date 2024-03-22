@@ -2,7 +2,6 @@
 using BurgerApp.BLL.Manager.Concrete.GeneralManager;
 using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
 using BurgerApp.BLL.ViewModels.General_Models;
-using BurgerApp.BLL.ViewModels.Menu_Models;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Data;
@@ -14,12 +13,18 @@ namespace BurgerApp.PL.Controllers
     public class OrderDetailController : Controller
     {
         private readonly OrderDetailManager _manager;
+        private readonly BurgerManager _burgerManager;
+        private readonly DrinkManager _drinkManager;
+        private readonly CipsManager _cipsManager;
         private IMapper _mapper;
 
         public OrderDetailController(BurgerAppContext dbContext, IMapper mapper)
         {
             _manager = new OrderDetailManager(dbContext);
             _mapper = mapper;
+            _burgerManager = new BurgerManager(dbContext);
+            _drinkManager = new DrinkManager(dbContext);
+            _cipsManager = new CipsManager(dbContext);
         }
 
         public IActionResult Index()
@@ -28,10 +33,21 @@ namespace BurgerApp.PL.Controllers
         }
         public IActionResult GetTableList()
         {
+            var burgers = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
+            var drinks = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
+            var cips = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+
             var orderdetailDtoList = _manager.GetAll();
             var orderdetailViewList = _mapper.Map<List<OrderDetailViewModel>>(orderdetailDtoList);
-            ViewBag.drinkList = orderdetailViewList;
-            return PartialView();
+
+            ViewBag.Burgers = burgerViewList;
+            ViewBag.Drinks = drinkViewList;
+            ViewBag.Cips = cipsViewList;
+
+            return PartialView(orderdetailViewList);
         }
         [HttpPost]
         public IActionResult Add(OrderDetailViewModel orderDetailModel)
