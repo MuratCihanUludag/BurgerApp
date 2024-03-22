@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace BurgerApp.PL.CommonFunctions
 {
@@ -23,6 +24,12 @@ namespace BurgerApp.PL.CommonFunctions
 
             return FormFile;
         }
-
+        public static Dictionary<string, List<string>> GetErrors(this ModelStateDictionary modelState)
+        {
+            return modelState.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToList()
+            );
+        }
     }
 }

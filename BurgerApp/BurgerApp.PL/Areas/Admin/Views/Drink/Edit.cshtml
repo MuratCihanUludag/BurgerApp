@@ -1,8 +1,7 @@
 ﻿@using BurgerApp.DAL.Comman
-@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
 @using BurgerApp.PL.CommonFunctions
 
-@model CipsViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
     var tip = Model.Size.GetType();
@@ -21,7 +20,7 @@
         </div>
         <div class="form-group">
             <label class="form-label">Fiyat</label>
-            <input value="@Model.Price" name="Price" class="form-control" />
+            <input value="@Model.Price" type="number" name="Price" class="form-control" />
             <span id="Price-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group text-center">
@@ -60,7 +59,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `/admin/cips/edit`,
+            url: `/admin/drink/edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -83,7 +82,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `/admin/cips/getTableList`,
+            url: `/admin/drink/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
@@ -91,11 +90,9 @@
             success: (data) => {
                 $(".table-responsive").html(data);
                 BindButton()
-            },
-            error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
             }
         })
     }
 
 </script>
+

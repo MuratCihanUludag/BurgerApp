@@ -1,27 +1,26 @@
-﻿@using BurgerApp.DAL.Comman
-@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
 
-@model CipsViewModel
+@model BurgerViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
-    var tip = Model.Size.GetType();
+
 }
 <form id="form-edit" asp-action="Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="form-label">Ad</label>
-            <input value="@Model.Name" name="Name" class="form-control" />
+            <input asp-for="Name" value="@Model.Name" class="form-control" />
             <span id="Name-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label class="form-label">Boyut</label>
-            <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList(tip))"> </select>
-            <span id="Size-error-edit" class="text-danger"></span>
+            <label class="form-label">Aciklama</label>
+            <input asp-for="Description" value="@Model.Description" name="Description" class="form-control" />
+            <span id="Description-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label class="form-label">Fiyat</label>
-            <input value="@Model.Price" name="Price" class="form-control" />
+            <label class="fomr-label">Fiyat</label>
+            <input asp-for="Price" value="@Model.Price" class="form-control" />
             <span id="Price-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group text-center">
@@ -31,14 +30,12 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Guncelle</button>
+        <button type="submit" id="edit-button" class="btn btn-primary">Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
 
-
 <script>
-
     $("#img-@Model.Id").click(() => {
         $("#input-img-@Model.Id").click();
     })
@@ -60,7 +57,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `/admin/cips/edit`,
+            url: `/admin/burger/Edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -83,7 +80,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `/admin/cips/getTableList`,
+            url: `/admin/burger/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
@@ -91,11 +88,12 @@
             success: (data) => {
                 $(".table-responsive").html(data);
                 BindButton()
-            },
-            error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
             }
         })
     }
-
 </script>
+
+
+
+
+

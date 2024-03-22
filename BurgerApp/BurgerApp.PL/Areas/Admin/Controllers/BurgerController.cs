@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Data;
 
 namespace BurgerApp.PL.Areas.Admin.Controllers
 {
@@ -18,35 +21,74 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         {
             _manager = new BurgerManager(dbContext);
             _mapper = mapper;
-
         }
+
+
         public IActionResult Index()
-        {
-            var burgerDtoList = _manager.GetAll();
-            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
-
-            return View(burgerViewList);
-        }
-        public IActionResult _Edit(int id)
-        {
-            var burgerDto = _manager.GetById(id);
-            var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
-            return PartialView(burgerView);
-        }
-
-        [HttpGet]
-        public IActionResult Add()
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult Add(BurgerViewModel burger)
+        public IActionResult GetTableList()
         {
-            var burgerDto = _mapper.Map<BurgerDTO>(burger);
+            var burgerDtoList = _manager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
+            ViewBag.burgerViewList = burgerViewList;
+            return PartialView();
+        }
 
-            _manager.Add(burgerDto);
+        [HttpPost]
+        public IActionResult Add(BurgerViewModel burgerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var burgerDto = _mapper.Map<BurgerDTO>(burgerModel);
+                _manager.Add(burgerDto);
+                return Ok();
+            }
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
 
-            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            return PartialView(_mapper.Map<BurgerViewModel>(_manager.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult Edit(BurgerViewModel burgerModel)
+        {
+            if (burgerModel.Image is null)
+            {
+                var burgerDto = _manager.GetById(burgerModel.Id);
+                burgerModel.Image = CommonFunc.ArrayToImage(burgerDto.Image);
+                ModelState.Remove(nameof(burgerModel.Image));
+            }
+
+            if (ModelState.IsValid)
+            {
+                var burgerDto = _mapper.Map<BurgerDTO>(burgerModel);
+                _manager.Update(burgerDto);
+                return Ok();
+            }
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return PartialView(_mapper.Map<BurgerViewModel>(_manager.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult Delete(BurgerViewModel burgerModel)
+        {
+            if (burgerModel.Id is not 0)
+            {
+                _manager.Delete(_manager.GetById(burgerModel.Id));
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

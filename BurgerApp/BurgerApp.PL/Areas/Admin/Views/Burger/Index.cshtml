@@ -1,77 +1,11 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-@model List<BurgerViewModel>
-@{
-    int index = 1;
-}
+
+
 <div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Ad</th>
-                <th>Resim</th>
-                <th>Aciklama</th>
-                <th>Fiyat</th>
-                <th>Aksiyonlar</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var burger in Model)
-            {
-                <tr>
-                    <td>
-                        @(index++)
-                    </td>
-                    <td>
-                        @burger.Name
-                    </td>
-                    <td>
-                        @{
-                            var image2 = CommonFunc.ImageToArray(burger.Image);
-                        }
-                        <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
-                    </td>
-                    <td>
-                        @burger.Description
-                    </td>
-                    <td>
-                        @burger.Price
-                    </td>
-                    <td class="d-flex">
-                        <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Duzenle</button>
-                        <button class="btn btn-outline-danger">Sil</button>
-                    </td>
-                </tr>
-            }
-            <tr>
-                <form>
-                <td>
-                        @(index)
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Ad" />
-                </td>
-                <td>
-                    <input type="file" class="form-control" placeholder="Resim" />
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Aciklama" />
-                </td>
-                <td>
-                    <input class="form-control" placeholder="Fiyat" />
-                </td>
-                <td>
-                    <button class="btn btn-primary w-100">Ekle</button>
-                </td>
-                </form>
-            </tr>
-        </tbody>
-    </table>
 </div>
 
-
-<!-- Modal -->
+<!-- Edit-Modal -->
 <div class="modal fade" id="btn-edit-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -80,7 +14,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="burger-edit">
-
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete-Modal -->
+<div class="modal fade" id="btn-delete-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Sil</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="burger-delete">
             </div>
         </div>
     </div>
@@ -88,21 +34,50 @@
 
 @section Scripts {
     <script>
-        $(".btn-outline-warning").click((e) => {
-            var id = e.target.id;
-            console.log(id)
+        $(document).ready(() => {
             $.ajax({
-                url: `_Edit/${id}`,
-                method: "GET",
-                success: (data) => {
-                    $("#burger-edit").html(data)
+                url: `/admin/burger/GetTableList`,
+                method: 'GET',
+                beforeSend: () => {
+                    console.log("bekleyin")
                 },
-                error: (xhr) => {
-                    console.log(xhr.status)
+                success: (data) => {
+                    $(".table-responsive").html(data);
+                    BindButton()
                 }
             })
         })
-    </script>
+        function BindButton() {
+            $(".btn-burger-edit").click((e) => {
+                var id = e.target.id;
+                console.log(id)
+                $.ajax({
+                    url: `/admin/burger/Edit/${id}`,
+                    method: "GET",
+                    success: (data) => {
+                        $("#burger-edit").html(data);
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
 
+            $(".btn-burger-delete").click((e) => {
+                var id = e.target.id;
+                console.log(id)
+                $.ajax({
+                    url: `/admin/burger/Delete/${id}`,
+                    method: "GET",
+                    success: (data) => {
+                        $("#burger-delete").html(data);
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
+        }
+    </script>
 }
 

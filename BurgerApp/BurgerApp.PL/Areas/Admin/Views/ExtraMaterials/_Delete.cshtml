@@ -1,0 +1,59 @@
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.CommonFunctions
+@model ExtraMaterialViewModel
+@{
+    var image = CommonFunc.ImageToArray(Model.Image);
+
+}
+<form id="form-delete" asp-action="_Delete" method="post">
+    <div class="modal-body">
+        <div class="form-group">
+            <p id="result-text">@Model.Name silmek istedigine eminmisin</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Vazgec</button>
+            <button type="button" id="delete-button" class="btn btn-danger" data-bs-dismiss="modal">Sil</button>
+            <input name="Id" type="hidden" value="@Model.Id" />
+        </div>
+</form>
+
+<script>
+    $("#delete-button").click(() => {
+        var formData = new FormData($("#form-delete")[0]);
+        console.log(formData)
+        $.ajax({
+            url: `_Delete`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                $(".modal-body").html(`
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p id="result-text" >Silme Islemi Basarili</p>
+                        </div
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    </div>`);
+                ReInitTable()
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+</script>

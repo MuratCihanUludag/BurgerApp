@@ -32,21 +32,25 @@ namespace BurgerApp.BLL.Manager.Abstract
 
         public void Delete(TModel obj)
         {
-            TEntity entity = _mapper.Map<TEntity>(_repo);
+            TEntity entity = _mapper.Map<TEntity>(obj);
             _repo.Delete(entity);
         }
         public void Remove(TModel obj)
         {
-            TEntity entity = _mapper.Map<TEntity>(_repo);
+            TEntity entity = _mapper.Map<TEntity>(obj);
             _repo.Remove(entity);
 
         }
+        //public void Update(TModel obj)
+        //{
+        //    TEntity entity = _mapper.Map<TEntity>(_repo);
+        //    _repo.Update(entity);
+        //}
         public void Update(TModel obj)
         {
-            TEntity entity = _mapper.Map<TEntity>(_repo);
+            TEntity entity = _mapper.Map<TEntity>(obj);
             _repo.Update(entity);
         }
-
         public IList<TModel> GetAll()
         {
             ICollection<TEntity> entities = _repo.GetAll();
@@ -65,5 +69,6 @@ namespace BurgerApp.BLL.Manager.Abstract
             TModel model = _mapper.Map<TModel>(entity);
             return model;
         }
+
     }
 }

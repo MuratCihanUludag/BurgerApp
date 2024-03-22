@@ -1,40 +1,40 @@
 ﻿
-
 <div class="table-responsive"> </div>
 
 <!-- Edit-Modal -->
 
-<div class="modal fade" id="btn-edit-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-edit-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Duzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="cips-edit"></div>
+            <div id="drink-edit"></div>
         </div>
     </div>
 </div>
 
 <!-- Delete-Modal -->
 
-<div class="modal fade" id="btn-delete-cips" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-delete-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Sil</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Sil</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-delete"> </div>
+            <div id="drink-delete"> </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+
     <script>
         $(document).ready(() => {
             $.ajax({
-                url: `/admin/cips/getTableList`,
+                url: `/admin/drink/getTableList`,
                 method: 'GET',
                 beforeSend: () => {
                     console.log("bekleyin")
@@ -45,28 +45,28 @@
                 }
             })
         })
+
         function BindButton() {
-            $(".btn-edit-cips").click((e) => {
+            $(".btn-edit-drink").click((e) => {
                 var id = e.target.id;
                 $.ajax({
-                    url: `/admin/cips/edit/${id}`,
+                    url: `/admin/drink/edit/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#cips-edit").html(data);
+                        $("#drink-edit").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
                     }
                 })
             })
-
-            $(".btn-delete-cips").click((e) => {
+            $(".btn-delete-drink").click((e) => {
                 var id = e.target.id;
                 $.ajax({
-                    url: `/admin/cips/delete/${id}`,
+                    url: `/admin/drink/delete/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#burger-delete").html(data);
+                        $("#drink-delete").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
@@ -74,8 +74,5 @@
                 })
             })
         }
-
-
-
     </script>
 }

@@ -1,0 +1,111 @@
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.CommonFunctions
+@model CipsViewModel
+@{
+    int index = 1;
+}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Resim</th>
+            <th>Boyut</th>
+            <th>Fiyat</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cips in ViewBag.CipsList)
+        {
+            <tr>
+                <td> @(index++) </td>
+                <td> @cips.Name </td>
+                <td>
+                    @{
+                        var image = CommonFunc.ImageToArray(cips.Image);
+                    }
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" alt="Burger Image" />
+                </td>
+                <td>
+                    @cips.Size
+                </td>
+                <td>
+                    @cips.Price
+                </td>
+                <td class="">
+                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-edit-cips btn-outline-warning me-2">Duzenle</button>
+                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-delete-cips btn-outline-danger">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
+    <table class="table table-hover">
+        <tbody>
+            <tr>
+                <td>@(index + 1)</td>
+                <td>
+                    <input asp-for="Name" class="form-control" placeholder="Ad" />
+                    <span id="Name-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
+                    <span id="Image-error" class="text-danger"></span>
+                </td>
+                <td> <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
+                <td>
+                    <input asp-for="Price" value="0"  type="number"  class="form-control" placeholder="Fiyat" />
+                    <span id="Price-error" class="text-danger"></span>
+                </td>
+                <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    $("#form-add").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add")[0]);
+        var formData2 = Object.fromEntries(new FormData($("#form-add")[0]).entries())
+        console.log(formData2)
+        $.ajax({
+            url: `/admin/cips/add`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable()
+            },
+            error: (xhr) => {
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `/admin/cips/getTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+
+</script>

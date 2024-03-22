@@ -7,32 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BurgerApp.BLL.ViewModels.Other_Models;
+using BurgerApp.DAL.Entities.Concrate.MenuClasses;
+using BurgerApp.BLL.ViewModels.Menu_Models;
 
 namespace BurgerApp.BLL.ViewModels.General_Models
 {
     public class OrderDetailDTO:BaseDTO
     {
-        public int MenuId { get; set; }
-        public MenuDTO Menu { get; set; }
-        public int Count { get; set; }
+        public int Id { get; set; } 
+        public int BurgerId { get; set; } 
+        public BurgerDTO Burger { get; set; }
+        public int DrinkId { get; set; }
+        public DrinkDTO Drink { get; set; }
+        public int CipsId { get; set; }
+        public CipsDTO Cips { get; set; }
+        public int Count { get; set; } 
         public ICollection<SauceDTO> Sauces { get; set; }
-        public ICollection<ExtraMaterialDTO> ExtraMetarials { get; set; }
-        public int OrderId { get; set; }
-        public OrderDTO Order { get; set; }
+        public ICollection<ExtraMaterialDTO> ExtraMaterials { get; set; }
+        public int OrderId { get; set; } 
         public double OrderDetailTotalPrice()
         {
-            double totalSaucePrice = 0;
-            double totalExtraMetarialPrice = 0;
-            foreach (var sauce in Sauces)
-            {
-                totalSaucePrice += sauce.Price;
-            }
-            foreach (var extraMetarial in ExtraMetarials)
-            {
-                totalExtraMetarialPrice += extraMetarial.Price;
-            }
-
-            return (this.Menu.MenuPrice() + totalSaucePrice + totalExtraMetarialPrice) * this.Count;
+            double totalSaucePrice = Sauces?.Sum(sauce => sauce.Price) ?? 0;
+            double totalExtraMaterialPrice = ExtraMaterials?.Sum(extra => extra.Price) ?? 0;
+            double menuPrice = (Burger?.Price ?? 0) + (Drink?.Price ?? 0) + (Cips?.Price ?? 0);
+            return (menuPrice + totalSaucePrice + totalExtraMaterialPrice) * Count;
         }
+
     }
 }
