@@ -23,6 +23,7 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
             _mapper = mapper;
         }
 
+
         public IActionResult Index()
         {
             return View();
@@ -36,58 +37,58 @@ namespace BurgerApp.PL.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(BurgerViewModel burger)
+        public IActionResult Add(BurgerViewModel burgerModel)
         {
             if (ModelState.IsValid)
             {
-                var burgerDto = _mapper.Map<BurgerDTO>(burger);
+                var burgerDto = _mapper.Map<BurgerDTO>(burgerModel);
                 _manager.Add(burgerDto);
+                return Ok();
             }
-            return PartialView("Index");
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
+
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var burgerDto = _manager.GetById(id);
-            var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
-
-            return PartialView(burgerView);
+            return PartialView(_mapper.Map<BurgerViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult Edit(BurgerViewModel burger)
+        public IActionResult Edit(BurgerViewModel burgerModel)
         {
-            if (burger.Image is null)
+            if (burgerModel.Image is null)
             {
-                var burgerDto = _manager.GetById(burger.Id);
-                burger.Image = CommonFunc.ArrayToImage(burgerDto.Image);
+                var burgerDto = _manager.GetById(burgerModel.Id);
+                burgerModel.Image = CommonFunc.ArrayToImage(burgerDto.Image);
+                ModelState.Remove(nameof(burgerModel.Image));
             }
 
             if (ModelState.IsValid)
             {
-                var burgerDto = _mapper.Map<BurgerDTO>(burger);
+                var burgerDto = _mapper.Map<BurgerDTO>(burgerModel);
                 _manager.Update(burgerDto);
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(burger);
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var burgerDto = _manager.GetById(id);
-            var burgerView = _mapper.Map<BurgerViewModel>(burgerDto);
-            return PartialView(burgerView);
+            return PartialView(_mapper.Map<BurgerViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult Delete(BurgerViewModel burger)
+        public IActionResult Delete(BurgerViewModel burgerModel)
         {
-            if (burger.Id is not 0)
+            if (burgerModel.Id is not 0)
             {
-                _manager.Delete(_manager.GetById(burger.Id));
-                return RedirectToAction("Index");
+                _manager.Delete(_manager.GetById(burgerModel.Id));
+                return Ok();
             }
-            return PartialView(burger);
+            return BadRequest();
         }
     }
 }

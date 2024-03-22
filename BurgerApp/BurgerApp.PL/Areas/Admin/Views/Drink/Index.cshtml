@@ -1,128 +1,69 @@
-﻿@model List<BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel>
-
-<div class="table-responsive">
-</div>
+﻿
+<div class="table-responsive"> </div>
 
 <!-- Edit-Modal -->
 
 <div class="modal fade" id="btn-edit-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
     <div class="modal-dialog">
-
         <div class="modal-content">
-
             <div class="modal-header">
-
                 <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Duzenle</h1>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
-
-            <div id="drink-edit">
-            </div>
-
+            <div id="drink-edit"></div>
         </div>
-
     </div>
-
 </div>
 
 <!-- Delete-Modal -->
 
 <div class="modal fade" id="btn-delete-drink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
     <div class="modal-dialog">
-
         <div class="modal-content">
-
             <div class="modal-header">
-
                 <h1 class="modal-title fs-5" id="exampleModalLabel">İçecek Sil</h1>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
             </div>
-
-            <div id="drink-delete">
-            </div>
-
+            <div id="drink-delete"> </div>
         </div>
-
     </div>
-
 </div>
 
 @section Scripts {
 
     <script>
-
         $(document).ready(() => {
-
             $.ajax({
-
-                url: `GetTableList`,
-
+                url: `/admin/drink/getTableList`,
                 method: 'GET',
-
                 beforeSend: () => {
-
                     console.log("bekleyin")
-
                 },
-
                 success: (data) => {
-
                     $(".table-responsive").html(data);
-
                     BindButton()
-
                 }
-
             })
-
         })
 
         function BindButton() {
-
-            $(".btn-outline-warning").click((e) => {
-
+            $(".btn-edit-drink").click((e) => {
                 var id = e.target.id;
-
-                console.log(id)
-
                 $.ajax({
-
-                    url: `_Edit/${id}`,
-
+                    url: `/admin/drink/edit/${id}`,
                     method: "GET",
-
                     success: (data) => {
-
                         $("#drink-edit").html(data);
-
                     },
-
                     error: (xhr) => {
-
                         console.log(xhr.status)
-
                     }
-
                 })
-
             })
-
-            $(".btn-outline-danger").click((e) => {
-
+            $(".btn-delete-drink").click((e) => {
                 var id = e.target.id;
-
-                console.log(id)
-
                 $.ajax({
-
-                    url: `_Delete/${id}`,
-
+                    url: `/admin/drink/delete/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#drink-delete").html(data);
@@ -133,6 +74,5 @@
                 })
             })
         }
-
     </script>
 }

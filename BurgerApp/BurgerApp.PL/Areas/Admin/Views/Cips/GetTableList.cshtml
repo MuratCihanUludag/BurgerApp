@@ -24,9 +24,9 @@
                 <td> @cips.Name </td>
                 <td>
                     @{
-                        var image2 = CommonFunc.ImageToArray(cips.Image);
+                        var image = CommonFunc.ImageToArray(cips.Image);
                     }
-                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" alt="Burger Image" />
                 </td>
                 <td>
                     @cips.Size
@@ -35,8 +35,8 @@
                     @cips.Price
                 </td>
                 <td class="">
-                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-outline-warning me-2">Duzenle</button>
-                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-edit-cips btn-outline-warning me-2">Duzenle</button>
+                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-delete-cips btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -57,7 +57,7 @@
                 </td>
                 <td> <select asp-for="Size" class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
                 <td>
-                    <input asp-for="Price" name="Price" class="form-control" placeholder="Fiyat" />
+                    <input asp-for="Price" value="0"  type="number"  class="form-control" placeholder="Fiyat" />
                     <span id="Price-error" class="text-danger"></span>
                 </td>
                 <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
@@ -70,8 +70,10 @@
     $("#form-add").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
+        var formData2 = Object.fromEntries(new FormData($("#form-add")[0]).entries())
+        console.log(formData2)
         $.ajax({
-            url: `Add`,
+            url: `/admin/cips/add`,
             method: "POST",
             data: formData,
             processData: false,
@@ -94,7 +96,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/cips/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

@@ -43,7 +43,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/burger/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
