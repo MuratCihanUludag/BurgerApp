@@ -15,6 +15,10 @@ namespace BurgerApp.BLL.ViewModels.Menu_Models
         public string Description { get; set; }
         public byte[] Image { get; set; }
         public double Price { get; set; }
-        public ICollection<MenuDTO> Menus { get; set; }
+        public ICollection<Menu> Menus { get; set; }
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }
