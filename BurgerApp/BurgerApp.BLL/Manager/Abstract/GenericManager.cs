@@ -41,17 +41,14 @@ namespace BurgerApp.BLL.Manager.Abstract
             _repo.Remove(entity);
 
         }
-        //public void Update(TModel obj)
-        //{
-        //    TEntity entity = _mapper.Map<TEntity>(_repo);
-        //    _repo.Update(entity);
-        //}
+
         public void Update(TModel obj)
         {
             TEntity entity = _mapper.Map<TEntity>(obj);
             _repo.Update(entity);
         }
         public IList<TModel> GetAll()
+        
         {
             ICollection<TEntity> entities = _repo.GetAll();
             List<TModel> models = new List<TModel>();
