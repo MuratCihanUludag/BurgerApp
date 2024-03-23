@@ -13,39 +13,40 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
         public GeneralProfile()
         {
             #region BurgerProfile
-                CreateMap<BurgerViewModel, BurgerDTO>()
-                            .ForMember(dest => dest.Id , opt=> opt.MapFrom(src =>src.Id))
-                            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)));
+            CreateMap<BurgerViewModel, BurgerDTO>()
+                        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                        .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                        .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)));
 
-                CreateMap<BurgerDTO, BurgerViewModel>()
-                            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)));
+
+            CreateMap<BurgerDTO, BurgerViewModel>()
+                        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                        .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                        .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                        .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)));
+
             #endregion
 
             #region CipsProfile
-                CreateMap<CipsViewModel, CipsDTO>()
-                        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-                        .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
-                        .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)))
-                        .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+            CreateMap<CipsViewModel, CipsDTO>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)))
+                    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
 
-                CreateMap<CipsDTO, CipsViewModel>()
-                        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                        .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+            CreateMap<CipsDTO, CipsViewModel>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                    .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)))
+                    .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
 
-                        .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
-                        .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ArrayToImage(src.Image)))
-                        .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
 
 
-                        
             CreateMap<DrinkViewModel, DrinkDTO>()
                         .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                         .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -101,8 +102,9 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
                     .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.CipsId))
                     .ForMember(dest => dest.Image, opt => opt.MapFrom(src => CommonFunc.ImageToArray(src.Image)));
 
+
             CreateMap<MenuDTO, MenuViewModel>()
-                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                     .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.DrinkId))
@@ -112,22 +114,23 @@ namespace BurgerApp.PL.Areas.Admin.Profiles
 
             #endregion
             #region OrderDetailProfile
+
             CreateMap<OrderDetailViewModel, OrderDetailDTO>()
-                .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.Burger.Id))
-                .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.Drink.Id))
-                .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.Cips.Id))
+                .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.BurgerId))
+                .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.DrinkId))
+                .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.CipsId))
                 .ForMember(dest => dest.Sauces, opt => opt.MapFrom(src => src.Sauces))
                 .ForMember(dest => dest.ExtraMetarials, opt => opt.MapFrom(src => src.ExtraMetarials))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
-                .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.Order.Id));
+                .ForMember(dest => dest.IsSell, opt => opt.MapFrom(src => src.IsSell));
             CreateMap<OrderDetailDTO, OrderDetailViewModel>()
-                .ForMember(dest => dest.Burger, opt => opt.MapFrom(src => src.Burger))
-                .ForMember(dest => dest.Drink, opt => opt.MapFrom(src => src.Drink))
-                .ForMember(dest => dest.Cips, opt => opt.MapFrom(src => src.Cips))
+                .ForMember(dest => dest.BurgerId, opt => opt.MapFrom(src => src.BurgerId))
+                .ForMember(dest => dest.DrinkId, opt => opt.MapFrom(src => src.DrinkId))
+                .ForMember(dest => dest.CipsId, opt => opt.MapFrom(src => src.CipsId))
                 .ForMember(dest => dest.Sauces, opt => opt.MapFrom(src => src.Sauces))
                 .ForMember(dest => dest.ExtraMetarials, opt => opt.MapFrom(src => src.ExtraMetarials))
                 .ForMember(dest => dest.Count, opt => opt.MapFrom(src => src.Count))
-                .ForMember(dest => dest.Order, opt => opt.MapFrom(src => src.Order));
+                .ForMember(dest => dest.IsSell, opt => opt.MapFrom(src => src.IsSell));
             #endregion
 
         }
