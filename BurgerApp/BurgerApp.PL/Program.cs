@@ -7,17 +7,22 @@ using BurgerApp.PL.Areas.Admin.Profiles;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionBurak") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionCihan") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
 
 
 
-builder.Services.AddDbContext<BurgerAppContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BurgerAppContext>(options =>
+
+{ options.UseLazyLoadingProxies(); options.UseSqlServer(connectionString); });
+
 
 builder.Services.AddDefaultIdentity<BurgerAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<string>>()
                 .AddEntityFrameworkStores<BurgerAppContext>();
 
+
 builder.Services.AddAutoMapper(builder => builder.AddProfile<GeneralProfile>());
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -1,11 +1,11 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
-@model MenuViewModel
+@model SauceViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
 
 }
-<form id="form-delete" asp-action="_Delete" method="post">
+<form id="form-delete" asp-action="Delete" method="post">
     <div class="modal-body">
         <div class="form-group">
             <p id="result-text">@Model.Name silmek istedigine eminmisin</p>
@@ -22,7 +22,7 @@
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `_Delete`,
+            url: `/admin/sauces/delete`,
             method: "POST",
             data: formData,
             processData: false,
@@ -45,7 +45,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/sauces/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

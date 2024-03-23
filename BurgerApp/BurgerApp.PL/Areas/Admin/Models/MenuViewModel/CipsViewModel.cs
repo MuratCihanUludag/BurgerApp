@@ -18,12 +18,10 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 
         [Range(0.01, Double.PositiveInfinity, ErrorMessage = "Fiyat sifirdam buyuk olmalidir.")]
         public double Price { get; set; }
-
         public override string ToString()
         {
-            return Name +" (" +Enum.GetName<ProductSize>(Size)+")" ;
+            return Name + " (" + Enum.GetName<ProductSize>(Size) + ")";
         }
     }
-
 
 }

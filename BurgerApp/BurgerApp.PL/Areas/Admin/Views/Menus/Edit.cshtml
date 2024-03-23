@@ -1,20 +1,32 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
 
-@model ExtraMaterialViewModel
+@model MenuViewModel
 @{
     var image = CommonFunc.ImageToArray(Model.Image);
 
 }
-<form id="form-edit" asp-action="_Edit" method="post">
+<form id="form-edit" asp-action="Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="fomr-label">Ad</label>
             <input value="@Model.Name" name="Name" class="form-control" />
-        </div>       
+        </div>
         <div class="form-group">
             <label class="fomr-label">Fiyat</label>
-            <input value="@Model.Price" name="Price" class="form-control" />
+            <input value="@Model.Description" name="Description" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label class="fomr-label">Burger</label>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, nameof(BurgerViewModel.Id), nameof(BurgerViewModel.Name)))"> </select>
+        </div>
+        <div class="form-group">
+            <label class="fomr-label">Burger</label>
+            <select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips,nameof(CipsViewModel.Id),nameof(CipsViewModel.Name)))"></select>
+        </div>
+        <div class="form-group">
+            <label class="fomr-label">Burger</label>
+            <select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks,nameof(DrinkViewModel.Id),nameof(DrinkViewModel.Name)))"> </select>
         </div>
         <div class="form-group text-center">
             <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
@@ -23,7 +35,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="edit-button" class="btn btn-primary">Guncelle</button>
+        <button type="submit" id="edit-button" class="btn btn-primary">Guncelle</button>
         <input name="Id" type="hidden" value="@Model.Id" />
     </div>
 </form>
@@ -46,10 +58,11 @@
     });
 
 
-    $("#edit-button").click(() => {
+    $("#form-edit").submit((e) => {
+        e.preventDefault();
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `_Edit`,
+            url: `/admin/menus/edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -66,7 +79,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/menus/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
