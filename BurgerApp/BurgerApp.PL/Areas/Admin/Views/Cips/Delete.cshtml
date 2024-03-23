@@ -9,7 +9,7 @@
         </div>
         <div class="modal-footer">
             <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Vazgec</button>
-            <button type="button" id="delete-button" class="btn btn-danger">Sil</button>
+            <button type="submit" id="delete-button" class="btn btn-danger">Sil</button>
             <input name="Id" type="hidden" value="@Model.Id" />
         </div>
     </div>
@@ -20,7 +20,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-delete")[0]);
         $.ajax({
-            url: `Delete`,
+            url: `/admin/cips/delete`,
             method: "POST",
             data: formData,
             processData: false,
@@ -43,7 +43,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/cips/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

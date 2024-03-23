@@ -33,8 +33,8 @@
                 <td>@burger.Description</td>
                 <td>@burger.Price</td>
                 <td>
-                    <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-burger-edit btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-burger-delete btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -51,19 +51,21 @@
                 <td>@(index + 1)</td>
                 <td>
                     <input asp-for="Name" class="form-control" placeholder="Ad" />
-                    <span asp-validation-for="Name"></span>
+                    <span id="Name-error" class="text-danger"></span>
                 </td>
                 <td>
                     <input asp-for="Image" type="file" class="form-control" placeholder="Resim" />
-                    <span asp-validation-for="Image"></span>
+                    <span id="Image-error" class="text-danger"></span>
                 </td>
                 <td>
                     <input asp-for="Description" class="form-control" placeholder="Açıklama" />
-                    <span asp-validation-for="Description"></span>
+                    <span id="Description-error" class="text-danger"></span>
+
                 </td>
                 <td>
-                    <input asp-for="Price" class="form-control" placeholder="Fiyat" />
-                    <span asp-validation-for="Price"></span>
+                    <input asp-for="Price" class="form-control" type="number" value="0" placeholder="Fiyat" />
+                    <span id="Price-error" class="text-danger"></span>
+
                 </td>
                 <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
             </tr>
@@ -79,7 +81,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
-            url: `Add`,
+            url: `/admin/burger/Add`,
             method: "POST",
             data: formData,
             processData: false,
@@ -89,14 +91,20 @@
                 ReInitTable()
             },
             error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
-
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
             }
         })
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/burger/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

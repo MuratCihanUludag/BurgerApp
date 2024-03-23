@@ -2,7 +2,7 @@
 @using BurgerApp.PL.CommonFunctions
 @model BurgerViewModel
 
-<form id="form-delete" asp-action="_Delete" method="post">
+<form id="form-delete" asp-action="Delete" method="post">
     <div class="modal-body">
         <div class="form-group">
             <p id="result-text">@Model.Name silmek istedigine eminmisin</p>
@@ -20,7 +20,7 @@
         var formData = new FormData($("#form-delete")[0]);
         console.log(formData)
         $.ajax({
-            url: `Delete`,
+            url: `/admin/burger/delete`,
             method: "POST",
             data: formData,
             processData: false,
@@ -43,7 +43,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/burger/GetTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

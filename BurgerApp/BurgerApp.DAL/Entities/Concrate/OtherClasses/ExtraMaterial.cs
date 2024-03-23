@@ -13,7 +13,7 @@ namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
     {
         public string Name { get; set; }
         public double Price { get; set; }
-        public ICollection<OrderDetail> Details { get; set; }
+        public virtual ICollection<OrderDetail> Details { get; set; }
 
     }
 }

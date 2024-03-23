@@ -21,13 +21,14 @@ namespace MenuApp.PL.Areas.Admin.Controllers
         private readonly DrinkManager _drinkManager;
         private readonly CipsManager _cipsManager;
         private IMapper _mapper;
+
         public MenusController(BurgerAppContext dbContext, IMapper mapper)
         {
             _menuManager = new MenuManager(dbContext);
-            _mapper = mapper;
             _burgerManager = new BurgerManager(dbContext);
             _drinkManager = new DrinkManager(dbContext);
             _cipsManager = new CipsManager(dbContext);
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -36,12 +37,14 @@ namespace MenuApp.PL.Areas.Admin.Controllers
         }
         public IActionResult GetTableList()
         {
-            var burgers = _burgerManager.GetAll();
-            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
-            var drinks = _drinkManager.GetAll();
-            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
-            var cips = _cipsManager.GetAll();
-            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+            var menuList = _menuManager.GetAll();
+
+            var burgerDtoList = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
+            var drinkDtoList = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkDtoList);
+            var cipDtoList = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cipDtoList);
 
             var menuDtoList = _menuManager.GetAll();
             var menuViewList = _mapper.Map<List<MenuViewModel>>(menuDtoList);
@@ -53,51 +56,72 @@ namespace MenuApp.PL.Areas.Admin.Controllers
             return PartialView(menuViewList);
         }
         [HttpPost]
-        public IActionResult Add(MenuViewModel menu)
-        {
-            var menuDto = _mapper.Map<MenuDTO>(menu);
-
-            _menuManager.Add(menuDto);
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public IActionResult _Edit(int id)
-        {
-            var menuDto = _menuManager.GetById(id);
-            var menuView = _mapper.Map<MenuViewModel>(menuDto);
-
-            return PartialView(menuView);
-        }
-        [HttpPost]
-        public IActionResult _Edit(MenuViewModel menu)
+        public IActionResult Add(MenuViewModel menuModel)
         {
             if (ModelState.IsValid)
             {
-                var menuDto = _mapper.Map<MenuDTO>(menu);
-                _menuManager.Update(menuDto);
-                return RedirectToAction("Index");
+                var menuDto = _mapper.Map<MenuDTO>(menuModel);
+                _menuManager.Add(menuDto);
+                return Ok();
             }
-            return PartialView(menu);
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
-        public IActionResult _Delete(int id)
+        public IActionResult Edit(int id)
         {
+
+            var burgerDtoList = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgerDtoList);
+            var drinkDtoList = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkDtoList);
+            var cipDtoList = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cipDtoList);
+
+            ViewBag.Burgers = burgerViewList;
+            ViewBag.Drinks = drinkViewList;
+            ViewBag.Cips = cipsViewList;
+
+
             var menuDto = _menuManager.GetById(id);
             var menuView = _mapper.Map<MenuViewModel>(menuDto);
+
             return PartialView(menuView);
         }
         [HttpPost]
-        public IActionResult _Delete(MenuViewModel menu)
+        public IActionResult Edit(MenuViewModel menuModel)
+        {
+            if (menuModel.Image is null)
+            {
+                var menuDto = _menuManager.GetById(menuModel.Id);
+                menuModel.Image = CommonFunc.ArrayToImage(menuDto.Image);
+                ModelState.Remove(nameof(menuModel.Image));
+            }
+            if (ModelState.IsValid)
+            {
+                var menuDto = _mapper.Map<MenuDTO>(menuModel);
+                _menuManager.Update(menuDto);
+                return Ok();
+            }
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            return PartialView(_mapper.Map<MenuViewModel>(_menuManager.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult Delete(MenuViewModel menu)
         {
             if (menu.Id is not 0)
             {
                 _menuManager.Delete(_menuManager.GetById(menu.Id));
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(menu);
+            return BadRequest();
         }
     }
 }

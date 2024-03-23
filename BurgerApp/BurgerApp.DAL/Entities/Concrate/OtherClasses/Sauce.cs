@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BurgerApp.DAL.Entities.Concrate.OtherClasses
 {
-    public class Sauce : BaseImage,ISauce
+    public class Sauce : BaseImage, ISauce
     {
         public string Name { get; set; }
         public double Price { get; set; }
-        public ICollection<OrderDetail> Details { get; set; }
+        public virtual ICollection<OrderDetail> Details { get; set; }
     }
 }

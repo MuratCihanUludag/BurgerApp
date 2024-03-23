@@ -1,7 +1,7 @@
 ﻿@using BurgerApp.DAL.Comman
 @using BurgerApp.PL.CommonFunctions
 @using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
-@model BurgerApp.PL.Areas.Admin.Models.MenuViewModel.DrinkViewModel
+@model DrinkViewModel
 
 @{
     int index = 1;
@@ -21,23 +21,17 @@
         @foreach (var drinks in ViewBag.DrinkList)
         {
             <tr>
-                <td> @(index++) </td>
+                <td> @(index++)   </td>
                 <td> @drinks.Name </td>
                 <td>
-                    @{
-                        var image2 = CommonFunc.ImageToArray(drinks.Image);
-                    }
-                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Drink Image" />
+                    @{var image = CommonFunc.ImageToArray(drinks.Image);}
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" alt="Drink Image" />
                 </td>
+                <td> @drinks.Size </td>
+                <td> @drinks.Price</td>
                 <td>
-                    @drinks.Size
-                </td>
-                <td>
-                    @drinks.Price
-                </td>
-                <td class="">
-                    <button data-bs-target="#btn-edit-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-warning me-2">Duzenle</button>
-                    <button data-bs-target="#btn-delete-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-edit-drink btn-outline-warning me-2">Duzenle</button>
+                    <button data-bs-target="#btn-delete-drink" data-bs-toggle="modal" id="@drinks.Id" class="btn btn-delete-drink btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -48,11 +42,25 @@
         <tbody>
             <tr>
                 <td>@(index + 1)</td>
-                <td><input asp-for="Name" required class="form-control" placeholder="Ad" /></td>
-                <td><input asp-for="Image" required type="file" class="form-control" placeholder="Resim" /></td>
-                <td> <select asp-for="Size" required class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"> </select> </td>
-                <td><input asp-for="Price" required name="Price" class="form-control" placeholder="Fiyat" /></td>
-                <td><button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button></td>
+                <td>
+                    <input asp-for="Name" class="form-control" placeholder="Ad" />
+                    <span id="Name-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Image"  type="file" class="form-control" placeholder="Resim" />
+                    <span id="Image-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <select asp-for="Size"  class="form-select" asp-items="@(Html.GetEnumSelectList<ProductSize>())"></select>
+                    <span id="Size-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="Price"  name="Price" class="form-control" value="0" type="number" placeholder="Fiyat" />
+                    <span id="Price-error" class="text-danger"></span>
+                </td>
+                <td>
+                    <button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -63,7 +71,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
-            url: `Add`,
+            url: `/admin/drink/add`,
             method: "POST",
             data: formData,
             processData: false,
@@ -73,14 +81,21 @@
                 ReInitTable()
             },
             error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
-
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        console.log(value)
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
             }
         })
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/drink/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

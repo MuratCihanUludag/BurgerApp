@@ -20,24 +20,24 @@
         </tr>
     </thead>
     <tbody id="table-list">
-        @foreach (var burger in Model)
+        @foreach (var menu in Model)
         {
             <tr>
                 <td>@(index++)</td>
-                <td>@burger.Name</td>
+                <td>@menu.Name</td>
                 <td>
                     @{
-                        var image2 = CommonFunc.ImageToArray(burger.Image);
-                     }
-                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
+                        var image = CommonFunc.ImageToArray(menu.Image);
+                    }
+                    <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" alt="Burger Image" />
                 </td>
-                <td>@burger.Description</td>
-                <td>@burger.Burger.ToString()</td>
-                <td>@burger.Cips.ToString()</td>
-                <td>@burger.Drink.ToString()</td>
+                <td>@menu.Description</td>
+                <td>@menu.Burger.Name.ToString()</td>
+                <td>@menu.Cips.Name.ToString()</td>
+                <td>@menu.Drink.Name.ToString()</td>
                 <td>
-                    <button data-bs-target="#btn-edit-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-burger" data-bs-toggle="modal" id="@burger.Id" class="btn btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-menu" data-bs-toggle="modal" id="@menu.Id" class="btn btn-edit-menu btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-menu" data-bs-toggle="modal" id="@menu.Id" class="btn btn-delete-menu btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -46,15 +46,15 @@
 
 <form id="form-add" asp-action="Add" method="POST" enctype="multipart/form-data">
     <table class="table table-hover">
-        <tbody >
+        <tbody>
             <tr>
-                <td>@(index + 1)</td>
+                <td>@(index)</td>
                 <td><input name="Name" class="form-control" placeholder="Ad" /></td>
                 <td><input name="Description" class="form-control" placeholder="Açıklama" /></td>
 
-                <td><select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers,nameof(BurgerViewModel.Id),null))"> </select></td>
-                <td><select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips,nameof(CipsViewModel.Id),null))"></select></td>
-                <td><select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks,nameof(DrinkViewModel.Id),null))"> </select></td>
+                <td><select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers,nameof(BurgerViewModel.Id),nameof(BurgerViewModel.Name)))"> </select></td>
+                <td><select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips,nameof(CipsViewModel.Id),nameof(CipsViewModel.Name)))"></select></td>
+                <td><select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks,nameof(DrinkViewModel.Id),nameof(DrinkViewModel.Name)))"> </select></td>
 
                 <td><input name="Image" type="file" class="form-control" placeholder="Resim" /></td>
                 <td><input name="Price" class="form-control" placeholder="Fiyat" /></td>
@@ -69,7 +69,7 @@
     $("#add-button").click(() => {
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
-            url: `Add`,
+            url: `/admin/menus/add`,
             method: "POST",
             data: formData,
             processData: false,
@@ -86,7 +86,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/menus/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
