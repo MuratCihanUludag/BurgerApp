@@ -14,23 +14,25 @@ namespace BurgerApp.BLL.ViewModels.General_Models
 {
     public class OrderDetailDTO:BaseDTO
     {
-        public int Id { get; set; } 
-        public int BurgerId { get; set; } 
-        public BurgerDTO Burger { get; set; }
+        public int BurgerId { get; set; }
+        public Burger Burger { get; set; }
         public int DrinkId { get; set; }
-        public DrinkDTO Drink { get; set; }
+        public Drink Drink { get; set; }
         public int CipsId { get; set; }
-        public CipsDTO Cips { get; set; }
-        public int Count { get; set; } 
-        public ICollection<SauceDTO> Sauces { get; set; }
-        public ICollection<ExtraMaterialDTO> ExtraMaterials { get; set; }
-        public int OrderId { get; set; } 
+        public Cips Cips { get; set; }
+        public int Count { get; set; }
+        public ICollection<Sauce> Sauces { get; set; }
+        public ICollection<ExtraMaterial> ExtraMetarials { get; set; }
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
         public double OrderDetailTotalPrice()
         {
-            double totalSaucePrice = Sauces?.Sum(sauce => sauce.Price) ?? 0;
-            double totalExtraMaterialPrice = ExtraMaterials?.Sum(extra => extra.Price) ?? 0;
-            double menuPrice = (Burger?.Price ?? 0) + (Drink?.Price ?? 0) + (Cips?.Price ?? 0);
-            return (menuPrice + totalSaucePrice + totalExtraMaterialPrice) * Count;
+            double totalSaucePrice = Sauces.Sum(sauce => sauce.Price);
+            double totalExtraMaterialPrice = ExtraMetarials.Sum(extra => extra.Price);
+            double menuPrice = this.Burger.Price + (this.Drink.Price - 10) + (this.Cips.Price - 15);
+            double totalPrice = (menuPrice + totalSaucePrice + totalExtraMaterialPrice) * Count;
+
+            return totalPrice;
         }
 
     }

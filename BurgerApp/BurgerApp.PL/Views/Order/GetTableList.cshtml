@@ -1,0 +1,81 @@
+﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.CommonFunctions
+@using BurgerApp.PL.ViewModels
+@model OrderViewModel
+
+@{
+
+    int index = 1;
+}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Adres Bilgisi</th>
+            <th>Fiyat</th>
+            <th>Aksiyonlar</th>
+        </tr>
+    </thead>
+    <tbody id="table-list">
+        @foreach (OrderViewModel order in ViewBag.orderViewList)
+        {
+            <tr>
+                <td>@(index++)</td>
+                @* <td>@order.User.Adres</td> *@
+                <td>@order.OrderPrice()</td>
+                <td>
+                    <button data-bs-target="#btn-edit-order" data-bs-toggle="modal" id="@order.Id" class="btn btn-order-edit btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-order" data-bs-toggle="modal" id="@order.Id" class="btn btn-order-delete btn-outline-danger">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div id="test">
+</div>
+
+
+
+<script>
+
+    $("#form-add").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add")[0]);
+        $.ajax({
+            url: `order/Add`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable()
+            },
+            error: (xhr) => {
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
+            }
+        })
+    })
+    function ReInitTable() {
+        $.ajax({
+            url: `order/GetTableList`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("bekleyin")
+            },
+            success: (data) => {
+                $(".table-responsive").html(data);
+                BindButton()
+            }
+        })
+    }
+
+</script>
