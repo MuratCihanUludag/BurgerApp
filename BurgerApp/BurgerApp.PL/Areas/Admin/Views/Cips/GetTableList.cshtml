@@ -28,13 +28,9 @@
                     }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" alt="Burger Image" />
                 </td>
-                <td>
-                    @cips.Size
-                </td>
-                <td>
-                    @cips.Price
-                </td>
-                <td class="">
+                <td> @cips.Size </td>
+                <td> @cips.Price </td>
+                <td >
                     <button data-bs-target="#btn-edit-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-edit-cips btn-outline-warning me-2">Duzenle</button>
                     <button data-bs-target="#btn-delete-cips" data-bs-toggle="modal" id="@cips.Id" class="btn btn-delete-cips btn-outline-danger">Sil</button>
                 </td>

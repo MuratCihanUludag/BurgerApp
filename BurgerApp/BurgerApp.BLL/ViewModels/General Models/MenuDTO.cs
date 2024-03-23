@@ -15,11 +15,11 @@ namespace BurgerApp.BLL.ViewModels.General_Models
         public string Description { get; set; }
         public byte[] Image { get; set; }
         public int BurgerId { get; set; }
-        public BurgerDTO Burger { get; set; }
+        public virtual Burger Burger { get; set; }
         public int DrinkId { get; set; }
-        public DrinkDTO Drink { get; set; }
+        public virtual Drink Drink { get; set; }
         public int CipsId { get; set; }
-        public CipsDTO Cips { get; set; }
+        public virtual Cips Cips { get; set; }
         public double MenuPrice()
         {
             if (this.Burger.Price != null && this.Drink.Price != null && this.Cips.Price != null)

@@ -7,22 +7,26 @@ using System.Text;
 using System.Threading.Tasks;
 using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.DAL.Entities.Concrate.MenuClasses;
+using BurgerApp.PL.Areas.Identity.Data;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BurgerApp.DAL.Entities.Abstract
 {
     public interface IOrderDetail : IBaseEntity
     {
-        public int BurgerId { get; set; }
-        public Burger Burger { get; set; }
-        public int DrinkId { get; set; }
-        public Drink Drink { get; set; }
-        public int CipsId { get; set; }
-        public Cips Cips { get; set; }
-        public int Count { get; set; }
-        public ICollection<Sauce> Sauces { get; set; }
-        public ICollection<ExtraMaterial> ExtraMetarials { get; set; }
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
-        public double OrderDetailTotalPrice();
+        string UserId { get; set; }
+        BurgerAppUser User { get; set; }
+        int BurgerId { get; set; }
+        Burger Burger { get; set; }
+        int DrinkId { get; set; }
+        Drink Drink { get; set; }
+        int CipsId { get; set; }
+        Cips Cips { get; set; }
+        int Count { get; set; }
+        ICollection<Sauce> Sauces { get; set; }
+        ICollection<ExtraMaterial> ExtraMetarials { get; set; }
+        bool IsSell { get; set; }
+
+        double OrderDetailTotalPrice();
     }
 }
