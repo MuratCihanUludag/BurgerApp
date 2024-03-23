@@ -1,5 +1,6 @@
 ﻿using BurgerApp.DAL.Entities.Abstract.Base;
 using BurgerApp.PL.Data;
+using Castle.Components.DictionaryAdapter.Xml;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,9 +34,10 @@ namespace BurgerApp.DAL.Repo.Abstract
 
         public void Delete(T entity)
         {
-            entity.DataStatus = Comman.DataStatus.Delete;
-            entity.Deleted = DateTime.Now;
-            this.Update(entity);
+            var entity2 = _dbSet.AsNoTracking().FirstOrDefault(x => x.Id == entity.Id);
+            entity2.DataStatus = Comman.DataStatus.Delete;
+            entity2.Deleted = DateTime.Now;
+            this.Update(entity2);
         }
         public void Remove(T entity)
         {
@@ -49,7 +51,6 @@ namespace BurgerApp.DAL.Repo.Abstract
 
             if (entity.DataStatus == Comman.DataStatus.Update)
                 entity.Updated = DateTime.Now;
-
             _dbSet.Update(entity);
             _dbContext.SaveChanges();
 
@@ -63,6 +64,7 @@ namespace BurgerApp.DAL.Repo.Abstract
         {
             return _dbSet.AsNoTracking().Where(c => c.DataStatus != Comman.DataStatus.Delete).ToList();
         }
+
 
     }
 }

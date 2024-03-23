@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BurgerApp.DAL.Migrations
 {
     [DbContext(typeof(BurgerAppContext))]
-    [Migration("20240322163009_birincimiz")]
-    partial class birincimiz
+    [Migration("20240323114239_Mig-1")]
+    partial class Mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,6 +21,9 @@ namespace BurgerApp.DAL.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -195,37 +198,6 @@ namespace BurgerApp.DAL.Migrations
                     b.ToTable("Drinks");
                 });
 
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DataStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Deleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Orders");
-                });
-
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
@@ -255,11 +227,15 @@ namespace BurgerApp.DAL.Migrations
                     b.Property<int>("DrinkId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsSell")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -269,7 +245,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.HasIndex("DrinkId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -426,7 +402,7 @@ namespace BurgerApp.DAL.Migrations
                     b.ToTable("ExtraMaterialOrderDetail");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -605,17 +581,6 @@ namespace BurgerApp.DAL.Migrations
                     b.Navigation("Drink");
                 });
 
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.HasOne("BurgerApp.PL.Areas.Identity.Data.BurgerAppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.OrderDetail", b =>
                 {
                     b.HasOne("BurgerApp.DAL.Entities.Concrate.MenuClasses.Burger", "Burger")
@@ -636,9 +601,9 @@ namespace BurgerApp.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BurgerApp.DAL.Entities.Concrate.Order", "Order")
-                        .WithMany("Details")
-                        .HasForeignKey("OrderId")
+                    b.HasOne("BurgerApp.PL.Areas.Identity.Data.BurgerAppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -648,7 +613,7 @@ namespace BurgerApp.DAL.Migrations
 
                     b.Navigation("Drink");
 
-                    b.Navigation("Order");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ExtraMaterialOrderDetail", b =>
@@ -668,7 +633,7 @@ namespace BurgerApp.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<string>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -695,7 +660,7 @@ namespace BurgerApp.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<string>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -745,11 +710,6 @@ namespace BurgerApp.DAL.Migrations
             modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.MenuClasses.Drink", b =>
                 {
                     b.Navigation("Menus");
-                });
-
-            modelBuilder.Entity("BurgerApp.DAL.Entities.Concrate.Order", b =>
-                {
-                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }

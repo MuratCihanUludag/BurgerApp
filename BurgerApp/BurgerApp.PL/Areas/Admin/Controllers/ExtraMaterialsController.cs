@@ -28,61 +28,63 @@ namespace ExtraMaterialApp.PL.Areas.Admin.Controllers
         public IActionResult GetTableList()
         {
             var extraMaterialDtoList = _manager.GetAll();
-            var extraMaterialViewList = _mapper.Map<List<ExtraMaterialViewModel>>(extraMaterialDtoList);
-            return PartialView(extraMaterialViewList);
+            var extraMaterialModelList = _mapper.Map<List<ExtraMaterialViewModel>>(extraMaterialDtoList);
+            ViewBag.extraMaterialModelList = extraMaterialModelList;
+            return PartialView();
         }
         [HttpPost]
         public IActionResult Add(ExtraMaterialViewModel extraMaterial)
         {
-            var extraMaterialDto = _mapper.Map<ExtraMaterialDTO>(extraMaterial);
+            if (ModelState.IsValid)
+            {
+                var extraMaterialDto = _mapper.Map<ExtraMaterialDTO>(extraMaterial);
+                _manager.Add(extraMaterialDto);
+                return Ok();
+            }
 
-            _manager.Add(extraMaterialDto);
-
-            return RedirectToAction("Index");
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
-        public IActionResult _Edit(int id)
+        public IActionResult Edit(int id)
         {
-            var extraMaterialDto = _manager.GetById(id);
-            var extraMaterialView = _mapper.Map<ExtraMaterialViewModel>(extraMaterialDto);
-
-            return PartialView(extraMaterialView);
+            return PartialView(_mapper.Map<ExtraMaterialViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult _Edit(ExtraMaterialViewModel extraMaterial)
+        public IActionResult Edit(ExtraMaterialViewModel extraMaterial)
         {
             if (extraMaterial.Image is null)
             {
                 var extraMaterialDto = _manager.GetById(extraMaterial.Id);
                 extraMaterial.Image = CommonFunc.ArrayToImage(extraMaterialDto.Image);
+                ModelState.Remove(nameof(extraMaterial.Image));
             }
 
             if (ModelState.IsValid)
             {
                 var extraMaterialDto = _mapper.Map<ExtraMaterialDTO>(extraMaterial);
                 _manager.Update(extraMaterialDto);
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(extraMaterial);
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
 
         [HttpGet]
-        public IActionResult _Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var extraMaterialDto = _manager.GetById(id);
-            var extraMaterialView = _mapper.Map<ExtraMaterialViewModel>(extraMaterialDto);
-            return PartialView(extraMaterialView);
+            return PartialView(_mapper.Map<ExtraMaterialViewModel>(_manager.GetById(id)));
         }
         [HttpPost]
-        public IActionResult _Delete(ExtraMaterialViewModel extraMaterial)
+        public IActionResult Delete(ExtraMaterialViewModel extraMaterial)
         {
             if (extraMaterial.Id is not 0)
             {
                 _manager.Delete(_manager.GetById(extraMaterial.Id));
-                return RedirectToAction("Index");
+                return Ok();
             }
-            return PartialView(extraMaterial);
+            return BadRequest();
         }
     }
 }
