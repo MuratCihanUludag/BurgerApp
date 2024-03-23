@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BurgerApp.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class birincimiz : Migration
+    public partial class Mig1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -255,29 +255,6 @@ namespace BurgerApp.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DataStatus = table.Column<int>(type: "int", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Deleted = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Menus",
                 columns: table => new
                 {
@@ -323,11 +300,12 @@ namespace BurgerApp.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BurgerId = table.Column<int>(type: "int", nullable: false),
                     DrinkId = table.Column<int>(type: "int", nullable: false),
                     CipsId = table.Column<int>(type: "int", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    IsSell = table.Column<bool>(type: "bit", nullable: false),
                     DataStatus = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -336,6 +314,12 @@ namespace BurgerApp.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderDetails_Burgers_BurgerId",
                         column: x => x.BurgerId,
@@ -352,12 +336,6 @@ namespace BurgerApp.DAL.Migrations
                         name: "FK_OrderDetails_Drinks_DrinkId",
                         column: x => x.DrinkId,
                         principalTable: "Drinks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -485,19 +463,14 @@ namespace BurgerApp.DAL.Migrations
                 column: "DrinkId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_OrderId",
+                name: "IX_OrderDetails_UserId",
                 table: "OrderDetails",
-                column: "OrderId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetailSauce_SaucesId",
                 table: "OrderDetailSauce",
                 column: "SaucesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
-                table: "Orders",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -540,6 +513,9 @@ namespace BurgerApp.DAL.Migrations
                 name: "Sauces");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Burgers");
 
             migrationBuilder.DropTable(
@@ -547,12 +523,6 @@ namespace BurgerApp.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Drinks");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

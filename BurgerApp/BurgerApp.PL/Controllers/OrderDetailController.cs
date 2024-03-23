@@ -7,6 +7,7 @@ using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Data;
 using BurgerApp.PL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BurgerApp.PL.Controllers
 {
@@ -25,6 +26,7 @@ namespace BurgerApp.PL.Controllers
             _burgerManager = new BurgerManager(dbContext);
             _drinkManager = new DrinkManager(dbContext);
             _cipsManager = new CipsManager(dbContext);
+
         }
 
         public IActionResult Index()
@@ -33,6 +35,20 @@ namespace BurgerApp.PL.Controllers
         }
         public IActionResult GetTableList()
         {
+            var admin = HttpContext.User.FindAll(ClaimTypes.Role).Where(x => x.Value == "Admin").FirstOrDefault();
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;    
+            IList<OrderDetailDTO> orderdetailDtoList;
+
+            if (admin is not null)
+            {
+                orderdetailDtoList = _manager.GetAll();
+            }
+            else
+            {
+                orderdetailDtoList = _manager.GetAll().Where(x => x.UserId == userId).ToList();
+            }
+
             var burgers = _burgerManager.GetAll();
             var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
             var drinks = _drinkManager.GetAll();
@@ -40,10 +56,11 @@ namespace BurgerApp.PL.Controllers
             var cips = _cipsManager.GetAll();
             var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
 
-            var orderdetailDtoList = _manager.GetAll();
             var orderdetailViewList = _mapper.Map<List<OrderDetailViewModel>>(orderdetailDtoList);
+            
 
             ViewBag.Burgers = burgerViewList;
+            ViewData["Burger2"]= burgerViewList;
             ViewBag.Drinks = drinkViewList;
             ViewBag.Cips = cipsViewList;
 

@@ -1,20 +1,19 @@
 ﻿@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @using BurgerApp.PL.CommonFunctions
 
-@model MenuViewModel
-@{
-    var image = CommonFunc.ImageToArray(Model.Image);
-
-}
-<form id="form-edit" asp-action="_Edit" method="post">
+@model ExtraMaterialViewModel
+@{ var image = CommonFunc.ImageToArray(Model.Image); }
+<form id="form-edit" asp-action="Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="fomr-label">Ad</label>
-            <input value="@Model.Name" name="Name" class="form-control" />
-        </div>       
+            <input value="@Model.Name" asp-for="Name" class="form-control" />
+            <span id="Name-error-edit" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label class="fomr-label">Fiyat</label>
-            <input value="@Model.Description" name="Description" class="form-control" />
+            <input value="@Model.Price" name="Price" asp-for="Price" class="form-control" />
+            <span id="Price-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group text-center">
             <img class="img-fluid" id="img-@Model.Id" style="object-fit:contain;height:300px" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image)}")" />
@@ -49,7 +48,7 @@
     $("#edit-button").click(() => {
         var formData = new FormData($("#form-edit")[0]);
         $.ajax({
-            url: `_Edit`,
+            url: `/admin/extraMaterials/edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -59,14 +58,20 @@
                 ReInitTable()
             },
             error: (xhr) => {
-                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
-
+                if (xhr.status === 400) {
+                    var errors = xhr.responseJSON;
+                    $.each(errors, function (key, value) {
+                        $("#" + key + "-error-edit").text(value.join(", "));
+                    });
+                } else {
+                    console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+                }
             }
         })
     })
     function ReInitTable() {
         $.ajax({
-            url: `GetTableList`,
+            url: `/admin/extraMaterials/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")

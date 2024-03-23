@@ -15,7 +15,7 @@ namespace BurgerApp.DAL.Entities.Concrate.MenuClasses
         public string Name { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
-        public ICollection<Menu> Menus { get; set; }
+        public virtual ICollection<Menu> Menus { get; set; }
 
     }
 }

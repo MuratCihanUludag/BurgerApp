@@ -6,28 +6,26 @@
 </div>
 
 <!-- Edit-Modal -->
-<div class="modal fade" id="btn-edit-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-edit-extraMaterial" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Extra Metaryal Düzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-edit">
-            </div>
+            <div id="extraMaterial-edit"></div>
         </div>
     </div>
 </div>
 <!-- Delete-Modal -->
-<div class="modal fade" id="btn-delete-burger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="btn-delete-extraMaterial" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Sil</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Extra Metaryal Sil</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="burger-delete">
-            </div>
+            <div id="extraMaterial-delete"></div>
         </div>
     </div>
 </div>
@@ -36,7 +34,7 @@
     <script>
         $(document).ready(() => {
             $.ajax({
-                url: `GetTableList`,
+                url: `/admin/ExtraMaterials/getTableList`,
                 method: 'GET',
                 beforeSend: () => {
                     console.log("bekleyin")
@@ -48,14 +46,13 @@
             })
         })
         function BindButton() {
-            $(".btn-outline-warning").click((e) => {
+            $(".btn-edit-extraMaterial").click((e) => {
                 var id = e.target.id;
-                console.log(id)
                 $.ajax({
-                    url: `_Edit/${id}`,
+                    url: `/admin/extraMaterials/edit/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#burger-edit").html(data);
+                        $("#extraMaterial-edit").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
@@ -63,14 +60,13 @@
                 })
             })
 
-            $(".btn-outline-danger").click((e) => {
+            $(".btn-delete-extraMaterial").click((e) => {
                 var id = e.target.id;
-                console.log(id)
                 $.ajax({
-                    url: `_Delete/${id}`,
+                    url: `/admin/extraMaterials/delete/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#burger-delete").html(data);
+                        $("#extraMaterial-delete").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
