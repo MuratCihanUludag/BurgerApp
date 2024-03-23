@@ -11,13 +11,18 @@ var connectionString = builder.Configuration.GetConnectionString("BurgerAppConte
 
 
 
-builder.Services.AddDbContext<BurgerAppContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BurgerAppContext>(options =>
+
+{ options.UseLazyLoadingProxies(); options.UseSqlServer(connectionString); });
+
 
 builder.Services.AddDefaultIdentity<BurgerAppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole<string>>()
                 .AddEntityFrameworkStores<BurgerAppContext>();
 
+
 builder.Services.AddAutoMapper(builder => builder.AddProfile<GeneralProfile>());
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

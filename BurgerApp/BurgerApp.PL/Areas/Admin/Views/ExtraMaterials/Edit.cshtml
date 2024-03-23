@@ -2,11 +2,8 @@
 @using BurgerApp.PL.CommonFunctions
 
 @model ExtraMaterialViewModel
-@{
-    var image = CommonFunc.ImageToArray(Model.Image);
-
-}
-<form id="form-edit" asp-action="_Edit" method="post">
+@{ var image = CommonFunc.ImageToArray(Model.Image); }
+<form id="form-edit" asp-action="Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="fomr-label">Ad</label>

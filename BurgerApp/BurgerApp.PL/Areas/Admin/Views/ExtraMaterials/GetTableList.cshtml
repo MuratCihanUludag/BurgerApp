@@ -17,21 +17,21 @@
         </tr>
     </thead>
     <tbody id="table-list">
-        @foreach (var burger in ViewBag.extraMaterialModelList)
+        @foreach (var metarial in ViewBag.extraMaterialModelList)
         {
             <tr>
                 <td>@(index++)</td>
-                <td>@burger.Name</td>
+                <td>@metarial.Name</td>
                 <td>
                     @{
-                        var image2 = CommonFunc.ImageToArray(burger.Image);
+                        var image2 = CommonFunc.ImageToArray(metarial.Image);
                     }
                     <img class="img-fluid" style="width:150px;height:100px;object-fit:contain" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(image2)}")" alt="Burger Image" />
                 </td>
-                <td>@burger.Price</td>
+                <td>@metarial.Price</td>
                 <td>
-                    <button data-bs-target="#btn-edit-extraMaterial" data-bs-toggle="modal" id="@burger.Id" class="btn btn-edit-extraMaterial btn-outline-warning me-2">Düzenle</button>
-                    <button data-bs-target="#btn-delete-extraMaterial" data-bs-toggle="modal" id="@burger.Id" class="btn btn-delete-extraMaterial btn-outline-danger">Sil</button>
+                    <button data-bs-target="#btn-edit-extraMaterial" data-bs-toggle="modal" id="@metarial.Id" class="btn btn-edit-extraMaterial btn-outline-warning me-2">Düzenle</button>
+                    <button data-bs-target="#btn-delete-extraMaterial" data-bs-toggle="modal" id="@metarial.Id" class="btn btn-delete-extraMaterial btn-outline-danger">Sil</button>
                 </td>
             </tr>
         }
@@ -56,7 +56,7 @@
                     <span id="Price-error" class="text-danger"></span>
                 </td>
                 <td>
-                    <button type="button" id="add-button" class="btn btn-primary w-100">Ekle</button>
+                    <button type="submit" id="add-button" class="btn btn-primary w-100">Ekle</button>
                 </td>
             </tr>
         </tbody>
@@ -64,7 +64,8 @@
 </form>
 
 <script>
-    $("#add-button").click(() => {
+    $("#form-add").submit((e) => {
+        e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
         $.ajax({
             url: `/admin/extraMaterials/add`,
