@@ -1,7 +1,31 @@
 ﻿@using BurgerApp.PL.ViewModels
 
-<div class="table-responsive">
+
+
+
+
+
+<section class="section-1">
+    <div class="section-admin-img"></div>
+    <div class="table-responsive-container container">
+        <div class="table-responsive"> </div>
+    </div>
+</section>
+
+
+<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editOrderDetailModalLabel">OrderDetail Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="orderdetail-detail">
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -16,6 +40,8 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="btn-delete-orderdetail" tabindex="-1" aria-labelledby="deleteOrderDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -28,6 +54,8 @@
         </div>
     </div>
 </div>
+
+
 @section Scripts {
     <script>
         $(document).ready(() => {

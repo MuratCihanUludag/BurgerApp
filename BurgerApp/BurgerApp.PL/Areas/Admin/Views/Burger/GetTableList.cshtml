@@ -76,7 +76,6 @@
 
 
 <script>
-
     $("#form-add").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-add")[0]);
@@ -88,7 +87,7 @@
             contentType: false,
             success: (data) => {
                 console.log("İstek başarıyla tamamlandı:");
-                ReInitTable()
+                ReInitTable();
             },
             error: (xhr) => {
                 if (xhr.status === 400) {
@@ -99,9 +98,11 @@
                 } else {
                     console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
                 }
+             
             }
-        })
-    })
+        });
+    });
+
     function ReInitTable() {
         $.ajax({
             url: `/admin/burger/GetTableList`,
