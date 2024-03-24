@@ -17,6 +17,7 @@ namespace BurgerApp.PL.Controllers
         private readonly BurgerManager _burgerManager;
         private readonly DrinkManager _drinkManager;
         private readonly CipsManager _cipsManager;
+        private readonly MenuManager _menuManager;
         private IMapper _mapper;
 
         public OrderDetailController(BurgerAppContext dbContext, IMapper mapper)
@@ -26,6 +27,7 @@ namespace BurgerApp.PL.Controllers
             _burgerManager = new BurgerManager(dbContext);
             _drinkManager = new DrinkManager(dbContext);
             _cipsManager = new CipsManager(dbContext);
+            _menuManager = new MenuManager(dbContext);
 
         }
 
@@ -37,7 +39,7 @@ namespace BurgerApp.PL.Controllers
         {
             var admin = HttpContext.User.FindAll(ClaimTypes.Role).Where(x => x.Value == "Admin").FirstOrDefault();
             string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.UserId = userId;    
+            ViewBag.UserId = userId;
             IList<OrderDetailDTO> orderdetailDtoList;
 
             if (admin is not null)
@@ -51,18 +53,24 @@ namespace BurgerApp.PL.Controllers
 
             var burgers = _burgerManager.GetAll();
             var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
+
             var drinks = _drinkManager.GetAll();
             var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
             var cips = _cipsManager.GetAll();
             var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
 
+            var menuList = _menuManager.GetAll();
+            var menuViewList = _mapper.Map<List<MenuViewModel>>(menuList);
+
+
             var orderdetailViewList = _mapper.Map<List<OrderDetailViewModel>>(orderdetailDtoList);
-            
+
 
             ViewBag.Burgers = burgerViewList;
-            ViewData["Burger2"]= burgerViewList;
+            ViewData["Burger2"] = burgerViewList;
             ViewBag.Drinks = drinkViewList;
             ViewBag.Cips = cipsViewList;
+            ViewBag.Menus = menuList;
 
             return PartialView(orderdetailViewList);
         }
