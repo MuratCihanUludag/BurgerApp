@@ -1,4 +1,5 @@
-﻿using BurgerApp.PL.Data;
+﻿using BurgerApp.PL.Areas.Identity.Pages.Account.Manage;
+using BurgerApp.PL.Data;
 using BurgerApp.PL.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -16,6 +17,7 @@ namespace BurgerApp.PL.Controllers
 
         public IActionResult Index()
         {
+            
             return View();
         }
 
