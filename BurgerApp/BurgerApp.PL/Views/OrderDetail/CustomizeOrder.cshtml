@@ -1,0 +1,117 @@
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@using BurgerApp.PL.ViewModels
+@model OrderDetailViewModel
+
+<form id="form-customize-order" asp-action="SaveCustomization" method="post">
+    <div class="modal-body">
+        <!-- Burger Seçimi -->
+        <div class="form-group">
+            <label>Burger</label>
+            <select asp-for="BurgerId" class="form-select">
+                @foreach (var burger in ViewBag.Burgers as List<BurgerViewModel>)
+                {
+                    <option value="@burger.Id" selected="@(Model.BurgerId == burger.Id ? "selected" : null)">@burger.Name</option>
+                }
+            </select>
+        </div>
+        <!-- İçecek Seçimi -->     
+        <div class="form-group">
+            <label>İçecek</label>
+            <select asp-for="DrinkId" class="form-select">
+                @foreach (var drink in ViewBag.Drinks as List<DrinkViewModel>)
+                {
+                    <option value="@drink.Id" selected="@(Model.DrinkId == drink.Id ? "selected" : null)">@drink.Name</option>
+                }
+            </select>
+        </div>
+        <!-- Cips Seçimi -->
+        <div class="form-group">
+            <label>Cips</label>
+            <select asp-for="CipsId" class="form-select">
+                @foreach (var cips in ViewBag.Chips as List<CipsViewModel>)
+                {
+                    <option value="@cips.Id" selected="@(Model.CipsId == cips.Id ? "selected" : null)">@cips.Name</option>
+                }
+            </select>
+        </div>
+        <!-- Ekstra Malzemeler -->
+        <div class="form-group">
+            <label>Ekstra Malzemeler</label>
+            @foreach (var extra in ViewBag.ExtraMaterials as List<ExtraMaterialViewModel>)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="ExtraMaterials" value="@extra.Id" @(Model.ExtraMetarials.Any(em => em.Id == extra.Id) ? "checked" : "")>
+                    <label class="form-check-label">
+                        @extra.Name
+                    </label>
+                </div>
+            }
+        </div>
+@*         <div class="form-group">
+            <label>Soslar</label>
+            @foreach (var sauce in ViewBag.Sauces as List<SauceViewModel>)
+            {
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="Sauces" value="@sauce.Id" @(Model.Sauces.Any(s => s.Id == sauce.Id) ? "checked" : "")>
+                    <label class="form-check-label">
+                        @sauce.Name
+                    </label>
+                </div>
+            }
+        </div> *@
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+
+    </div>
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+</form>
+
+<script>
+    $("#form-customize-order").submit(function (e) {
+        e.preventDefault();
+
+        // Form verisini topla
+        var formData = $(this).serializeArray();
+        var extraMaterials = [];
+        var sauces = [];
+
+        // Form verisinden ekstra malzemeleri ve sosları ayıklama
+        formData.forEach(function (item) {
+            if (item.name === "ExtraMaterials") {
+                extraMaterials.push(item.value);
+            } else if (item.name === "Sauces") {
+                sauces.push(item.value);
+            }
+        });
+
+        // Ekstra malzemeleri ve sosları ayrı bir şekilde AJAX isteğinde gönderme
+        var dataToSend = {
+            ...formData,
+            ExtraMaterials: extraMaterials,
+            Sauces: sauces
+        };
+
+        $.ajax({
+            url: '@Url.Action("SaveCustomization", "OrderDetail")',
+            method: 'POST',
+            data: dataToSend,
+            traditional: true,
+            success: function (response) {
+                // Başarılı kayıt sonrası işlemler
+                console.log("Customization saved successfully:", response);
+                // Modalı kapat
+                $('#customizeOrderModal').modal('hide');
+                // Tabloyu güncelle
+                LoadTableList();
+            },
+            error: function (error) {
+                // Hata işlemleri
+                console.error("Error saving customization:", error);
+            }
+        });
+    });
+</script>

@@ -56,7 +56,7 @@
 </div>
 
 
-@section Scripts {
+@* @section Scripts {
     <script>
         $(document).ready(() => {
             LoadTableList();
@@ -108,6 +108,92 @@
                         console.error("Silme modalı yüklenirken hata oluştu: ", xhr.responseText);
                     }
                 });
+            });
+        }
+    </script>
+} *@
+@section Scripts {
+    <script>
+        // Sayfa yüklendiğinde çalışacak fonksiyonlar
+        $(document).ready(() => {
+            LoadTableList();
+            BindCustomizeButtons();
+        });
+
+        // Sipariş listesini yükleyen fonksiyon
+        function LoadTableList() {
+            $.ajax({
+                url: '@Url.Action("GetTableList", "OrderDetail")',
+                method: 'GET',
+                beforeSend: () => {
+                    console.log("Yükleniyor...");
+                },
+                success: (data) => {
+                    $(".table-responsive").html(data);
+                    BindButton();
+                },
+                error: (xhr, status, error) => {
+                    console.error("Liste yüklenirken hata oluştu:", error);
+                }
+            });
+        }
+
+        // Düzenleme ve silme butonlarını bağlayan fonksiyon
+        function BindButton() {
+            // Düzenleme butonu
+            $(document).on("click", ".btn-edit-orderdetail", function () {
+                var id = $(this).attr("id");
+                $.ajax({
+                    url: '@Url.Action("Edit", "OrderDetail")/' + id,
+                    method: "GET",
+                    success: (data) => {
+                        $("#orderdetail-edit").html(data);
+                        $('#btn-edit-orderdetail').modal('show');
+                    },
+                    error: (xhr) => {
+                        console.error("Düzenleme modalı yüklenirken hata oluştu:", xhr.responseText);
+                    }
+                });
+            });
+
+            // Silme butonu
+            $(document).on("click", ".btn-delete-orderdetail", function () {
+                var id = $(this).attr("id");
+                $.ajax({
+                    url: '@Url.Action("DeleteConfirmation", "OrderDetail")/' + id,
+                    method: "GET",
+                    success: (data) => {
+                        $("#orderdetail-delete").html(data);
+                        $('#btn-delete-orderdetail').modal('show');
+                    },
+                    error: (xhr) => {
+                        console.error("Silme modalı yüklenirken hata oluştu:", xhr.responseText);
+                    }
+                });
+            });
+        }
+
+        // Özelleştirme butonlarını bağlayan fonksiyon
+        function BindCustomizeButtons() {
+            $('.add-customize').on('click', function () {
+                var menuId = $(this).data('id');
+                showCustomizeOrderModal(menuId);
+            });
+        }
+
+        // Özelleştirme modalını gösteren fonksiyon
+        function showCustomizeOrderModal(menuId) {
+            $.ajax({
+                url: '@Url.Action("CustomizeOrder", "OrderDetail")',
+                type: 'GET',
+                data: { id: menuId },
+                success: function (data) {
+                    $('#customizeOrderBody').html(data);
+                    $('#customizeOrderModal').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error("Hata oluştu:", error);
+                }
             });
         }
     </script>

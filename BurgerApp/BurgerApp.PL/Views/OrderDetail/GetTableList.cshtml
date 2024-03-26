@@ -93,7 +93,7 @@
                     </div>
                     <div>
                         <h4>@menu.MenuPrice().ToString("C")</h4>
-                        <button class="btn btn-primary">+ Ekle</button>
+                        <button class="btn btn-primary add-customize" data-id="@menu.Id">+ Ekle</button>
                     </div>
                 </div>
             </div>
@@ -104,6 +104,41 @@
 }
 
 <script>
+    // Sayfa yüklendiğinde çalışacak fonksiyonlar
+    $(document).ready(() => {
+        LoadTableList();
+        BindCustomizeButtons();
+    });
+
+    // Özelleştirme butonlarını bağlama fonksiyonu
+    function BindCustomizeButtons() {
+        $('.add-customize').on('click', function () {
+            var menuId = $(this).data('id');
+            showCustomizeOrderModal(menuId);
+        });
+    }
+
+    // Özelleştirme modalını gösterme fonksiyonu
+    function showCustomizeOrderModal(menuId) {
+        $.ajax({
+            url: '/OrderDetail/CustomizeOrder',
+            type: 'GET',
+            data: { id: menuId },
+            success: function (data) {
+                $('#customizeOrderBody').html(data);
+                $('#customizeOrderModal').modal('show');
+            },
+            error: function (xhr, status, error) {
+                console.error("Hata oluştu: ", error);
+            }
+        });
+    }
+
+
+
+
+
+
     $("#form-add-orderdetail").submit((e) => {
         e.preventDefault();
         var formData = new FormData($("#form-add-orderdetail")[0]);

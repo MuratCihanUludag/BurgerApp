@@ -7,7 +7,7 @@ using BurgerApp.PL.Areas.Admin.Profiles;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionCihan") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionKutay") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
 
 
 

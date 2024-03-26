@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using BurgerApp.BLL.Manager.Concrete.GeneralManager;
 using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
+using BurgerApp.BLL.Manager.Concrete.Other_Managers;
 using BurgerApp.BLL.ViewModels.General_Models;
+using BurgerApp.BLL.ViewModels.Other_Models;
+using BurgerApp.DAL.Entities.Concrate.OtherClasses;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using BurgerApp.PL.CommonFunctions;
 using BurgerApp.PL.Data;
@@ -18,6 +21,7 @@ namespace BurgerApp.PL.Controllers
         private readonly DrinkManager _drinkManager;
         private readonly CipsManager _cipsManager;
         private readonly MenuManager _menuManager;
+        private readonly SauceManager _sauceManager;
         private IMapper _mapper;
 
         public OrderDetailController(BurgerAppContext dbContext, IMapper mapper)
@@ -112,6 +116,39 @@ namespace BurgerApp.PL.Controllers
         public IActionResult Delete(int id)
         {
             return PartialView(_mapper.Map<OrderDetailViewModel>(_manager.GetById(id)));
+        }
+        [HttpGet]
+        public IActionResult CustomizeOrder(int id)
+        {
+            var orderDetail = _manager.GetById(id);
+            if (orderDetail == null)
+            {
+                return NotFound("Sipariş detayı bulunamadı.");
+            }
+            ViewBag.Burgers = _mapper.Map<List<BurgerViewModel>>(_burgerManager.GetAll());
+            ViewBag.Drinks = _mapper.Map<List<DrinkViewModel>>(_drinkManager.GetAll());
+            ViewBag.Chips = _mapper.Map<List<CipsViewModel>>(_cipsManager.GetAll());
+            //ViewBag.Sauces = _mapper.Map<List<SauceViewModel>>(_sauceManager.GetAll());
+
+            return PartialView("_CustomizeOrder", orderDetail);
+        }
+
+        [HttpPost]
+        public IActionResult SaveCustomization(OrderDetailViewModel customizedOrder)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.GetErrors();
+                return BadRequest(errors);
+            }
+            var orderToUpdate = _mapper.Map<OrderDetailDTO>(customizedOrder);
+
+            // OrderDetailDTO ve Sauce, ExtraMaterial sınıfları arasındaki ilişkiyi düzenliyoruz.
+            //orderToUpdate.Sauces = _mapper.Map<ICollection<Sauce>>(customizedOrder.Sauces);
+            orderToUpdate.ExtraMetarials = _mapper.Map<ICollection<ExtraMaterial>>(customizedOrder.ExtraMetarials);
+            _manager.Update(orderToUpdate);
+
+            return Ok();
         }
     }
 }
