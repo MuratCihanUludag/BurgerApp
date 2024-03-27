@@ -8,7 +8,7 @@ namespace BurgerApp.PL.ViewModels
     public class OrderDetailViewModel
     {
         public int Id { get; set; } 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public BurgerAppUser? User { get; set; }
         public int BurgerId { get; set; }
         public Burger? Burger { get; set; }

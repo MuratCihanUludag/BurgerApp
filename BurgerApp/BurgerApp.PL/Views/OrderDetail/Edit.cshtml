@@ -1,11 +1,16 @@
 ﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @model BurgerApp.PL.ViewModels.OrderDetailViewModel
 
 <form id="form-edit-orderdetail" asp-action="Edit" method="post">
     <div class="modal-body">
-        <div class="form-group">
+        <div><select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers,nameof(BurgerViewModel.Id),nameof(BurgerViewModel.Name)))"> </select></div>
+        <div><select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips,nameof(CipsViewModel.Id),nameof(CipsViewModel.Name)))"></select></div>
+        <div><select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks,nameof(DrinkViewModel.Id),nameof(DrinkViewModel.Name)))"> </select></div>
+      
+        @*  <div class="form-group">
             <label class="form-label">Burger</label>
-            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, "Value", "Text", Model.BurgerId))"></select>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, "Value", "Text", Model.Id))"></select>
             <span id="BurgerId-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -17,7 +22,8 @@
             <label class="form-label">Cips</label>
             <select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips, "Value", "Text", Model.CipsId))"></select>
             <span id="CipsId-error-edit" class="text-danger"></span>
-        </div>
+        </div> *@
+
         <div class="form-group">
             <label class="form-label">Adet</label>
             <input value="@Model.Count" type="number" name="Count" class="form-control" />
@@ -36,7 +42,7 @@
         e.preventDefault();
         var formData = new FormData($("#form-edit-orderdetail")[0]);
         $.ajax({
-            url: `/admin/orderdetail/edit`,
+            url: `/orderdetail/edit`,
             method: "POST",
             data: formData,
             processData: false,
@@ -59,7 +65,7 @@
     })
     function ReInitTable() {
         $.ajax({
-            url: `/admin/orderdetail/getTableList`,
+            url: `/orderdetail/getTableList`,
             method: 'GET',
             beforeSend: () => {
                 console.log("bekleyin")
