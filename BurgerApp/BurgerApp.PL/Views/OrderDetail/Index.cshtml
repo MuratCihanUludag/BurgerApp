@@ -20,20 +20,6 @@
                 <h5 class="modal-title" id="editOrderDetailModalLabel">OrderDetail Düzenle</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="orderdetail-detail">
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editOrderDetailModalLabel">OrderDetail Düzenle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
             <div id="orderdetail-edit">
             </div>
         </div>
@@ -71,44 +57,78 @@
                 },
                 success: (data) => {
                     $(".table-responsive").html(data);
-                    BindButton();
+                    BindButton(); 
+                    console.log("Yüklendi")
                 },
                 error: (xhr, status, error) => {
                     console.error("Liste yüklenirken hata oluştu: ", error);
                 }
             });
         }
-
         function BindButton() {
-            $(document).on("click", ".btn-edit-orderdetail", function () {
-                var id = $(this).attr("id");
+            $(".btn-orderdetail-edit").click((e) => {
+                var id = e.target.id;
+                console.log(id)
                 $.ajax({
-                    url: '@Url.Action("Edit", "OrderDetail")/' + id,
+                    url: `/OrderDetail/Edit/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#orderdetail-edit").html(data);
-                        $('#btn-edit-orderdetail').modal('show');
+                        $('#editOrderDetailModalLabel').modal('show');
                     },
                     error: (xhr) => {
-                        console.error("Düzenleme modalı yüklenirken hata oluştu: ", xhr.responseText);
+                        console.log(xhr.status)
                     }
-                });
-            });
+                })
+            })
 
-            $(document).on("click", ".btn-delete-orderdetail", function () {
-                var id = $(this).attr("id");
+            $(".btn-orderdetail-delete").click((e) => {
+                var id = e.target.id;
+                console.log(id)
                 $.ajax({
-                    url: '@Url.Action("DeleteConfirmation", "OrderDetail")/' + id,
+                    url: `/OrderDetail/Delete/${id}`,
                     method: "GET",
                     success: (data) => {
                         $("#orderdetail-delete").html(data);
-                        $('#btn-delete-orderdetail').modal('show');
+                        $('#deleteOrderDetailModalLabel').modal('show');
                     },
                     error: (xhr) => {
-                        console.error("Silme modalı yüklenirken hata oluştu: ", xhr.responseText);
+                        console.log(xhr.status)
                     }
-                });
-            });
+                })
+            })
         }
+
+        // function BindButton() {
+        //     $(document).on("click", ".btn-edit-orderdetail", function () {
+        //         var id = $(this).attr("id");
+        //         $.ajax({
+        //             url: '@Url.Action("Edit", "OrderDetail")/' + id,
+        //             method: "GET",
+        //             success: (data) => {
+        //                 $("#orderdetail-edit").html(data);
+        //                 $('#btn-edit-orderdetail').modal('show');
+        //             },
+        //             error: (xhr) => {
+        //                 console.error("Düzenleme modalı yüklenirken hata oluştu: ", xhr.responseText);
+        //             }
+        //         });
+        //     });
+
+        //     $(document).on("click", ".btn-delete-orderdetail", function () {
+        //         var id = $(this).attr("id");
+        //         $.ajax({
+        //             url: '@Url.Action("DeleteConfirmation", "OrderDetail")/' + id,
+        //             method: "GET",
+        //             success: (data) => {
+        //                 $("#orderdetail-delete").html(data);
+        //                 $('#btn-delete-orderdetail').modal('show');
+        //             },
+        //             error: (xhr) => {
+        //                 console.error("Silme modalı yüklenirken hata oluştu: ", xhr.responseText);
+        //             }
+        //         });
+        //     });
+        // }
     </script>
 }
