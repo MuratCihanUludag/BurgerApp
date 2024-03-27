@@ -24,7 +24,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
             if (this.Burger.Price != null && this.Drink.Price != null && this.Cips.Price != null)
                 return this.Burger.Price + (this.Drink.Price - 10) + (this.Cips.Price - 15);
             return 0;
-
+            
         }
     }
 

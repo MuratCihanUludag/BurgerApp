@@ -27,6 +27,7 @@ namespace BurgerApp.DAL.Entities.Abstract
         ICollection<ExtraMaterial> ExtraMetarials { get; set; }
         bool IsSell { get; set; }
 
+
         double OrderDetailTotalPrice();
     }
 }

@@ -13,7 +13,8 @@
 </section>
 
 
-<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="edit-orderdetail-modal" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -27,7 +28,8 @@
 </div>
 
 
-<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="delete-orderdetail-modal" tabindex="-1" aria-labelledby="deleteOrderDetailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -55,8 +57,7 @@
     </div>
 </div>
 
-
-@* @section Scripts {
+@section Scripts {
     <script>
         $(document).ready(() => {
             LoadTableList();
@@ -111,90 +112,120 @@
             });
         }
     </script>
-} *@
-@section Scripts {
-    <script>
-        // Sayfa yüklendiğinde çalışacak fonksiyonlar
-        $(document).ready(() => {
-            LoadTableList();
-            BindCustomizeButtons();
-        });
-
-        // Sipariş listesini yükleyen fonksiyon
-        function LoadTableList() {
-            $.ajax({
-                url: '@Url.Action("GetTableList", "OrderDetail")',
-                method: 'GET',
-                beforeSend: () => {
-                    console.log("Yükleniyor...");
-                },
-                success: (data) => {
-                    $(".table-responsive").html(data);
-                    BindButton();
-                },
-                error: (xhr, status, error) => {
-                    console.error("Liste yüklenirken hata oluştu:", error);
-                }
-            });
-        }
-
-        // Düzenleme ve silme butonlarını bağlayan fonksiyon
-        function BindButton() {
-            // Düzenleme butonu
-            $(document).on("click", ".btn-edit-orderdetail", function () {
-                var id = $(this).attr("id");
-                $.ajax({
-                    url: '@Url.Action("Edit", "OrderDetail")/' + id,
-                    method: "GET",
-                    success: (data) => {
-                        $("#orderdetail-edit").html(data);
-                        $('#btn-edit-orderdetail').modal('show');
-                    },
-                    error: (xhr) => {
-                        console.error("Düzenleme modalı yüklenirken hata oluştu:", xhr.responseText);
-                    }
-                });
-            });
-
-            // Silme butonu
-            $(document).on("click", ".btn-delete-orderdetail", function () {
-                var id = $(this).attr("id");
-                $.ajax({
-                    url: '@Url.Action("DeleteConfirmation", "OrderDetail")/' + id,
-                    method: "GET",
-                    success: (data) => {
-                        $("#orderdetail-delete").html(data);
-                        $('#btn-delete-orderdetail').modal('show');
-                    },
-                    error: (xhr) => {
-                        console.error("Silme modalı yüklenirken hata oluştu:", xhr.responseText);
-                    }
-                });
-            });
-        }
-
-        // Özelleştirme butonlarını bağlayan fonksiyon
-        function BindCustomizeButtons() {
-            $('.add-customize').on('click', function () {
-                var menuId = $(this).data('id');
-                showCustomizeOrderModal(menuId);
-            });
-        }
-
-        // Özelleştirme modalını gösteren fonksiyon
-        function showCustomizeOrderModal(menuId) {
-            $.ajax({
-                url: '@Url.Action("CustomizeOrder", "OrderDetail")',
-                type: 'GET',
-                data: { id: menuId },
-                success: function (data) {
-                    $('#customizeOrderBody').html(data);
-                    $('#customizeOrderModal').modal('show');
-                },
-                error: function (xhr, status, error) {
-                    console.error("Hata oluştu:", error);
-                }
-            });
-        }
-    </script>
 }
+
+@* @section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Sipariş listesini yükleyen fonksiyon.
+            function loadTableList() {
+                $.ajax({
+                    url: '/OrderDetail/GetTableList', // Endpoint doğru.
+                    type: 'GET',
+                    success: function (data) {
+                        // Sayfadaki tabloyu güncelleyin.
+                        $('.table-responsive').html(data); // ID yerine class kullanıldı.
+                    },
+                    error: function (xhr, status, error) {
+                        // Hata mesajını konsolda göster.
+                        console.error("Tablo yüklenirken hata oluştu:", error);
+                    }
+                });
+            }
+
+            // Düzenleme ve silme butonlarını bağlayan fonksiyon.
+            function bindButton() {
+                // Düzenleme butonu için event listener.
+                $(document).on("click", ".btn-edit-orderdetail", function () {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        url: '/OrderDetail/Edit/' + id, 
+                        method: "GET",
+                        success: function (data) {
+                            // Düzenleme formunu modal içine yerleştir ve göster.
+                            $("#orderdetail-edit").html(data);
+                            $('#btn-edit-orderdetail').modal('show');
+                        },
+                        error: function (xhr) {
+                            // Hata mesajını konsolda göster.
+                            console.error("Düzenleme modalı yüklenirken hata oluştu:", xhr.responseText);
+                        }
+                    });
+                });
+
+                // Silme butonu için event listener.
+                $(document).on("click", ".btn-delete-orderdetail", function () {
+                    var id = $(this).data('id');
+                    $.ajax({
+                        url: '/OrderDetail/DeleteConfirmation/' + id, // Doğru endpoint.
+                        method: "GET",
+                        success: function (data) {
+                            // Silme onay formunu modal içine yerleştir ve göster.
+                            $("#orderdetail-delete").html(data);
+                            $('#btn-delete-orderdetail').modal('show');
+                        },
+                        error: function (xhr) {
+                            // Hata mesajını konsolda göster.
+                            console.error("Silme modalı yüklenirken hata oluştu:", xhr.responseText);
+                        }
+                    });
+                });
+            }
+
+            // Özelleştirme butonlarını bağlayan fonksiyon.
+            function bindCustomizeButtons() {
+                $(document).on('click', '.add-customize', function () {
+                    var menuId = $(this).data('id'); // Menü ID'sini al.
+                    showCustomizeOrderModal(menuId); // Modal gösterme fonksiyonunu çağır.
+                });
+            }
+
+            // Özelleştirme modalını gösteren fonksiyon.
+            function showCustomizeOrderModal(menuId) {
+                $.ajax({
+                    url: '/OrderDetail/CustomizeOrder', // Doğru URL.
+                    type: 'GET',
+                    data: { id: menuId },
+                    success: function (data) {
+                        // Modal body'sini güncelle ve modalı göster.
+                        $('#customizeOrderModalBody').html(data);
+                        $('#customizeOrderModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        // Hata mesajını konsolda göster.
+                        console.error("Hata oluştu:", error);
+                    }
+                });
+            }
+
+            // Form submit işleyicisi.
+            $(document).on('submit', '#form-customize-order', function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize(); // Form verilerini serialize et.
+
+                // Form verilerini AJAX POST isteği ile sunucuya gönder.
+                $.ajax({
+                    url: '/OrderDetail/SaveCustomization', // Doğru URL.
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        // Modalı gizle ve listeyi yeniden yükle.
+                        $('#customizeOrderModal').modal('hide');
+                        loadTableList();
+                        console.log('Özelleştirme başarıyla kaydedildi.');
+                    },
+                    error: function (xhr) {
+                        // Hata mesajını konsolda göster.
+                        console.error('Özelleştirme kaydedilirken bir hata oluştu.', xhr.responseText);
+                    }
+                });
+            });
+
+            // Sayfa yüklendiğinde gerekli fonksiyonları çağır.
+            loadTableList();
+            bindButton(); // Bu fonksiyonun eksik olduğunu fark ettim ve ekledim.
+            bindCustomizeButtons();
+        });
+    </script>
+} *@
+    

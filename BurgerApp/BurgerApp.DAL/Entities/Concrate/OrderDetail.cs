@@ -28,6 +28,13 @@ namespace BurgerApp.DAL.Entities.Concrate
         public virtual ICollection<Sauce> Sauces { get; set; }
         public virtual ICollection<ExtraMaterial> ExtraMetarials { get; set; }
         public bool IsSell { get; set; }
+        // Kullanıcı tarafından seçilebilecek soslar ve ekstra malzemeler için listeler
+        //public List<Sauce> AvailableSauces { get; set; } = new List<Sauce>();
+        //public List<ExtraMaterial> AvailableExtras { get; set; } = new List<ExtraMaterial>();
+
+        //// Kullanıcı tarafından yapılan seçimleri tutacak alanlar
+        //public List<int> SelectedSaucesIds { get; set; } = new List<int>();
+        //public List<int> SelectedExtrasIds { get; set; } = new List<int>();
         public double OrderDetailTotalPrice()
         {
             double totalSaucePrice = Sauces.Sum(sauce => sauce.Price);

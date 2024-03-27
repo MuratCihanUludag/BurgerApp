@@ -57,8 +57,8 @@ namespace BurgerApp.DAL.Repo.Abstract
         }
         public T GetById(int id)
         {
-            return _dbSet.AsNoTracking().Single(e => e.Id == id);
-
+            //return _dbSet.AsNoTracking().Single(e => e.Id == id);
+            return _dbSet.AsNoTracking().SingleOrDefault(e => e.Id == id);
         }
 
         public IList<T> GetAll()

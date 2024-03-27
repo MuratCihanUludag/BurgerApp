@@ -103,7 +103,7 @@
     <br />
 }
 
-<script>
+@* <script>
     // Sayfa yüklendiğinde çalışacak fonksiyonlar
     $(document).ready(() => {
         LoadTableList();
@@ -170,4 +170,38 @@
             }
         });
     }
+</script> *@
+<script>
+    $("#form-add-orderdetail").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add-orderdetail")[0]);
+        $.ajax({
+            url: `@Url.Action("Add", "OrderDetail")`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable();
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+            }
+        });
+    });
+
+    function ReInitTable() {
+        $.ajax({
+            url: `@Url.Action("GetTableList", "OrderDetail")`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("Yenileniyor...");
+            },
+            success: (data) => {
+                $("#table-list").html(data);
+            }
+        });
+    }
 </script>
+
