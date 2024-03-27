@@ -77,8 +77,10 @@ namespace BurgerApp.PL.Controllers
         [HttpPost]
         public IActionResult Add(OrderDetailViewModel orderDetailModel)
         {
-            if (ModelState.IsValid)
-            {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid && userId is not null)
+            {                
+                orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
                 _manager.Add(orderDetailDto);
                 return Ok();
@@ -91,6 +93,26 @@ namespace BurgerApp.PL.Controllers
         public IActionResult Edit(int id)
         {
             var orderDetailDto = _manager.GetById(id);
+
+            var burgers = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
+
+            var drinks = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
+
+            var cips = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+
+            //var menuList = _menuManager.GetAll();
+            //var menuViewList = _mapper.Map<List<MenuViewModel>>(menuList);
+
+
+
+            ViewBag.Burgers = burgerViewList;
+            ViewBag.Drinks = drinkViewList;
+            ViewBag.Cips = cipsViewList;
+            //ViewBag.Menus = menuList;
+
             var orderDetailView = _mapper.Map<OrderDetailViewModel>(orderDetailDto);
             return PartialView(orderDetailView);
         }
@@ -98,8 +120,10 @@ namespace BurgerApp.PL.Controllers
         [HttpPost]
         public IActionResult Edit(OrderDetailViewModel orderDetailModel)
         {
-            if (ModelState.IsValid)
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid && userId is not null)
             {
+                orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
                 _manager.Update(orderDetailDto);
                 return Ok();
