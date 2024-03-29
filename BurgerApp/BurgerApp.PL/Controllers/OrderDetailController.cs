@@ -31,12 +31,31 @@ namespace BurgerApp.PL.Controllers
             _drinkManager = new DrinkManager(dbContext);
             _cipsManager = new CipsManager(dbContext);
             _menuManager = new MenuManager(dbContext);
-            _extraManager=new ExtraMaterialManager(dbContext);
-            _sauceManager=new SauceManager(dbContext);
+            _extraManager = new ExtraMaterialManager(dbContext);
+            _sauceManager = new SauceManager(dbContext);
         }
 
         public IActionResult Index()
-        {
+
+            {
+            var admin = HttpContext.User.FindAll(ClaimTypes.Role).Where(x => x.Value == "Admin").FirstOrDefault();
+            string userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.UserId = userId;
+            IList<OrderDetailDTO> orderdetailDtoList;
+
+            if (admin is not null)
+            {
+                orderdetailDtoList = _manager.GetAll().ToList();
+            }
+            else
+            {
+                orderdetailDtoList = _manager.GetAll().Where(x => x.UserId == userId).ToList();
+
+            }
+            var orderdetailViewList = _mapper.Map<List<OrderDetailViewModel>>(orderdetailDtoList);
+
+            ViewBag.ListeOrderList = orderdetailViewList;
+
             return View();
         }
         public IActionResult GetTableList()
@@ -83,7 +102,7 @@ namespace BurgerApp.PL.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (ModelState.IsValid && userId is not null)
-            {                
+            {
                 orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
                 _manager.Add(orderDetailDto);
@@ -96,25 +115,6 @@ namespace BurgerApp.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-
-            var burgers = _burgerManager.GetAll();
-            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
-
-            var drinks = _drinkManager.GetAll();
-            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
-            var cips = _cipsManager.GetAll();
-            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
-
-            var menuList = _menuManager.GetAll();
-
-
-
-
-            ViewBag.Burgers = burgerViewList;
-            ViewData["Burger2"] = burgerViewList;
-            ViewBag.Drinks = drinkViewList;
-            ViewBag.Cips = cipsViewList;
-            ViewBag.Menus = menuList;
 
 
             var orderDetailDto = _manager.GetById(id);
@@ -212,6 +212,37 @@ namespace BurgerApp.PL.Controllers
             }
             var errors = ModelState.GetErrors();
             return BadRequest(errors);
+        }
+        [HttpGet]
+        public IActionResult Plus(int id)
+        {
+            var order = _manager.GetById(id);
+            var LastPrice = order.OrderDetailTotalPrice();
+            order.Count++;
+            _manager.Update(order);
+            var res = new List<double>() { order.Count, order.OrderDetailTotalPrice(),LastPrice };
+            return Ok(res);
+        }
+        [HttpGet]
+        public IActionResult Minus(int id)
+        {
+            var order = _manager.GetById(id);
+            var LastPrice = order.OrderDetailTotalPrice();
+
+            if (order.Count > 1)
+            {
+                order.Count--;
+                _manager.Update(order);
+            }
+            else
+                _manager.Remove(order);
+
+
+            var res = new List<double>() { order.Count, order.OrderDetailTotalPrice(), LastPrice };
+
+
+            return Ok(res);
+
         }
     }
 }
