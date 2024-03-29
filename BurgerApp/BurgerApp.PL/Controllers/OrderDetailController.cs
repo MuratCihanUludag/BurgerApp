@@ -165,15 +165,15 @@ namespace BurgerApp.PL.Controllers
             var sauces = _sauceManager.GetAll();
             var sauceViewList = _mapper.Map<List<SauceViewModel>>(sauces);
 
-            //var menuList = _menuManager.GetAll();
-            //var menuViewList = _mapper.Map<List<MenuViewModel>>(menuList);
+            var drinkList = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkList);
 
 
 
             ViewBag.ExtraMetarials = extraViewList;
             ViewBag.Cips = cipsViewList;
             ViewBag.Sauces = sauceViewList;
-            //ViewBag.Menus = menuList;
+            ViewBag.Drinks = drinkViewList;
 
             var orderDetailView = _mapper.Map<OrderDetailViewModel>(orderDetailDto);
             return PartialView(orderDetailView);

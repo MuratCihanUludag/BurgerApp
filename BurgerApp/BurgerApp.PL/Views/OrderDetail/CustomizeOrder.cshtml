@@ -31,7 +31,7 @@
                 <option value="">Seçiniz...</option>
                 @foreach (var extraMaterial in ViewBag.ExtraMetarials)
                 {
-                    <option value="@extraMaterial.Id">@extraMaterial.Name</option>
+                    <option price="@extraMaterial.Price" value="@extraMaterial.Id">@extraMaterial.ToString()</option>
                 }
             </select>
         </div>
@@ -41,7 +41,7 @@
                 <option value="">Seçiniz...</option>
                 @foreach (var cips in ViewBag.Cips)
                 {
-                    <option value="@cips.Id">@cips.Name</option>
+                    <option price="@cips.Price" value="@cips.Id">@cips.ToString()</option>
                 }
             </select>
         </div>
@@ -51,7 +51,17 @@
                 <option value="">Seçiniz...</option>
                 @foreach (var sauce in ViewBag.Sauces)
                 {
-                    <option value="@sauce.Id">@sauce.Name</option>
+                    <option price ="@sauce.Price" value="@sauce.Id">@sauce.ToString()</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="DrinkId">Drink:</label>
+            <select id="DrinkId" name="DrinkId" class="form-select" onchange="updateTotalPrice()">
+                <option value="">Seçiniz...</option>
+                @foreach (var drink in ViewBag.Drinks)
+                {
+                    <option price="@drink.Price" value="@drink.Id">@drink.ToString()</option>
                 }
             </select>
         </div>
@@ -166,7 +176,7 @@
         function updateTotalPrice() {
             var totalPrice = 0; 
             $('#ExtraMaterialId option:selected, #CipsId option:selected, #SauceId option:selected').each(function () {
-                var price = $(this).attr('data-price'); 
+                var price = $(this).attr('price'); 
                 if (price) {
                     totalPrice += parseFloat(price); 
                 }
