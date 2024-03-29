@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BurgerApp.BLL.Manager.Concrete.GeneralManager;
 using BurgerApp.BLL.Manager.Concrete.Menu_Manager;
+using BurgerApp.BLL.Manager.Concrete.Other_Managers;
 using BurgerApp.BLL.ViewModels.General_Models;
 using BurgerApp.PL.Areas.Admin.Models.MenuViewModel;
 using BurgerApp.PL.CommonFunctions;
@@ -18,6 +19,8 @@ namespace BurgerApp.PL.Controllers
         private readonly DrinkManager _drinkManager;
         private readonly CipsManager _cipsManager;
         private readonly MenuManager _menuManager;
+        private readonly ExtraMaterialManager _extraManager;
+        private readonly SauceManager _sauceManager;
         private IMapper _mapper;
 
         public OrderDetailController(BurgerAppContext dbContext, IMapper mapper)
@@ -28,7 +31,8 @@ namespace BurgerApp.PL.Controllers
             _drinkManager = new DrinkManager(dbContext);
             _cipsManager = new CipsManager(dbContext);
             _menuManager = new MenuManager(dbContext);
-
+            _extraManager=new ExtraMaterialManager(dbContext);
+            _sauceManager=new SauceManager(dbContext);
         }
 
         public IActionResult Index()
@@ -77,8 +81,10 @@ namespace BurgerApp.PL.Controllers
         [HttpPost]
         public IActionResult Add(OrderDetailViewModel orderDetailModel)
         {
-            if (ModelState.IsValid)
-            {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid && userId is not null)
+            {                
+                orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
                 _manager.Add(orderDetailDto);
                 return Ok();
@@ -112,6 +118,26 @@ namespace BurgerApp.PL.Controllers
 
 
             var orderDetailDto = _manager.GetById(id);
+
+            var burgers = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
+
+            var drinks = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
+
+            var cips = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+
+            //var menuList = _menuManager.GetAll();
+            //var menuViewList = _mapper.Map<List<MenuViewModel>>(menuList);
+
+
+
+            ViewBag.Burgers = burgerViewList;
+            ViewBag.Drinks = drinkViewList;
+            ViewBag.Cips = cipsViewList;
+            //ViewBag.Menus = menuList;
+
             var orderDetailView = _mapper.Map<OrderDetailViewModel>(orderDetailDto);
             return PartialView(orderDetailView);
         }
@@ -119,8 +145,10 @@ namespace BurgerApp.PL.Controllers
         [HttpPost]
         public IActionResult Edit(OrderDetailViewModel orderDetailModel)
         {
-            if (ModelState.IsValid)
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid && userId is not null)
             {
+                orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
                 _manager.Update(orderDetailDto);
                 return Ok();
@@ -133,6 +161,57 @@ namespace BurgerApp.PL.Controllers
         public IActionResult Delete(int id)
         {
             return PartialView(_mapper.Map<OrderDetailViewModel>(_manager.GetById(id)));
+        }
+        [HttpPost]
+        public IActionResult Delete(OrderDetailViewModel orderModel)
+        {
+            if (orderModel.Id is not 0)
+            {
+                _manager.Delete(_manager.GetById(orderModel.Id));
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpGet]
+        public IActionResult CustomizeOrder(int id)
+        {
+            var orderDetailDto = _manager.GetById(id);
+
+            var extras = _extraManager.GetAll();
+            var extraViewList = _mapper.Map<List<ExtraMaterialViewModel>>(extras);
+
+            var cips = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+
+            var sauces = _sauceManager.GetAll();
+            var sauceViewList = _mapper.Map<List<SauceViewModel>>(sauces);
+
+            var drinkList = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinkList);
+
+
+
+            ViewBag.ExtraMetarials = extraViewList;
+            ViewBag.Cips = cipsViewList;
+            ViewBag.Sauces = sauceViewList;
+            ViewBag.Drinks = drinkViewList;
+
+            var orderDetailView = _mapper.Map<OrderDetailViewModel>(orderDetailDto);
+            return PartialView(orderDetailView);
+        }
+        [HttpPost]
+        public IActionResult CustomizeOrder(OrderDetailViewModel orderDetailModel)
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (ModelState.IsValid && userId is not null)
+            {
+                orderDetailModel.UserId = userId;
+                var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
+                _manager.Update(orderDetailDto);
+                return Ok();
+            }
+            var errors = ModelState.GetErrors();
+            return BadRequest(errors);
         }
     }
 }
