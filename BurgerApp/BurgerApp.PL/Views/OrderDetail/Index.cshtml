@@ -2,13 +2,74 @@
 
 
 
-
+@{
+    double @totalPrice = 0;
+}
 
 
 <section class="section-1">
     <div class="section-admin-img"></div>
-    <div class="table-responsive-container container">
-        <div class="table-responsive"> </div>
+    <div class="container">
+        <div class="row g-5" style="position: relative;top: 75px;padding: 1rem;">
+            <div class="col-md-8">
+                <div class="table-responsive bg-info"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="position-relative" style="border:2px solid rgb(255, 211, 0);border-radius:12px;background:white;min-height:350px">
+                    @if (ViewBag.ListeOrderList.Count == 0)
+                    {
+                        <div class="position-absolute" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+                            <i class="icon sepet mx-auto my-3 d-flex"></i>
+                            <div class="text-center">
+                                <h6 style="font-size:14px; color:rgb(93, 62, 188);">Sepetin şu an boş</h6>
+                                <p style="font-size:12px;color:rgb(62, 62, 62)">Sipariş vermek için bir şeyler ekle</p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container py-3">
+                            <div class="d-flex justify-content-between align-items-center my-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <i class="icon catal-bicak me-2"></i>
+                                    <span class="fs-3 text-success" style="margin-bottom:0">Sepetiniz</span>
+                                </div>
+                                <i class="icon delete"></i>
+                            </div>
+                            @foreach (OrderDetailViewModel item in ViewBag.ListeOrderList)
+                            {
+                                totalPrice += item.OrderDetailTotalPrice();
+                                <div class="d-flex justify-content-between align-items-center" style="">
+                                    <h5 class="fw-bold text-secondary">@item.Burger.Name Menu</h5>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <button style="width:20px;height:20px" id="@item.Id" class="d-flex btn-minus btn btn-light icon @(item.Count > 1 ? "eksi" : "delete")">
+                                        </button>
+                                        <span class="btn btn-count-@item.Id">@item.Count</span>
+                                        <button style="width:20px;height:20px" id="@item.Id" class="d-flex btn-plus icon arti btn btn-light"></button>
+                                    </div>
+                                </div>
+
+                                <p class="mb-1 text-black">Hamburger Tercihi: <span class="text-black-50">@item.Burger.Name</span> </p>
+                                <p class="mb-1 text-black">Icecek tercihi: <span class="text-black-50">@item.Drink.Name</span> </p>
+                                <p class="mb-1 text-black">Cips tercihi: <span class="text-black-50">@item.Cips.Name</span></p>
+                                <p class="mb-1 text-warning order-price-@item.Id">₺@item.OrderDetailTotalPrice()</p>
+                            }
+                            <div class="d-flex align-items-center justify-content-center">
+                                <button class="btn btn-info text-white w-75">Siparisi Ver  </button>
+                                <div class="btn w-25 d-flex align-items-center" style="margin-bottom:0;border:1px solid #0dcaf0;cursor:default">
+                                    <span>₺ </span>
+                                    <p class=" mb-0 btn-total-order">@totalPrice</p>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -69,7 +130,7 @@
                 },
                 success: (data) => {
                     $(".table-responsive").html(data);
-                    BindButton(); 
+                    BindButton();
                     console.log("Yüklendi")
                 },
                 error: (xhr, status, error) => {
@@ -86,7 +147,7 @@
                     method: "GET",
                     success: (data) => {
                         $("#orderdetail-edit").html(data);
-                        
+
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
@@ -156,5 +217,56 @@
         //         });
         //     });
         // }
+        $(".btn-plus").click((e) => {
+            var id = e.target.id;
+            var totalPrice = parseFloat($(".btn-total-order").text());
+            $.ajax({
+                url: `/OrderDetail/Plus/${id}`,
+                method: 'GET',
+                success: function (res) {
+                    $(`.btn-count-${id}`).html("₺" + res[0])
+                    $(`.order-price-${id}`).html("₺" + res[1])
+                    $(".btn-total-order").html("");
+                    $(".btn-total-order").html(totalPrice - parseFloat(res[2]) + parseFloat(res[1]))
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+
+
+        $(".btn-minus").click((e) => {
+            var id = e.target.id;
+
+            var totalPrice = parseFloat($(".btn-total-order").text());
+            $.ajax({
+                url: `/OrderDetail/minus/${id}`,
+                method: 'GET',
+                success: function (res) {
+                    if (res[0] < 2) {
+                        var btn = e.target.classList;
+                        btn.add("delete");
+                        btn.remove("eksi")
+                    } else {
+                        var btn = e.target.classList;
+                        btn.add("eksi");
+                        btn.remove("delete")
+                    }
+                    $(`.btn-count-${id}`).html("₺" + res[0])
+                    $(`.order-price-${id}`).html("₺" + res[1])
+                    $(".btn-total-order").html(totalPrice - parseFloat(res[2]) + parseFloat(res[1]))
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+
+
+
+
     </script>
 }
