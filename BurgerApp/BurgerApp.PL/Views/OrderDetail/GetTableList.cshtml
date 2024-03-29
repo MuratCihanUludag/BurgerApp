@@ -93,7 +93,7 @@
                     </div>
                     <div>
                         <h4>@menu.MenuPrice().ToString("C")</h4>
-                        <button class="btn btn-primary btn-add-to-order" data-menu-id="@menu.Id">+ Ekle</button>
+                        <button class="btn btn-primary btn-add-to-order" data-menu-id="@menu.Id" data-bs-target="#btn-add-to-order" onclick="GetOrderModal(this)">+ Ekle</button>
                     </div>
                 </div>
             </div>
@@ -156,7 +156,27 @@
             }
         });
     });
-
+    function GetOrderModal(e) {
+        console.log(e)
+        var id = $(e).attr("data-menu-id");
+        console.log(id);
+        if (id != null) {
+            console.log(id)
+            $.ajax({
+                url: `/OrderDetail/CustomizeOrder/${id}`,
+                method: "GET",
+                success: (data) => {
+                    $("#orderdetail-customizeorder").html(data);
+                    $('#btn-add-to-order').modal('show');
+                },
+                error: (xhr) => {
+                    console.log(xhr.status)
+                }
+            })
+        }          
+        
+    }
+    
     function ReInitTable() {
         $.ajax({
             url: `@Url.Action("GetTableList", "OrderDetail")`,

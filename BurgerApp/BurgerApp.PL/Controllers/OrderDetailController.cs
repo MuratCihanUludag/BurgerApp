@@ -186,7 +186,7 @@ namespace BurgerApp.PL.Controllers
             {
                 orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
-                _manager.Update(orderDetailDto);
+                _manager.Add(orderDetailDto);
                 return Ok();
             }
             var errors = ModelState.GetErrors();
