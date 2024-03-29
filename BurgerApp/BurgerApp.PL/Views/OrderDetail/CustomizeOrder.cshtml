@@ -35,7 +35,7 @@
                 }
             </select>
         </div> *@ 
-        <div>
+        @* <div>
             @foreach (var extraMaterial in ViewBag.ExtraMetarials)
             {
                 <div class="form-check">
@@ -45,6 +45,20 @@
                     </label>
                 </div>
             }
+        </div> *@
+        <div>
+        @foreach (var extra in ViewBag.ExtraMetarials)
+        {
+            <div class="form-check">
+                <div class="form-check form-check-inline">
+                    @* <input class="form-check-input" type="checkbox" name="SauceId" id="@sauce.Id" value="@sauce.Id" price="@sauce.Price" onchange="updateTotalPrice()"> *@
+                    <input class="form-check-input" type="checkbox" name="ExtraMaterialId" id="@extra.Id" value="@extra.Id" data-price="@extra.Price" onchange="updateTotalPrice()">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        @extra.ToString();
+                    </label>
+                </div>
+            </div>
+        }
         </div>
         <div>
             <label for="CipsId">Cips:</label>
