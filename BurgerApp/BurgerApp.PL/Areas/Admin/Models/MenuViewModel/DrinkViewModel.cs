@@ -1,5 +1,6 @@
 ﻿using BurgerApp.DAL.Comman;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 {
@@ -21,7 +22,7 @@ namespace BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 
         public override string ToString()
         {
-            return Name + " (" + Enum.GetName<ProductSize>(Size) + ")";
+            return Name + " (" + Enum.GetName<ProductSize>(Size) + ") "+ Price.ToString("C", CultureInfo.CurrentCulture);
         }
     }
 }

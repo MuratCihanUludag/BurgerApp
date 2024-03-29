@@ -41,6 +41,18 @@
     </div>
 </div>
 
+<div class="modal fade" id="btn-add-to-order" tabindex="-1" aria-labelledby="customizeOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customizeOrderModalLabel">Özelleştir</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="orderdetail-customizeorder">
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -74,7 +86,7 @@
                     method: "GET",
                     success: (data) => {
                         $("#orderdetail-edit").html(data);
-                        $('#editOrderDetailModalLabel').modal('show');
+                        
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
@@ -90,7 +102,21 @@
                     method: "GET",
                     success: (data) => {
                         $("#orderdetail-delete").html(data);
-                        $('#deleteOrderDetailModalLabel').modal('show');
+                    },
+                    error: (xhr) => {
+                        console.log(xhr.status)
+                    }
+                })
+            })
+
+            $(".btn-add-to-order").click((e) => {
+                var id = e.target.id;
+                console.log(id)
+                $.ajax({
+                    url: `/OrderDetail/CustomizeOrder/${id}`,
+                    method: "GET",
+                    success: (data) => {
+                        $("#orderdetail-customizeorder").html(data);
                     },
                     error: (xhr) => {
                         console.log(xhr.status)
