@@ -90,6 +90,27 @@ namespace BurgerApp.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+
+            var burgers = _burgerManager.GetAll();
+            var burgerViewList = _mapper.Map<List<BurgerViewModel>>(burgers);
+
+            var drinks = _drinkManager.GetAll();
+            var drinkViewList = _mapper.Map<List<DrinkViewModel>>(drinks);
+            var cips = _cipsManager.GetAll();
+            var cipsViewList = _mapper.Map<List<CipsViewModel>>(cips);
+
+            var menuList = _menuManager.GetAll();
+
+
+
+
+            ViewBag.Burgers = burgerViewList;
+            ViewData["Burger2"] = burgerViewList;
+            ViewBag.Drinks = drinkViewList;
+            ViewBag.Cips = cipsViewList;
+            ViewBag.Menus = menuList;
+
+
             var orderDetailDto = _manager.GetById(id);
             var orderDetailView = _mapper.Map<OrderDetailViewModel>(orderDetailDto);
             return PartialView(orderDetailView);

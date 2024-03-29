@@ -1,44 +1,38 @@
 ﻿@using BurgerApp.PL.ViewModels
 
 
-
-
-
-
 <section class="section-1">
     <div class="section-admin-img"></div>
-    <div class="table-responsive-container container">
-        <div class="table-responsive"> </div>
+    <div class="container">
+        <div class="row g-5 position-relative " style="top:75px;">
+            <div class="col-md-9 ">
+                <div class="table-responsive-container bg-white " style="top:0px;">
+                    <div class="table-responsive"></div>
+                </div>
+            </div>
+            <div class="col-md-3 bg-white text-center">
+                sepet
+            </div>
+        </div>
     </div>
 </section>
 
 
-<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
+<!-- Edit-Modal -->
+<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editOrderDetailModalLabel">OrderDetail Düzenle</h5>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Burger Duzenle</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="orderdetail-detail">
+            <div id="order-edit">
             </div>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="btn-edit-orderdetail" tabindex="-1" aria-labelledby="editOrderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editOrderDetailModalLabel">OrderDetail Düzenle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div id="orderdetail-edit">
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -79,21 +73,37 @@
             });
         }
 
+
         function BindButton() {
-            $(document).on("click", ".btn-edit-orderdetail", function () {
-                var id = $(this).attr("id");
+            $(".btn-order-edit").click((e) => {
+                var id = e.target.id;
                 $.ajax({
-                    url: '@Url.Action("Edit", "OrderDetail")/' + id,
+                    url: `/orderDetail/edit/${id}`,
                     method: "GET",
                     success: (data) => {
-                        $("#orderdetail-edit").html(data);
-                        $('#btn-edit-orderdetail').modal('show');
+                        $("#order-edit").html(data);
                     },
                     error: (xhr) => {
-                        console.error("Düzenleme modalı yüklenirken hata oluştu: ", xhr.responseText);
+                        console.log(xhr.status)
                     }
-                });
-            });
+                })
+            })
+
+            // function BindButton() {
+            //     $(document).on("click", ".btn-edit-orderdetail", function () {
+            //         var id = $(this).attr("id");
+            //         $.ajax({
+            //             url: ``,
+            //             method: "GET",
+            //             success: (data) => {
+            //                 $("#orderdetail-edit").html(data);
+            //                 $('#btn-edit-orderdetail').modal('show');
+            //             },
+            //             error: (xhr) => {
+            //                 console.error("Düzenleme modalı yüklenirken hata oluştu: ", xhr.responseText);
+            //             }
+            //         });
+            //     });
 
             $(document).on("click", ".btn-delete-orderdetail", function () {
                 var id = $(this).attr("id");

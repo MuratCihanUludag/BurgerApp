@@ -1,21 +1,22 @@
 ﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
 @model BurgerApp.PL.ViewModels.OrderDetailViewModel
 
 <form id="form-edit-orderdetail" asp-action="Edit" method="post">
     <div class="modal-body">
         <div class="form-group">
             <label class="form-label">Burger</label>
-            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, "Value", "Text", Model.BurgerId))"></select>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Burgers, nameof(BurgerViewModel.Id), nameof(BurgerViewModel.Name)))"> </select>
             <span id="BurgerId-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label class="form-label">İçecek</label>
-            <select name="DrinkId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks, "Value", "Text", Model.DrinkId))"></select>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Drinks, nameof(DrinkViewModel.Id), nameof(BurgerViewModel.Name)))"> </select>
             <span id="DrinkId-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label class="form-label">Cips</label>
-            <select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips, "Value", "Text", Model.CipsId))"></select>
+            <select name="BurgerId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips, nameof(CipsViewModel.Id), nameof(BurgerViewModel.Name)))"> </select>
             <span id="CipsId-error-edit" class="text-danger"></span>
         </div>
         <div class="form-group">
