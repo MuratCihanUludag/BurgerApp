@@ -20,7 +20,7 @@ namespace BurgerApp.PL.ViewModels
         public ICollection<Sauce>? Sauces { get; set; }
         public ICollection<ExtraMaterial>? ExtraMetarials { get; set; }
         public bool IsSell { get; set; }
-
+  
         public double OrderDetailTotalPrice()
         {
             double totalSaucePrice = Sauces.Sum(sauce => sauce.Price);
