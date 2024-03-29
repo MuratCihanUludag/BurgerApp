@@ -19,7 +19,7 @@
         e.preventDefault();
         var id = $("input[name='Id']").val();
         $.ajax({
-            url: `/admin/orderdetail/delete/${id}`,
+            url: `/orderdetail/delete/${id}`,
             method: "POST",
             success: (data) => {
                 $('#myModal').modal('hide');
@@ -33,7 +33,7 @@
 
     function ReInitTable() {
         $.ajax({
-            url: `/admin/orderdetail/getTableList`,
+            url: `/orderdetail/getTableList`,
             method: 'GET',
             success: (data) => {
                 $(".table-responsive").html(data);

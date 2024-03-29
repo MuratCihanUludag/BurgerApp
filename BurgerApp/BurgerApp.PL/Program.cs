@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using BurgerApp.PL.Data;
 using BurgerApp.PL.Areas.Identity.Data;
 using BurgerApp.PL.Areas.Admin.Profiles;
+using BurgerApp.PL.Areas.Identity.Pages.EmailSender.YourProject.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionCihan") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("BurgerAppContextConnectionKutay") ?? throw new InvalidOperationException("Connection string 'BurgerAppContextConnection' not found.");
 
+builder.Services.AddTransient<IEmailSender, EmailSenderManager>();
 
 
 builder.Services.AddDbContext<BurgerAppContext>(options =>
