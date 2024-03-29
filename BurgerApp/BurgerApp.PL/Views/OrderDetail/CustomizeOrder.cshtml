@@ -1,0 +1,190 @@
+﻿@using BurgerApp.DAL.Comman
+@using BurgerApp.PL.Areas.Admin.Models.MenuViewModel
+@model BurgerApp.PL.ViewModels.OrderDetailViewModel
+
+@* <form id="form-CustomizeOrder-orderdetail" asp-action="CustomizeOrder" method="post">
+    <div class="modal-body">
+        <div><select name="ExtraMaterialId" class="form-select" asp-items="@(new SelectList(ViewBag.ExtraMetarials, "Id", "Name"))"></select></div>
+        <div><select name="CipsId" class="form-select" asp-items="@(new SelectList(ViewBag.Cips,nameof(CipsViewModel.Id),nameof(CipsViewModel.Name)))"></select></div>
+        <div><select name="SauceId" class="form-select" asp-items="@(new SelectList(ViewBag.Sauces, "Id", "Name"))"></select></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            <button type="submit" class="btn btn-primary">Özelleştir</button>
+            @if (Model != null && Model.Id != 0)
+            {
+                <input name="Id" type="hidden" value="@Model.Id" />
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Lütfen sipariş detaylarını seçin.
+                </div>
+            }
+        </div>
+</form> *@
+
+<form id="form-CustomizeOrder-orderdetail" asp-action="CustomizeOrder" method="post">
+    <div class="modal-body">
+        <div>
+            <label for="ExtraMaterialId">Ekstra Malzeme:</label>
+            <select id="ExtraMaterialId" name="ExtraMaterialId" class="form-select" onchange="updateTotalPrice()">
+                <option value="">Seçiniz...</option>
+                @foreach (var extraMaterial in ViewBag.ExtraMetarials)
+                {
+                    <option value="@extraMaterial.Id">@extraMaterial.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="CipsId">Cips:</label>
+            <select id="CipsId" name="CipsId" class="form-select" onchange="updateTotalPrice()">
+                <option value="">Seçiniz...</option>
+                @foreach (var cips in ViewBag.Cips)
+                {
+                    <option value="@cips.Id">@cips.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="SauceId">Sos:</label>
+            <select id="SauceId" name="SauceId" class="form-select" onchange="updateTotalPrice()">
+                <option value="">Seçiniz...</option>
+                @foreach (var sauce in ViewBag.Sauces)
+                {
+                    <option value="@sauce.Id">@sauce.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label for="totalPrice">Toplam Fiyat:</label>
+            <span id="totalPrice">0 TL</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+        <button type="submit" class="btn btn-primary">Özelleştir</button>
+    </div>
+</form>
+
+@* <script>
+    $(document).ready(function () {
+        // + Ekle butonuna basıldığında özelleştirme formunu yükler
+        $(document).on('click', '.btn-add-to-order', function () {
+            var menuId = $(this).data('menu-id');
+            $.ajax({
+                url: '/OrderDetail/CustomizeOrder/' + menuId,
+                method: 'GET',
+                success: function (data) {
+                    // Özelleştirme formunun yükleneceği bölüm
+                    $('#orderdetail-customizeorder').html(data);
+                    // Özelleştirme formunu içeren modalı göster
+                    $('#btn-add-to-order').modal('show');
+                },
+                error: function (xhr) {
+                    console.error("Form yüklenirken hata: ", xhr.responseText);
+                }
+            });
+        });
+
+        // Özelleştirme formunun gönderilmesi
+        $(document).on('submit', '#form-CustomizeOrder-orderdetail', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '/orderdetail/CustomizeOrder',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log("Sipariş başarıyla özelleştirildi.");
+                    $('#btn-add-to-order').modal('hide'); // Modalı kapat
+                    ReInitTable(); // Sipariş listesini yenile
+                },
+                error: function (xhr) {
+                    console.error("Sipariş özelleştirmede hata: ", xhr.responseText);
+                }
+            });
+        });
+
+        // Sipariş listesini yenilemek için kullanılan fonksiyon
+        function ReInitTable() {
+            $.ajax({
+                url: '/orderdetail/GetTableList',
+                method: 'GET',
+                success: function (data) {
+                    // Sipariş listesini yeniden yükler
+                    $('.table-responsive').html(data);
+                },
+                error: function (xhr) {
+                    console.error("Liste yenilenirken hata: ", xhr.responseText);
+                }
+            });
+        }
+    });
+</script> *@
+
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.btn-add-to-order', function () {
+            var menuId = $(this).data('menu-id');
+            $.ajax({
+                url: '/OrderDetail/CustomizeOrder/' + menuId,
+                method: 'GET',
+                success: function (data) {
+                    $('#orderdetail-customizeorder').html(data);
+                    $('#btn-add-to-order').modal('show'); 
+                    $('#ExtraMaterialId, #CipsId, #SauceId').change(updateTotalPrice);
+                    updateTotalPrice();
+                },
+                error: function (xhr) {
+                    console.error("Form yüklenirken hata: ", xhr.responseText);
+                }
+            });
+        });
+
+        $(document).on('submit', '#form-CustomizeOrder-orderdetail', function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: '/orderdetail/CustomizeOrder',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log("Sipariş başarıyla özelleştirildi.");
+                    $('#btn-add-to-order').modal('hide'); 
+                    ReInitTable(); 
+                },
+                error: function (xhr) {
+                    console.error("Sipariş özelleştirmede hata: ", xhr.responseText);
+                }
+            });
+        });
+
+        function updateTotalPrice() {
+            var totalPrice = 0; 
+            $('#ExtraMaterialId option:selected, #CipsId option:selected, #SauceId option:selected').each(function () {
+                var price = $(this).attr('data-price'); 
+                if (price) {
+                    totalPrice += parseFloat(price); 
+                }
+            });
+            $('#totalPrice').text(totalPrice.toFixed(2) + ' TL');
+        }
+
+        function ReInitTable() {
+            $.ajax({
+                url: '/orderdetail/GetTableList',
+                method: 'GET',
+                success: function (data) {
+                    $('.table-responsive').html(data);
+                },
+                error: function (xhr) {
+                    console.error("Liste yenilenirken hata: ", xhr.responseText);
+                }
+            });
+        }
+    });
+</script>

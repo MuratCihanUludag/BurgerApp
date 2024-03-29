@@ -2,9 +2,9 @@
 @using BurgerApp.PL.ViewModels
 @model List<OrderDetailViewModel>
 
-@{
+@* @{
     int index = 1;
-}
+} *@
 @*
     // =========================DONT DELETE PLS ====================================
     //
@@ -27,7 +27,7 @@
 
 
 
-<table class="table table-hover">
+@* <table class="table table-hover">
     <thead>
         <tr class="align-items-center">
             <th>#</th>
@@ -58,9 +58,9 @@
         }
 
     </tbody>
-</table>
+</table> *@
 
-<form id="form-add-orderdetail" asp-action="Add" method="POST">
+@* <form id="form-add-orderdetail" asp-action="Add" method="POST">
     <table class="table table-hover">
         <tbody>
             <tr>
@@ -74,7 +74,7 @@
             </tr>
         </tbody>
     </table>
-</form>
+</form> *@
 
 
 
@@ -93,7 +93,7 @@
                     </div>
                     <div>
                         <h4>@menu.MenuPrice().ToString("C")</h4>
-                        <button class="btn btn-primary">+ Ekle</button>
+                        <button class="btn btn-primary btn-add-to-order" data-menu-id="@menu.Id">+ Ekle</button>
                     </div>
                 </div>
             </div>
@@ -102,6 +102,40 @@
     </div>
     <br />
 }
+
+@* <script>
+    $("#form-add-orderdetail").submit((e) => {
+        e.preventDefault();
+        var formData = new FormData($("#form-add-orderdetail")[0]);
+        $.ajax({
+            url: `@Url.Action("Add", "OrderDetail")`,
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: (data) => {
+                console.log("İstek başarıyla tamamlandı:");
+                ReInitTable();
+            },
+            error: (xhr) => {
+                console.log("İstek başarısız oldu. Hata kodu:", xhr.status);
+            }
+        });
+    });
+
+    function ReInitTable() {
+        $.ajax({
+            url: `@Url.Action("GetTableList", "OrderDetail")`,
+            method: 'GET',
+            beforeSend: () => {
+                console.log("Yenileniyor...");
+            },
+            success: (data) => {
+                $("#table-list").html(data);
+            }
+        });
+    }
+</script> *@
 
 <script>
     $("#form-add-orderdetail").submit((e) => {
