@@ -15,7 +15,7 @@ namespace BurgerApp.DAL.Entities.Concrate
 {
     public class OrderDetail : BaseEntity, IOrderDetail
     {
- 
+
         public string UserId { get; set; }
         public virtual BurgerAppUser User { get; set; }
         public int BurgerId { get; set; }
