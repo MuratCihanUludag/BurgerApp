@@ -152,9 +152,10 @@ namespace BurgerApp.PL.Controllers
             return BadRequest();
         }
         [HttpGet]
-        public IActionResult CustomizeOrder(int id)
+        public IActionResult CustomizeOrder(int id,int burgerId)
         {
             var orderDetailDto = _manager.GetById(id);
+            var orderDetailDto2 = _burgerManager.GetById(burgerId);
 
             var extras = _extraManager.GetAll();
             var extraViewList = _mapper.Map<List<ExtraMaterialViewModel>>(extras);
@@ -186,7 +187,7 @@ namespace BurgerApp.PL.Controllers
             {
                 orderDetailModel.UserId = userId;
                 var orderDetailDto = _mapper.Map<OrderDetailDTO>(orderDetailModel);
-                _manager.Update(orderDetailDto);
+                _manager.Add(orderDetailDto);
                 return Ok();
             }
             var errors = ModelState.GetErrors();
